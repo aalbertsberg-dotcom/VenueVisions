@@ -1,11 +1,12 @@
 import Logo from './Logo'
 
-export type PageKey = 'home' | 'catalog' | 'wedding' | 'planner' | 'admin'
+export type PageKey = 'home' | 'catalog' | 'wedding' | 'planner' | 'messages' | 'admin'
 
 type HeaderProps = {
   page: PageKey
   onNavigate: (page: PageKey) => void
   selectionCount: number
+  unreadMessages: number
   onResetDemo: () => void
 }
 
@@ -13,9 +14,10 @@ const navItems: Array<{ key: PageKey; label: string }> = [
   { key: 'catalog', label: 'Décor Catalog' },
   { key: 'planner', label: 'Venue Designer' },
   { key: 'wedding', label: 'My Wedding' },
+  { key: 'messages', label: 'Messages' },
 ]
 
-export default function Header({ page, onNavigate, selectionCount, onResetDemo }: HeaderProps) {
+export default function Header({ page, onNavigate, selectionCount, unreadMessages, onResetDemo }: HeaderProps) {
   return (
     <header className="site-header">
       <button className="brand-button" onClick={() => onNavigate('home')} aria-label="Venue Visions home">
@@ -30,6 +32,7 @@ export default function Header({ page, onNavigate, selectionCount, onResetDemo }
           >
             {item.label}
             {item.key === 'wedding' && selectionCount > 0 && <span className="nav-badge">{selectionCount}</span>}
+            {item.key === 'messages' && unreadMessages > 0 && <span className="nav-badge nav-badge--message">{unreadMessages}</span>}
           </button>
         ))}
         <button className="nav-link reset-link" onClick={onResetDemo}>Reset Demo</button>

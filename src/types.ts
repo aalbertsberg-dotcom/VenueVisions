@@ -56,3 +56,29 @@ export type WeddingProfile = {
   guests: number
   notes: string
 }
+
+export type MessageRole = 'bride' | 'venue'
+
+export type MessageAttachment = {
+  id: string
+  name: string
+  mimeType: string
+  size: number
+  dataUrl: string
+}
+
+export type MessageContext =
+  | { kind: 'inventory'; id: string; label: string }
+  | { kind: 'area'; id: string; label: string }
+
+export type WeddingMessage = {
+  id: string
+  senderRole: MessageRole
+  senderName: string
+  body: string
+  timestamp: string
+  attachments: MessageAttachment[]
+  context?: MessageContext
+  readByBride: boolean
+  readByVenue: boolean
+}

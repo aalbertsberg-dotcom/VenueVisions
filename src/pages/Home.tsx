@@ -12,7 +12,7 @@ export default function Home({ onNavigate }: { onNavigate: (page: PageKey) => vo
           <p className="eyebrow">YOUR VENUE, YOUR VISION</p>
           <h1>Design the day before the day arrives.</h1>
           <p className="hero__lead">
-            Browse the venue's décor collection, choose your pieces, and build a visual reception plan from home.
+            Browse the venue's décor collection, choose your pieces, build a visual reception plan, and keep questions with the wedding instead of scattered across texts.
           </p>
           <div className="hero__actions">
             <button className="button button--primary" onClick={() => onNavigate('catalog')}>Explore the décor</button>
@@ -79,7 +79,7 @@ export default function Home({ onNavigate }: { onNavigate: (page: PageKey) => vo
         <div className="process-grid">
           <article><span>1</span><h3>Browse</h3><p>See photos, quantities, colors and dimensions without scheduling a shed visit.</p></article>
           <article><span>2</span><h3>Design</h3><p>Lay out tables, important areas and selected decorations on the venue floor plan.</p></article>
-          <article><span>3</span><h3>Finalize</h3><p>Save notes and selections so the venue knows exactly what needs to be pulled and placed.</p></article>
+          <article><span>3</span><h3>Coordinate</h3><p>Message the venue, attach photos, and link questions directly to décor or the floor plan before final setup.</p></article>
         </div>
       </section>
 

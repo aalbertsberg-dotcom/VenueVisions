@@ -1,11 +1,18 @@
+import type { PageKey } from '../components/Header'
 import { inventory, sampleWeddings } from '../data'
 import type { Selection } from '../types'
 
-export default function Admin({ selections }: { selections: Selection[] }) {
+type AdminProps = {
+  selections: Selection[]
+  unreadMessages: number
+  onNavigate: (page: PageKey) => void
+}
+
+export default function Admin({ selections, unreadMessages, onNavigate }: AdminProps) {
   return (
     <main className="page-main shell admin-page">
       <section className="page-intro page-intro--split">
-        <div><p className="eyebrow">OWNER VIEW</p><h1>Venue operations at a glance.</h1><p>This side is intentionally separate from the customer experience. Inventory locations, wedding status and setup details live here.</p></div>
+        <div><p className="eyebrow">OWNER VIEW</p><h1>Venue operations at a glance.</h1><p>This side is intentionally separate from the customer experience. Inventory locations, wedding status, messages and setup details live here.</p></div>
         <span className="prototype-badge prototype-badge--large">Prototype admin</span>
       </section>
 
@@ -31,6 +38,7 @@ export default function Admin({ selections }: { selections: Selection[] }) {
           <p className="eyebrow">QUICK ACTIONS</p><h2>Manage venue</h2>
           <button><span>▦</span><div><strong>Inventory</strong><small>Add photos, quantities and storage locations</small></div><b>→</b></button>
           <button><span>⌖</span><div><strong>Venue areas</strong><small>Manage reception, ceremony and outdoor spaces</small></div><b>→</b></button>
+          <button onClick={() => onNavigate('messages')}><span>✉</span><div><strong>Wedding messages {unreadMessages > 0 && <em className="inline-unread">{unreadMessages}</em>}</strong><small>Questions, attachments and layout discussions</small></div><b>→</b></button>
           <button><span>☰</span><div><strong>Setup sheets</strong><small>Generate staff pull and placement lists</small></div><b>→</b></button>
         </section>
       </div>

@@ -6,12 +6,13 @@ import type { Selection, WeddingProfile } from '../types'
 type WeddingProps = {
   profile: WeddingProfile
   selections: Selection[]
+  unreadMessages: number
   onProfileChange: (profile: WeddingProfile) => void
   onSetQuantity: (itemId: string, quantity: number) => void
   onNavigate: (page: PageKey) => void
 }
 
-export default function Wedding({ profile, selections, onProfileChange, onSetQuantity, onNavigate }: WeddingProps) {
+export default function Wedding({ profile, selections, unreadMessages, onProfileChange, onSetQuantity, onNavigate }: WeddingProps) {
   const selectedItems = selections
     .map((selection) => ({ ...selection, item: inventory.find((item) => item.id === selection.itemId) }))
     .filter((entry) => entry.item)
@@ -38,6 +39,7 @@ export default function Wedding({ profile, selections, onProfileChange, onSetQua
         <article><span>Unique items</span><strong>{selections.length}</strong><small>styles selected</small></article>
         <article><span>Guest count</span><strong>{profile.guests}</strong><small>planning estimate</small></article>
         <article className="metric-grid__action"><span>Floor plan</span><strong>Ready</strong><button onClick={() => onNavigate('planner')}>Open designer →</button></article>
+        <article className="metric-grid__action metric-grid__messages"><span>Messages</span><strong>{unreadMessages > 0 ? unreadMessages : '✓'}</strong><small>{unreadMessages > 0 ? 'unread' : 'up to date'}</small><button onClick={() => onNavigate('messages')}>Open conversation →</button></article>
       </section>
 
       <div className="wedding-layout">
@@ -75,8 +77,8 @@ export default function Wedding({ profile, selections, onProfileChange, onSetQua
       </div>
 
       <section className="summary-strip">
-        <div><span className="mini-label">NEXT STEP</span><h2>Build the room around your selections.</h2><p>Use the venue designer to place tables, key areas and décor where you want them.</p></div>
-        <button className="button button--light" onClick={() => onNavigate('planner')}>Open venue designer</button>
+        <div><span className="mini-label">NEXT STEP</span><h2>Build the room, then keep the conversation with it.</h2><p>Use the venue designer for placement, then message the venue with questions or changes tied directly to the plan.</p></div>
+        <div className="summary-strip__actions"><button className="button button--light" onClick={() => onNavigate('planner')}>Open venue designer</button><button className="button button--light" onClick={() => onNavigate('messages')}>Message the venue</button></div>
       </section>
     </main>
   )

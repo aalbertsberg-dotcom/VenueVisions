@@ -74,3 +74,18 @@ This build is intended to be safe to share as a concept before real venue data i
 5. GitHub will publish the `dist` output and show the public Pages URL in the deployment.
 
 The Vite `base` setting is relative (`./`), so this build works from a project Pages path such as `https://username.github.io/VenueVisions/` without hard-coding the repository name.
+
+## v0.4 wedding messaging
+
+The prototype now includes a wedding-specific **Messages** workspace:
+
+- Bride/couple ↔ venue conversation tied to the wedding.
+- Sender names, roles, timestamps, and unread message badges.
+- A demo role switch so the same prototype can show both customer and owner views before real accounts exist.
+- Photo/file attachments stored locally in the browser for demo purposes (up to 3 files per message, 750 KB each).
+- Message links to selected décor items or the Reception Hall floor plan; clicking a linked item opens that part of the app.
+- Optional browser notifications plus a **Simulate reply** control to demonstrate how reply notifications would behave once a backend exists.
+- Owner View quick access to wedding messages.
+- My Wedding now surfaces unread messages and provides direct access to the conversation.
+
+Because this is still a GitHub Pages prototype, messages and attachments live only in the current browser's `localStorage`. A production version would move messages, attachments, read status, notifications, and user roles to the shared backend/database.

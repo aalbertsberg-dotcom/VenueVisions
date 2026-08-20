@@ -87,7 +87,11 @@ type PlannerProps = {
 
 export default function Planner({ selections, placedItems, setPlacedItems, onSetQuantity }: PlannerProps) {
   const canvasRef = useRef<HTMLDivElement>(null)
-  const [area, setArea] = useState('Reception Hall')
+  const [area, setArea] = useState(() => {
+    const focused = localStorage.getItem('venueVisions.plannerArea')
+    localStorage.removeItem('venueVisions.plannerArea')
+    return focused || 'Reception Hall'
+  })
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [inventorySearch, setInventorySearch] = useState('')
 

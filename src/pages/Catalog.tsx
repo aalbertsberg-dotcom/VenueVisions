@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import DecorVisual from '../components/DecorVisual'
 import { inventory } from '../data'
 import type { Category, Selection } from '../types'
@@ -25,6 +25,15 @@ export default function Catalog({ selections, onSetQuantity }: CatalogProps) {
   const [category, setCategory] = useState<'All' | Category>('All')
   const [query, setQuery] = useState('')
   const [detailId, setDetailId] = useState<string | null>(null)
+
+  useEffect(() => {
+    const focused = localStorage.getItem('venueVisions.catalogFocus')
+    if (!focused || !inventory.some((item) => item.id === focused)) return
+    setCategory('All')
+    setQuery('')
+    setDetailId(focused)
+    localStorage.removeItem('venueVisions.catalogFocus')
+  }, [])
 
   const filtered = useMemo(() => {
     return inventory.filter((item) => {
