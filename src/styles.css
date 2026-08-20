@@ -924,3 +924,245 @@ h3 { color: var(--brown); }
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- v0.6 simplified global navigation ---------- */
+.site-header {
+  z-index: 60;
+  min-height: 76px;
+  gap: 20px;
+}
+.header-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.header-wedding-chip {
+  max-width: 220px;
+  overflow: hidden;
+  padding: 8px 12px;
+  border: 1px solid #eaded4;
+  border-radius: 999px;
+  background: #fbf6f1;
+  color: #866a57;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.menu-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid #ded3ca;
+  border-radius: 999px;
+  background: rgba(255,255,255,.86);
+  color: var(--brown);
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 5px 18px rgba(83,64,54,.05);
+}
+.menu-toggle:hover,
+.menu-toggle--open { background: var(--cream); border-color: #cdb9a9; }
+.menu-toggle__bars { width: 20px; display: grid; gap: 4px; }
+.menu-toggle__bars i { display: block; height: 2px; border-radius: 999px; background: currentColor; transition: transform .18s ease, opacity .18s ease; }
+.menu-toggle--open .menu-toggle__bars i:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.menu-toggle--open .menu-toggle__bars i:nth-child(2) { opacity: 0; }
+.menu-toggle--open .menu-toggle__bars i:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+.menu-toggle__badge {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--brown);
+  color: white;
+  font-size: 10px;
+}
+.nav-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 54;
+  border: 0;
+  background: rgba(48,39,34,.26);
+  backdrop-filter: blur(2px);
+  cursor: default;
+}
+.nav-drawer {
+  position: fixed;
+  z-index: 65;
+  top: 86px;
+  right: max(24px, calc((100vw - 1180px) / 2));
+  width: min(380px, calc(100vw - 32px));
+  max-height: calc(100dvh - 102px);
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  padding: 18px;
+  border: 1px solid #e4d8ce;
+  border-radius: 20px;
+  background: #fffdfb;
+  box-shadow: 0 28px 80px rgba(48,36,29,.24);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px) scale(.985);
+  transform-origin: top right;
+  transition: opacity .16s ease, transform .16s ease;
+}
+.nav-drawer--open { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
+.nav-drawer__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 2px 2px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.nav-drawer__heading > div { display: flex; flex-direction: column; gap: 3px; }
+.nav-drawer__heading .mini-label { color: #a27b60; }
+.nav-drawer__heading strong { font-family: 'Playfair Display', Georgia, serif; color: var(--brown); font-size: 22px; }
+.nav-drawer__close {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: white;
+  color: #76685f;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+.nav-drawer__wedding {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 13px;
+  padding: 11px 13px;
+  border-radius: 12px;
+  background: #f7f1ea;
+}
+.nav-drawer__wedding span { color: #9b8779; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+.nav-drawer__wedding strong { overflow: hidden; color: var(--brown); font-size: 13px; white-space: nowrap; text-overflow: ellipsis; }
+.nav-drawer__links { display: grid; gap: 7px; padding: 14px 0; }
+.nav-drawer__link,
+.nav-drawer__owner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 13px 14px;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.nav-drawer__link:hover,
+.nav-drawer__link.active { border-color: #e5d9cf; background: #f8f3ed; }
+.nav-drawer__link-copy,
+.nav-drawer__owner > span:first-child { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.nav-drawer__link-copy strong,
+.nav-drawer__owner strong { color: var(--brown); font-size: 14px; }
+.nav-drawer__link-copy small,
+.nav-drawer__owner small { color: #998d85; font-size: 10px; line-height: 1.35; }
+.nav-drawer__link-meta { display: flex; align-items: center; gap: 8px; color: #aa9b91; font-size: 22px; }
+.nav-drawer__badge { min-width: 23px; height: 23px; display: grid; place-items: center; padding: 0 6px; border-radius: 999px; background: var(--brown); color: white; font-size: 10px; font-weight: 800; }
+.nav-drawer__badge--message { background: #b76d4e; }
+.nav-drawer__footer { padding-top: 14px; border-top: 1px solid var(--line); }
+.nav-drawer__owner { border-color: #dfd0c4; background: #f8f1e9; }
+.nav-drawer__owner > span:last-child { color: #9c806d; font-size: 22px; }
+.nav-drawer__reset { width: 100%; margin-top: 8px; padding: 10px; border: 0; background: transparent; color: #9a7355; font-size: 11px; font-weight: 700; cursor: pointer; }
+.nav-drawer__reset:hover { text-decoration: underline; }
+
+/* ---------- v0.6 owner access page ---------- */
+.owner-access-page {
+  min-height: calc(100vh - 170px);
+  display: grid;
+  place-items: center;
+  padding-top: 54px;
+  padding-bottom: 70px;
+}
+.owner-access-card {
+  width: min(520px, 100%);
+  padding: 38px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.owner-access-lock {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: #f3e9df;
+  color: #86664f;
+  font-size: 28px;
+  font-weight: 700;
+}
+.owner-access-card h1 { margin-bottom: 14px; font-size: clamp(38px, 5vw, 54px); }
+.owner-access-lead { max-width: 42ch; margin: 0 auto 24px; color: var(--muted); line-height: 1.65; }
+.owner-access-form { display: grid; gap: 10px; text-align: left; }
+.owner-access-form label { color: #746760; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; }
+.owner-access-form input { width: 100%; padding: 13px 14px; border: 1px solid #dcd0c7; border-radius: 11px; background: white; color: var(--ink); }
+.owner-access-form small { color: #9a8e86; font-size: 10px; }
+.owner-access-form small strong { color: #7c624f; letter-spacing: .05em; }
+.owner-access-error { padding: 9px 11px; border: 1px solid #e7b9b0; border-radius: 9px; background: #fff1ee; color: #9b4e43; font-size: 11px; }
+.owner-access-note { margin-top: 20px; padding: 13px 14px; border: 1px solid #e9d9ca; border-radius: 11px; background: #fff8f1; color: #7c6e65; font-size: 11px; line-height: 1.55; text-align: left; }
+.owner-access-back { margin-top: 11px; }
+
+/* ---------- v0.6 owner dashboard desktop rhythm ---------- */
+.admin-page .venue-switcher-demo { margin-bottom: 28px; }
+.admin-page .admin-metrics.metric-grid { margin-bottom: 30px; }
+.admin-weddings--cards {
+  padding: 30px;
+  margin-bottom: 30px;
+}
+.admin-weddings--cards .panel__heading { margin-bottom: 0; }
+.admin-weddings--cards .panel__heading h2 { margin-top: 6px; }
+.admin-weddings--cards .booking-rule { margin-top: 7px; line-height: 1.45; }
+.wedding-workspace-grid { gap: 16px; margin-top: 26px; }
+.wedding-workspace-card { padding: 20px; }
+.demo-scope-panel { margin-bottom: 30px; padding: 30px; }
+.inventory-admin { padding: 30px; }
+.inventory-admin .panel__heading { margin-bottom: 26px; }
+
+@media (max-width: 650px) {
+  .site-header {
+    position: sticky;
+    min-height: 72px;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+  }
+  .brand-button { align-self: auto; }
+  .brand__mark { width: 42px; height: 42px; }
+  .brand__venue { font-size: 24px; }
+  .brand__visions { font-size: 8px; letter-spacing: .34em; }
+  .header-wedding-chip { display: none; }
+  .menu-toggle { min-width: 48px; min-height: 44px; justify-content: center; padding: 9px 12px; }
+  .menu-toggle__label { display: none; }
+  .menu-toggle__badge { position: absolute; top: -5px; right: -5px; }
+  .nav-drawer {
+    top: 0;
+    right: 0;
+    width: min(350px, 90vw);
+    height: 100dvh;
+    max-height: none;
+    padding: 18px;
+    border-radius: 20px 0 0 20px;
+    transform: translateX(18px);
+  }
+  .nav-drawer--open { transform: translateX(0); }
+  .owner-access-card { padding: 28px 20px; }
+  .admin-weddings--cards { padding: 20px; }
+  .wedding-workspace-grid { margin-top: 20px; }
+  .wedding-workspace-card { padding: 18px; }
+  .demo-scope-panel, .inventory-admin { padding: 20px; }
+}
