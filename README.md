@@ -20,3 +20,8 @@ git add .
 git commit -m "Add hamburger navigation and owner demo login"
 git push
 ```
+
+
+## v0.6.1
+- Owner View demo password changed to `123456`.
+- Password field is prefilled for easier demo access.

@@ -13,7 +13,7 @@ type AdminProps = {
   onExitDemo: () => void
 }
 
-const DEMO_OWNER_CODE = 'VENUE2026'
+const DEMO_OWNER_CODE = '123456'
 
 function formatDate(date: string) {
   return new Date(`${date}T12:00:00`).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
@@ -29,7 +29,7 @@ export default function Admin({ weddings, activeWeddingId, onOpenWedding, onAddW
   const [date, setDate] = useState('')
   const [guests, setGuests] = useState(100)
   const [formError, setFormError] = useState('')
-  const [accessCode, setAccessCode] = useState('')
+  const [accessCode, setAccessCode] = useState(DEMO_OWNER_CODE)
   const [accessError, setAccessError] = useState('')
 
   const sortedWeddings = useMemo(() => [...weddings].sort((a, b) => a.profile.date.localeCompare(b.profile.date)), [weddings])
@@ -79,10 +79,10 @@ export default function Admin({ weddings, activeWeddingId, onOpenWedding, onAddW
               autoComplete="off"
               value={accessCode}
               onChange={(event) => { setAccessCode(event.target.value); setAccessError('') }}
-              placeholder="Enter demo password"
+              placeholder="Demo password"
               autoFocus
             />
-            <small>Demo password: <strong>{DEMO_OWNER_CODE}</strong></small>
+            <small>Demo password is prefilled for this prototype: <strong>{DEMO_OWNER_CODE}</strong></small>
             {accessError && <div className="owner-access-error" role="alert">{accessError}</div>}
             <button className="button button--primary full-width" type="submit">Enter Owner View</button>
           </form>
