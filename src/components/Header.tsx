@@ -7,6 +7,7 @@ type HeaderProps = {
   onNavigate: (page: PageKey) => void
   selectionCount: number
   unreadMessages: number
+  activeWeddingName: string
   onResetDemo: () => void
 }
 
@@ -17,13 +18,14 @@ const navItems: Array<{ key: PageKey; label: string }> = [
   { key: 'messages', label: 'Messages' },
 ]
 
-export default function Header({ page, onNavigate, selectionCount, unreadMessages, onResetDemo }: HeaderProps) {
+export default function Header({ page, onNavigate, selectionCount, unreadMessages, activeWeddingName, onResetDemo }: HeaderProps) {
   return (
     <header className="site-header">
       <button className="brand-button" onClick={() => onNavigate('home')} aria-label="Venue Visions home">
         <Logo />
       </button>
       <nav className="main-nav" aria-label="Primary navigation">
+        {page !== 'home' && page !== 'admin' && <span className="active-wedding-chip" title="Currently selected demo wedding">{activeWeddingName || 'Active wedding'}</span>}
         {navItems.map((item) => (
           <button
             key={item.key}

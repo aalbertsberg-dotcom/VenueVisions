@@ -57,6 +57,8 @@ export type WeddingProfile = {
   notes: string
 }
 
+export type WeddingStatus = 'Ready' | 'Designing' | 'Not started'
+
 export type MessageRole = 'bride' | 'venue'
 
 export type MessageAttachment = {
@@ -81,4 +83,14 @@ export type WeddingMessage = {
   context?: MessageContext
   readByBride: boolean
   readByVenue: boolean
+}
+
+export type WeddingWorkspace = {
+  id: string
+  venueId: string
+  status: WeddingStatus
+  profile: WeddingProfile
+  selections: Selection[]
+  placedItems: PlacedItem[]
+  messages: WeddingMessage[]
 }

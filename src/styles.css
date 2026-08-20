@@ -686,3 +686,82 @@ h3 { color: var(--brown); }
   .admin-demo-gate__actions .button { width:100%; justify-content:center; }
   .demo-scope-grid { grid-template-columns:1fr; }
 }
+
+/* ---------- v0.5 multiple wedding workspaces ---------- */
+.active-wedding-chip {
+  max-width: 150px;
+  overflow: hidden;
+  padding: 6px 10px;
+  border: 1px solid #eaded4;
+  border-radius: 999px;
+  background: #fbf6f1;
+  color: #866a57;
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.venue-switcher-demo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+  padding: 22px 24px;
+  background: linear-gradient(135deg,#f8f4ef,#fff);
+}
+.venue-switcher-demo h2 { margin: 3px 0 5px; }
+.venue-switcher-demo p { max-width: 680px; margin: 0; color: var(--muted); font-size: 11px; line-height: 1.55; }
+.venue-coming-soon[disabled] { opacity: .7; cursor: not-allowed; }
+.admin-weddings--cards { margin-bottom: 20px; }
+.booking-rule { margin: 3px 0 0; color: var(--muted); font-size: 10px; }
+.add-wedding-form {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr .7fr auto;
+  gap: 10px;
+  align-items: end;
+  margin: 15px 0 20px;
+  padding: 15px;
+  border: 1px solid #e7dbd0;
+  border-radius: 14px;
+  background: #fbf8f5;
+}
+.add-wedding-form label { display: flex; flex-direction: column; gap: 5px; }
+.add-wedding-form label span { color: var(--muted); font-size: 8px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+.add-wedding-form input { min-width: 0; padding: 10px 11px; border: 1px solid var(--line); border-radius: 9px; background: white; color: var(--ink); }
+.add-wedding-error { grid-column: 1 / -1; padding: 9px 11px; border: 1px solid #e6b7ae; border-radius: 9px; background: #fff1ee; color: #995247; font-size: 10px; }
+.wedding-workspace-grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+.wedding-workspace-card {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid #e6ddd6;
+  border-radius: 16px;
+  background: #fffdfb;
+  box-shadow: 0 8px 24px rgba(72,52,41,.04);
+}
+.wedding-workspace-card--active { border-color: #b99a80; box-shadow: 0 0 0 2px rgba(185,154,128,.13); }
+.wedding-workspace-card__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.wedding-workspace-card h3 { margin: 3px 0 4px; font-size: 21px; }
+.workspace-date { color: #8a6c58; font-size: 10px; }
+.workspace-stats { display: grid; grid-template-columns: repeat(2,1fr); gap: 7px; margin: 15px 0; }
+.workspace-stats div { padding: 9px; border-radius: 10px; background: #f7f3ef; }
+.workspace-stats span { display: block; color: #9a8e86; font-size: 8px; text-transform: uppercase; letter-spacing: .06em; }
+.workspace-stats strong { display: block; margin-top: 2px; color: var(--brown); font-size: 12px; }
+.workspace-actions { display: flex; flex-wrap: wrap; gap: 7px; }
+
+@media (max-width: 1050px) {
+  .active-wedding-chip { display: none; }
+  .wedding-workspace-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .add-wedding-form { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 650px) {
+  .venue-switcher-demo { align-items: stretch; flex-direction: column; }
+  .wedding-workspace-grid { grid-template-columns: 1fr; }
+  .add-wedding-form { grid-template-columns: 1fr; }
+  .add-wedding-form .button { width: 100%; justify-content: center; }
+}
