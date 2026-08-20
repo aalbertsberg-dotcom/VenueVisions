@@ -765,3 +765,162 @@ h3 { color: var(--brown); }
   .add-wedding-form { grid-template-columns: 1fr; }
   .add-wedding-form .button { width: 100%; justify-content: center; }
 }
+
+
+/* ---------- v0.5.1 responsive owner dashboard polish ---------- */
+.admin-weddings--cards .panel__heading {
+  align-items: flex-start;
+}
+.admin-weddings--cards .panel__heading > div {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.admin-weddings--cards .panel__heading h2 {
+  max-width: 760px;
+  line-height: 1.08;
+}
+.admin-weddings--cards .panel__heading > .button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.wedding-workspace-card__top > div {
+  min-width: 0;
+}
+.wedding-workspace-card h3 {
+  overflow-wrap: anywhere;
+}
+.status-pill {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .main-nav {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+  .admin-weddings--cards .panel__heading {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 650px) {
+  .site-header {
+    position: relative;
+    gap: 12px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .brand-button {
+    align-self: flex-start;
+  }
+  .main-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: 7px;
+    padding: 0;
+  }
+  .nav-link {
+    width: 100%;
+    min-width: 0;
+    padding: 10px 8px;
+    border: 1px solid #eee5dd;
+    background: rgba(255,255,255,.62);
+    text-align: center;
+    font-size: 11px;
+  }
+  .nav-link:hover,
+  .nav-link.active {
+    border-color: #dccabe;
+  }
+  .nav-link.admin-link {
+    margin-left: 0;
+  }
+  .nav-badge {
+    top: -5px;
+    right: 4px;
+  }
+
+  .admin-page .page-intro h1 {
+    font-size: 38px;
+  }
+  .admin-weddings--cards {
+    padding: 18px;
+  }
+  .admin-weddings--cards .panel__heading {
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .admin-weddings--cards .panel__heading h2 {
+    margin-top: 2px;
+    font-size: 31px;
+    line-height: 1.04;
+  }
+  .admin-weddings--cards .panel__heading > .button {
+    width: 100%;
+    justify-content: center;
+  }
+  .booking-rule {
+    margin-top: 8px;
+    font-size: 11px;
+    line-height: 1.45;
+  }
+  .wedding-workspace-grid {
+    gap: 12px;
+  }
+  .wedding-workspace-card {
+    padding: 16px;
+  }
+  .wedding-workspace-card__top {
+    gap: 8px;
+  }
+  .wedding-workspace-card h3 {
+    font-size: 24px;
+  }
+  .workspace-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .workspace-actions .button {
+    width: 100%;
+    justify-content: center;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .admin-metrics.metric-grid {
+    gap: 10px;
+  }
+  .admin-metrics.metric-grid article {
+    min-height: 105px;
+    padding: 16px;
+  }
+  .admin-metrics.metric-grid article > span:first-child {
+    font-size: 9px;
+  }
+  .admin-metrics.metric-grid article > strong {
+    font-size: 28px;
+  }
+
+  .demo-scope-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .demo-scope-grid article {
+    min-height: 105px;
+  }
+}
+
+@media (max-width: 390px) {
+  .main-nav {
+    grid-template-columns: 1fr;
+  }
+  .workspace-actions {
+    grid-template-columns: 1fr;
+  }
+  .admin-metrics.metric-grid,
+  .demo-scope-grid {
+    grid-template-columns: 1fr;
+  }
+}

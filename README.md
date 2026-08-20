@@ -35,3 +35,11 @@ GitHub Actions will redeploy the Pages site after the push.
 ## Prototype data
 
 All names, inventory, messages, dates and floor plans are sample data. The demo uses browser localStorage. Production should use a backend database and real authentication/authorization before storing customer information.
+
+
+## v0.5.1
+- Polished the Owner View layout for phones and desktop.
+- Mobile navigation now wraps cleanly instead of opening scrolled/cut off.
+- Wedding workspace heading and Add Wedding controls stack cleanly on phones.
+- Renamed the confusing “Date conflicts: Blocked” metric to “Double-booking protection: On.”
+- The single-venue demo prevents two wedding workspaces from using the same calendar date.

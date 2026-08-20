@@ -100,7 +100,7 @@ export default function Admin({ weddings, activeWeddingId, onOpenWedding, onAddW
             <div>
               <p className="eyebrow">UPCOMING</p>
               <h2>Couples &amp; wedding workspaces</h2>
-              <p className="booking-rule">One wedding per calendar date in this demo. Duplicate dates are blocked automatically.</p>
+              <p className="booking-rule">One wedding per calendar date for this venue. The demo prevents accidental double-booking.</p>
             </div>
             <button className="button button--small button--primary" onClick={() => { setShowAdd((current) => !current); setFormError('') }}>{showAdd ? 'Cancel' : '+ Add wedding'}</button>
           </div>
@@ -155,7 +155,7 @@ export default function Admin({ weddings, activeWeddingId, onOpenWedding, onAddW
           <div className="demo-scope-grid">
             <article><span>Current venue</span><strong>1</strong><small>Demo Venue</small></article>
             <article><span>Separate weddings</span><strong>{weddings.length}</strong><small>fully interactive locally</small></article>
-            <article><span>Date conflicts</span><strong>Blocked</strong><small>one wedding per date</small></article>
+            <article><span>Double-booking protection</span><strong>On</strong><small>same date can’t be reused</small></article>
             <article><span>Multiple venues</span><strong>Soon</strong><small>planned, not active</small></article>
           </div>
         </section>
