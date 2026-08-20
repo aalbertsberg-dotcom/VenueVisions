@@ -75,7 +75,7 @@ This build is intended to be safe to share as a concept before real venue data i
 
 The Vite `base` setting is relative (`./`), so this build works from a project Pages path such as `https://username.github.io/VenueVisions/` without hard-coding the repository name.
 
-## v0.4 wedding messaging
+## v0.4.1 wedding messaging
 
 The prototype now includes a wedding-specific **Messages** workspace:
 
@@ -89,3 +89,11 @@ The prototype now includes a wedding-specific **Messages** workspace:
 - My Wedding now surfaces unread messages and provides direct access to the conversation.
 
 Because this is still a GitHub Pages prototype, messages and attachments live only in the current browser's `localStorage`. A production version would move messages, attachments, read status, notifications, and user roles to the shared backend/database.
+
+
+## v0.4.1 owner demo clarification
+
+- Owner View now opens behind a demo-access acknowledgement explaining that GitHub Pages is not real authentication.
+- Owner dashboard now explicitly shows that the prototype represents one venue with multiple wedding workspaces.
+- Sarah & John is the only interactive wedding in the current demo; the additional couples are sample owner-dashboard records.
+- Production architecture should use secure authentication, separate wedding records, and a Venue ID so multi-venue support can be added later.

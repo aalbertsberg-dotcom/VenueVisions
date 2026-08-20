@@ -645,3 +645,44 @@ h3 { color: var(--brown); }
   .message-sidebar { display:flex; }
   .summary-strip__actions { width:100%; justify-content:flex-start; }
 }
+
+/* ---------- Owner demo access + workspace scope ---------- */
+.admin-demo-gate { z-index: 120; }
+.admin-demo-gate__card {
+  width: min(560px, 100%);
+  padding: 34px;
+  border: 1px solid #eaded4;
+  border-radius: 22px;
+  background: #fffdfb;
+  box-shadow: 0 30px 90px rgba(39,28,22,.32);
+  text-align: center;
+}
+.admin-demo-gate__icon { display:grid; place-items:center; width:54px; height:54px; margin:0 auto 15px; border-radius:50%; background:#f4ece5; font-size:23px; }
+.admin-demo-gate__card h2 { margin:5px 0 12px; font-size:31px; }
+.admin-demo-gate__card > p:not(.eyebrow) { margin:0 auto 15px; max-width:48ch; color:var(--muted); line-height:1.65; }
+.admin-demo-gate__warning { margin:18px 0; padding:12px 14px; border:1px solid #e8c8ae; border-radius:11px; background:#fff5eb; color:#76533d; font-size:11px; line-height:1.55; text-align:left; }
+.admin-demo-gate__actions { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; }
+.demo-scope-panel { margin-bottom:20px; padding:24px; border-color:#ddcec1; background:linear-gradient(135deg,#fffdfb,#faf4ee); }
+.demo-scope-panel > div:first-child { max-width:760px; }
+.demo-scope-panel h2 { margin:4px 0 9px; font-size:27px; }
+.demo-scope-panel p { color:var(--muted); font-size:12px; line-height:1.65; }
+.demo-scope-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:18px; }
+.demo-scope-grid article { min-height:100px; padding:15px; border:1px solid #eadfd5; border-radius:13px; background:rgba(255,255,255,.76); }
+.demo-scope-grid span, .demo-scope-grid small { display:block; color:#958980; font-size:9px; }
+.demo-scope-grid span { text-transform:uppercase; letter-spacing:.07em; }
+.demo-scope-grid strong { display:block; margin:5px 0 2px; color:var(--brown); font-family:'Playfair Display',Georgia,serif; font-size:24px; }
+.demo-scope-note { margin:15px 0 0!important; padding-top:13px; border-top:1px solid #eadfd5; }
+.workspace-link { border:0; background:transparent; color:#8f6649; font:inherit; font-weight:700; cursor:pointer; padding:0; }
+.workspace-link:hover { text-decoration:underline; }
+.sample-record-label { color:#a0958d; font-size:9px; text-transform:uppercase; letter-spacing:.05em; }
+
+@media (max-width: 900px) {
+  .demo-scope-grid { grid-template-columns:1fr 1fr; }
+}
+@media (max-width: 650px) {
+  .admin-demo-gate__card { padding:25px 20px; }
+  .admin-demo-gate__card h2 { font-size:26px; }
+  .admin-demo-gate__actions { flex-direction:column-reverse; }
+  .admin-demo-gate__actions .button { width:100%; justify-content:center; }
+  .demo-scope-grid { grid-template-columns:1fr; }
+}

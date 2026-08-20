@@ -99,6 +99,7 @@ export default function App() {
   const [messages, setMessages] = useState<WeddingMessage[]>(() => readLocal('venueVisions.messages', starterMessages))
   const [messageRole, setMessageRole] = useState<MessageRole>(() => readLocal('venueVisions.messageRole', 'bride'))
   const [notificationsEnabled, setNotificationsEnabled] = useState<boolean>(() => readLocal('venueVisions.notifications', false))
+  const [adminDemoAcknowledged, setAdminDemoAcknowledged] = useState<boolean>(() => sessionStorage.getItem('venueVisions.adminDemoAcknowledged') === 'true')
 
   useEffect(() => {
     const onHashChange = () => setPage(parseHash())
@@ -187,7 +188,7 @@ export default function App() {
       {page === 'wedding' && <Wedding profile={profile} selections={selections} unreadMessages={unreadMessages} onProfileChange={setProfile} onSetQuantity={setQuantity} onNavigate={navigate} />}
       {page === 'planner' && <Planner selections={selections} placedItems={placedItems} setPlacedItems={setPlacedItems} onSetQuantity={setQuantity} />}
       {page === 'messages' && <Messages profile={profile} selections={selections} placedItems={placedItems} messages={messages} setMessages={setMessages} currentRole={messageRole} setCurrentRole={setMessageRole} notificationsEnabled={notificationsEnabled} setNotificationsEnabled={setNotificationsEnabled} onOpenContext={openMessageContext} />}
-      {page === 'admin' && <Admin selections={selections} unreadMessages={unreadMessages} onNavigate={navigate} />}
+      {page === 'admin' && <Admin selections={selections} unreadMessages={unreadMessages} onNavigate={navigate} demoAcknowledged={adminDemoAcknowledged} onAcknowledgeDemo={() => { sessionStorage.setItem('venueVisions.adminDemoAcknowledged', 'true'); setAdminDemoAcknowledged(true) }} onExitDemo={() => navigate('home')} />}
       <footer className="site-footer">
         <div className="shell"><span>Venue Visions</span><span>Demo prototype · Sample data · Local browser storage only</span></div>
       </footer>
