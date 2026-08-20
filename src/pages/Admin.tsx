@@ -154,15 +154,6 @@ export default function Admin({ weddings, activeWeddingId, onSelectWedding, onOp
         </section>
       )}
 
-      <section className="panel venue-switcher-demo">
-        <div>
-          <p className="eyebrow">VENUE</p>
-          <h2>Demo Venue</h2>
-          <p>This build is configured for one venue. The data model keeps a venue ID on every wedding so multi-venue support can be added later.</p>
-        </div>
-        <button className="button button--ghost venue-coming-soon" disabled>＋ Add another venue · Coming soon</button>
-      </section>
-
       <section className="admin-metrics metric-grid">
         <article><span>Inventory styles</span><strong>{inventory.length}</strong><small>cataloged items</small></article>
         <article><span>Wedding workspaces</span><strong>{weddings.length}</strong><small>kept separate</small></article>
@@ -243,15 +234,15 @@ export default function Admin({ weddings, activeWeddingId, onSelectWedding, onOp
 
       <section className="panel demo-scope-panel">
         <div>
-          <p className="eyebrow">PRODUCTION DIRECTION</p>
-          <h2>One venue now. Multi-venue later.</h2>
-          <p>Each couple has its own link and workspace. The owner can switch between every wedding after signing in. A future multi-venue version will add a venue selector above the dashboard.</p>
+          <p className="eyebrow">DEMO STRUCTURE</p>
+          <h2>One venue, separate private wedding workspaces.</h2>
+          <p>Each couple has its own demo link and access code. After signing into Owner View, the venue owner can switch between every wedding without signing in again.</p>
         </div>
         <div className="demo-scope-grid">
-          <article><span>Current venue</span><strong>1</strong><small>Demo Venue</small></article>
-          <article><span>Separate weddings</span><strong>{weddings.length}</strong><small>unique couple access</small></article>
+          <article><span>Venue</span><strong>1</strong><small>single venue setup</small></article>
+          <article><span>Wedding workspaces</span><strong>{weddings.length}</strong><small>kept separate</small></article>
           <article><span>Date protection</span><strong>On</strong><small>duplicate dates warned</small></article>
-          <article><span>Multiple venues</span><strong>Soon</strong><small>planned, not active</small></article>
+          <article><span>Access</span><strong>Demo</strong><small>clearly labeled prototype access</small></article>
         </div>
       </section>
 

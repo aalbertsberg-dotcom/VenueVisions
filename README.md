@@ -1,4 +1,4 @@
-# Venue Visions v0.7
+# Venue Visions v0.7.1
 
 Demo prototype for a wedding venue décor catalog, couple workspace, visual venue planner, messaging, and owner dashboard.
 
@@ -29,7 +29,7 @@ The owner dashboard includes **Access details** for each couple with Copy Link, 
 - Couple/venue message role now follows the authenticated demo role instead of a manual role toggle.
 - Public décor browsing remains available, but changing a wedding requires wedding or owner access.
 - Duplicate wedding dates remain blocked for the current venue.
-- Multiple venues remain marked **Coming soon**.
+- The prototype is intentionally scoped to a **single venue**.
 
 ## Run locally
 
