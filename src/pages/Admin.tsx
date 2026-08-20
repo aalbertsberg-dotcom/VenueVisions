@@ -6,11 +6,13 @@ import type { WeddingWorkspace } from '../types'
 type AdminProps = {
   weddings: WeddingWorkspace[]
   activeWeddingId: string
+  onSelectWedding: (id: string) => void
   onOpenWedding: (id: string, destination?: PageKey) => void
   onAddWedding: (couple: string, date: string, guests: number) => string | null
-  demoAcknowledged: boolean
-  onAcknowledgeDemo: () => void
+  authenticated: boolean
+  onAuthenticate: (code: string) => boolean
   onExitDemo: () => void
+  onLogout: () => void
 }
 
 const DEMO_OWNER_CODE = '123456'
@@ -23,7 +25,11 @@ function venueUnread(wedding: WeddingWorkspace) {
   return wedding.messages.filter((message) => message.senderRole === 'bride' && !message.readByVenue).length
 }
 
-export default function Admin({ weddings, activeWeddingId, onOpenWedding, onAddWedding, demoAcknowledged, onAcknowledgeDemo, onExitDemo }: AdminProps) {
+function coupleLink(wedding: WeddingWorkspace) {
+  return `${window.location.origin}${window.location.pathname}#/couple/${encodeURIComponent(wedding.accessSlug)}`
+}
+
+export default function Admin({ weddings, activeWeddingId, onSelectWedding, onOpenWedding, onAddWedding, authenticated, onAuthenticate, onExitDemo, onLogout }: AdminProps) {
   const [showAdd, setShowAdd] = useState(false)
   const [couple, setCouple] = useState('')
   const [date, setDate] = useState('')
@@ -31,8 +37,11 @@ export default function Admin({ weddings, activeWeddingId, onOpenWedding, onAddW
   const [formError, setFormError] = useState('')
   const [accessCode, setAccessCode] = useState(DEMO_OWNER_CODE)
   const [accessError, setAccessError] = useState('')
+  const [accessWeddingId, setAccessWeddingId] = useState<string | null>(null)
+  const [copyStatus, setCopyStatus] = useState('')
 
   const sortedWeddings = useMemo(() => [...weddings].sort((a, b) => a.profile.date.localeCompare(b.profile.date)), [weddings])
+  const activeWedding = weddings.find((wedding) => wedding.id === activeWeddingId) ?? sortedWeddings[0]
   const totalSelected = weddings.reduce((sum, wedding) => sum + wedding.selections.reduce((sub, selection) => sub + selection.quantity, 0), 0)
   const totalUnread = weddings.reduce((sum, wedding) => sum + venueUnread(wedding), 0)
 
@@ -52,15 +61,29 @@ export default function Admin({ weddings, activeWeddingId, onOpenWedding, onAddW
 
   const submitAccess = (event: FormEvent) => {
     event.preventDefault()
-    if (accessCode.trim().toUpperCase() !== DEMO_OWNER_CODE) {
+    if (!onAuthenticate(accessCode)) {
       setAccessError('That demo password is not correct.')
       return
     }
     setAccessError('')
-    onAcknowledgeDemo()
   }
 
-  if (!demoAcknowledged) {
+  const copyText = async (text: string, label: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopyStatus(`${label} copied.`)
+      window.setTimeout(() => setCopyStatus(''), 1800)
+    } catch {
+      window.prompt(`Copy ${label.toLowerCase()}:`, text)
+    }
+  }
+
+  const copyInvite = async (wedding: WeddingWorkspace) => {
+    const text = `Venue Visions wedding access\n${wedding.profile.couple}\n${coupleLink(wedding)}\nAccess code: ${wedding.accessCode}`
+    await copyText(text, 'Wedding access')
+  }
+
+  if (!authenticated) {
     return (
       <main className="page-main shell owner-access-page">
         <section className="panel owner-access-card" aria-labelledby="owner-access-title">
@@ -68,7 +91,7 @@ export default function Admin({ weddings, activeWeddingId, onOpenWedding, onAddW
           <p className="eyebrow">OWNER VIEW · DEMO ACCESS</p>
           <h1 id="owner-access-title">Owner dashboard</h1>
           <p className="owner-access-lead">
-            This prototype uses a temporary demo password so the owner flow feels separate from the bride experience.
+            Sign into the owner side to manage every wedding, switch active couples, and view each couple's access details.
           </p>
 
           <form className="owner-access-form" onSubmit={submitAccess}>
@@ -79,16 +102,15 @@ export default function Admin({ weddings, activeWeddingId, onOpenWedding, onAddW
               autoComplete="off"
               value={accessCode}
               onChange={(event) => { setAccessCode(event.target.value); setAccessError('') }}
-              placeholder="Demo password"
               autoFocus
             />
-            <small>Demo password is prefilled for this prototype: <strong>{DEMO_OWNER_CODE}</strong></small>
+            <small>Prefilled for this prototype: <strong>{DEMO_OWNER_CODE}</strong></small>
             {accessError && <div className="owner-access-error" role="alert">{accessError}</div>}
             <button className="button button--primary full-width" type="submit">Enter Owner View</button>
           </form>
 
           <div className="owner-access-note">
-            <strong>Prototype only.</strong> This is a presentation gate, not real security. The production version will use secure authentication, role-based access, and private customer data.
+            <strong>Prototype only.</strong> This is a presentation gate, not real security. Production will use secure owner authentication and private customer data.
           </div>
           <button className="text-link owner-access-back" type="button" onClick={onExitDemo}>← Back to public demo</button>
         </section>
@@ -98,20 +120,45 @@ export default function Admin({ weddings, activeWeddingId, onOpenWedding, onAddW
 
   return (
     <main className="page-main shell admin-page">
-      <section className="page-intro page-intro--split">
+      <section className="page-intro page-intro--split admin-intro">
         <div>
           <p className="eyebrow">OWNER VIEW</p>
-          <h1>Each couple gets their own workspace.</h1>
-          <p>Inventory is shared by the venue, while décor selections, messages, notes and floor plans stay separated by wedding.</p>
+          <h1>Manage every couple from one dashboard.</h1>
+          <p>Inventory is shared by the venue. Décor, messages, notes, floor plans and access stay separated by wedding.</p>
         </div>
-        <span className="prototype-badge prototype-badge--large">Prototype admin</span>
+        <div className="owner-session-actions">
+          <span className="prototype-badge prototype-badge--large">Owner signed in</span>
+          <button className="text-link" type="button" onClick={onLogout}>Sign out</button>
+        </div>
       </section>
+
+      {activeWedding && (
+        <section className="panel owner-active-wedding">
+          <div className="owner-active-wedding__copy">
+            <p className="eyebrow">ACTIVE WEDDING</p>
+            <h2>Switch couples without leaving Owner View.</h2>
+            <p>Choose a wedding here and it becomes the active workspace across décor, the designer, messages and My Wedding.</p>
+          </div>
+          <div className="owner-active-wedding__controls">
+            <label htmlFor="owner-active-wedding-select">Active couple</label>
+            <select id="owner-active-wedding-select" value={activeWeddingId} onChange={(event) => onSelectWedding(event.target.value)}>
+              {sortedWeddings.map((wedding) => (
+                <option key={wedding.id} value={wedding.id}>{wedding.profile.couple} · {formatDate(wedding.profile.date)}</option>
+              ))}
+            </select>
+            <div className="owner-active-wedding__buttons">
+              <button className="button button--primary button--small" onClick={() => onOpenWedding(activeWedding.id, 'wedding')}>Open workspace</button>
+              <button className="button button--ghost button--small" onClick={() => onOpenWedding(activeWedding.id, 'messages')}>Messages</button>
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="panel venue-switcher-demo">
         <div>
           <p className="eyebrow">VENUE</p>
           <h2>Demo Venue</h2>
-          <p>This build is configured for one venue. The data model already keeps a venue ID on every wedding so multi-venue support can be added later.</p>
+          <p>This build is configured for one venue. The data model keeps a venue ID on every wedding so multi-venue support can be added later.</p>
         </div>
         <button className="button button--ghost venue-coming-soon" disabled>＋ Add another venue · Coming soon</button>
       </section>
@@ -124,11 +171,11 @@ export default function Admin({ weddings, activeWeddingId, onOpenWedding, onAddW
       </section>
 
       <section className="panel admin-weddings admin-weddings--cards">
-        <div className="panel__heading">
+        <div className="panel__heading admin-weddings__heading">
           <div>
             <p className="eyebrow">UPCOMING</p>
             <h2>Couples &amp; wedding workspaces</h2>
-            <p className="booking-rule">One wedding per calendar date for this venue. The demo prevents accidental double-booking.</p>
+            <p className="booking-rule">One wedding per calendar date for this venue. If that date is already used, the owner is warned before a duplicate workspace can be created.</p>
           </div>
           <button className="button button--small button--primary" onClick={() => { setShowAdd((current) => !current); setFormError('') }}>{showAdd ? 'Cancel' : '+ Add wedding'}</button>
         </div>
@@ -143,16 +190,19 @@ export default function Admin({ weddings, activeWeddingId, onOpenWedding, onAddW
           </form>
         )}
 
+        {copyStatus && <div className="copy-toast" role="status">{copyStatus}</div>}
+
         <div className="wedding-workspace-grid">
           {sortedWeddings.map((wedding) => {
             const selectedPieces = wedding.selections.reduce((sum, selection) => sum + selection.quantity, 0)
             const unread = venueUnread(wedding)
             const active = wedding.id === activeWeddingId
+            const showAccess = accessWeddingId === wedding.id
             return (
               <article className={`wedding-workspace-card ${active ? 'wedding-workspace-card--active' : ''}`} key={wedding.id}>
                 <div className="wedding-workspace-card__top">
                   <div>
-                    <span className="mini-label">{active ? 'ACTIVE DEMO WORKSPACE' : 'WEDDING WORKSPACE'}</span>
+                    <span className="mini-label">{active ? 'ACTIVE OWNER WORKSPACE' : 'WEDDING WORKSPACE'}</span>
                     <h3>{wedding.profile.couple}</h3>
                     <strong className="workspace-date">{formatDate(wedding.profile.date)}</strong>
                   </div>
@@ -164,10 +214,27 @@ export default function Admin({ weddings, activeWeddingId, onOpenWedding, onAddW
                   <div><span>Plan</span><strong>{wedding.placedItems.length ? `${wedding.placedItems.length} pcs` : '—'}</strong></div>
                   <div><span>Messages</span><strong>{unread ? `${unread} new` : wedding.messages.length}</strong></div>
                 </div>
-                <div className="workspace-actions">
+                <div className="workspace-actions workspace-actions--three">
                   <button className="button button--primary button--small" onClick={() => onOpenWedding(wedding.id, 'wedding')}>Open workspace</button>
                   <button className="button button--ghost button--small" onClick={() => onOpenWedding(wedding.id, 'messages')}>Messages</button>
+                  <button className="button button--ghost button--small" onClick={() => { setAccessWeddingId(showAccess ? null : wedding.id); setCopyStatus('') }}>Access details</button>
                 </div>
+
+                {showAccess && (
+                  <div className="couple-access-details">
+                    <div className="couple-access-details__heading">
+                      <div><span className="mini-label">COUPLE ACCESS</span><strong>Private demo link</strong></div>
+                      <span className="access-code-pill">Code {wedding.accessCode}</span>
+                    </div>
+                    <code className="couple-access-url">{coupleLink(wedding)}</code>
+                    <div className="couple-access-details__actions">
+                      <button className="button button--small button--ghost" onClick={() => copyText(coupleLink(wedding), 'Wedding link')}>Copy link</button>
+                      <button className="button button--small button--ghost" onClick={() => copyText(wedding.accessCode, 'Access code')}>Copy code</button>
+                      <button className="button button--small button--primary" onClick={() => copyInvite(wedding)}>Resend access</button>
+                    </div>
+                    <small>Production would email a secure sign-in link or one-time code. The owner would resend access instead of recovering a stored password.</small>
+                  </div>
+                )}
               </article>
             )
           })}
@@ -178,12 +245,12 @@ export default function Admin({ weddings, activeWeddingId, onOpenWedding, onAddW
         <div>
           <p className="eyebrow">PRODUCTION DIRECTION</p>
           <h2>One venue now. Multi-venue later.</h2>
-          <p>For a live venue, each couple would sign into only their own wedding. The owner would see all weddings for that venue. A future multi-venue version would add a venue selector above this dashboard.</p>
+          <p>Each couple has its own link and workspace. The owner can switch between every wedding after signing in. A future multi-venue version will add a venue selector above the dashboard.</p>
         </div>
         <div className="demo-scope-grid">
           <article><span>Current venue</span><strong>1</strong><small>Demo Venue</small></article>
-          <article><span>Separate weddings</span><strong>{weddings.length}</strong><small>fully interactive locally</small></article>
-          <article><span>Double-booking protection</span><strong>On</strong><small>same date can’t be reused</small></article>
+          <article><span>Separate weddings</span><strong>{weddings.length}</strong><small>unique couple access</small></article>
+          <article><span>Date protection</span><strong>On</strong><small>duplicate dates warned</small></article>
           <article><span>Multiple venues</span><strong>Soon</strong><small>planned, not active</small></article>
         </div>
       </section>

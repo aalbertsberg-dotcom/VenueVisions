@@ -10,7 +10,6 @@ type MessagesProps = {
   messages: WeddingMessage[]
   setMessages: Dispatch<SetStateAction<WeddingMessage[]>>
   currentRole: MessageRole
-  setCurrentRole: (role: MessageRole) => void
   notificationsEnabled: boolean
   setNotificationsEnabled: (enabled: boolean) => void
   onOpenContext: (context: MessageContext) => void
@@ -40,7 +39,6 @@ export default function Messages({
   messages,
   setMessages,
   currentRole,
-  setCurrentRole,
   notificationsEnabled,
   setNotificationsEnabled,
   onOpenContext,
@@ -193,13 +191,10 @@ export default function Messages({
           <h1>Keep the conversation with the plan.</h1>
           <p>Questions, confirmations, photos and linked décor stay attached to this wedding instead of getting scattered across texts and email.</p>
         </div>
-        <div className="message-demo-role">
-          <span className="mini-label">DEMO AS</span>
-          <div className="role-switch" role="group" aria-label="Demo message role">
-            <button className={currentRole === 'bride' ? 'active' : ''} onClick={() => setCurrentRole('bride')}>Bride</button>
-            <button className={currentRole === 'venue' ? 'active' : ''} onClick={() => setCurrentRole('venue')}>Venue</button>
-          </div>
-          <small>Real accounts would determine this automatically.</small>
+        <div className="message-demo-role message-demo-role--locked">
+          <span className="mini-label">SIGNED IN AS</span>
+          <strong>{currentRole === 'venue' ? 'Venue Team' : profile.couple}</strong>
+          <small>Role follows the demo access used to enter this workspace.</small>
         </div>
       </section>
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Logo from './Logo'
+import type { WeddingWorkspace } from '../types'
 
 export type PageKey = 'home' | 'catalog' | 'wedding' | 'planner' | 'messages' | 'admin'
 
@@ -9,6 +10,13 @@ type HeaderProps = {
   selectionCount: number
   unreadMessages: number
   activeWeddingName: string
+  weddings: WeddingWorkspace[]
+  activeWeddingId: string
+  ownerAuthenticated: boolean
+  coupleAuthenticated: boolean
+  onSelectWedding: (id: string) => void
+  onOwnerLogout: () => void
+  onCoupleLogout: () => void
   onResetDemo: () => void
 }
 
@@ -16,10 +24,24 @@ const navItems: Array<{ key: PageKey; label: string; description: string }> = [
   { key: 'catalog', label: 'Décor Catalog', description: 'Browse venue inventory' },
   { key: 'planner', label: 'Venue Designer', description: 'Build the floor plan' },
   { key: 'wedding', label: 'My Wedding', description: 'Selections, notes and details' },
-  { key: 'messages', label: 'Messages', description: 'Bride and venue conversation' },
+  { key: 'messages', label: 'Messages', description: 'Couple and venue conversation' },
 ]
 
-export default function Header({ page, onNavigate, selectionCount, unreadMessages, activeWeddingName, onResetDemo }: HeaderProps) {
+export default function Header({
+  page,
+  onNavigate,
+  selectionCount,
+  unreadMessages,
+  activeWeddingName,
+  weddings,
+  activeWeddingId,
+  ownerAuthenticated,
+  coupleAuthenticated,
+  onSelectWedding,
+  onOwnerLogout,
+  onCoupleLogout,
+  onResetDemo,
+}: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => setMenuOpen(false), [page])
@@ -29,6 +51,8 @@ export default function Header({ page, onNavigate, selectionCount, unreadMessage
     onNavigate(next)
   }
 
+  const sortedWeddings = [...weddings].sort((a, b) => a.profile.date.localeCompare(b.profile.date))
+
   return (
     <>
       <header className="site-header">
@@ -37,9 +61,9 @@ export default function Header({ page, onNavigate, selectionCount, unreadMessage
         </button>
 
         <div className="header-controls">
-          {page !== 'home' && page !== 'admin' && (
-            <span className="header-wedding-chip" title="Currently selected demo wedding">
-              {activeWeddingName || 'Active wedding'}
+          {(ownerAuthenticated || coupleAuthenticated) && page !== 'home' && (
+            <span className={ownerAuthenticated ? 'header-wedding-chip header-wedding-chip--owner' : 'header-wedding-chip'} title="Currently selected wedding">
+              {ownerAuthenticated ? 'Owner · ' : ''}{activeWeddingName || 'Active wedding'}
             </span>
           )}
           <button
@@ -70,10 +94,34 @@ export default function Header({ page, onNavigate, selectionCount, unreadMessage
           <button className="nav-drawer__close" type="button" aria-label="Close navigation menu" onClick={() => setMenuOpen(false)}>×</button>
         </div>
 
-        {page !== 'home' && page !== 'admin' && (
+        {ownerAuthenticated && (
+          <div className="nav-owner-switcher">
+            <div className="nav-owner-switcher__heading">
+              <span>Owner mode</span>
+              <button type="button" onClick={() => { setMenuOpen(false); onOwnerLogout() }}>Sign out</button>
+            </div>
+            <label htmlFor="nav-active-wedding">Active wedding</label>
+            <select id="nav-active-wedding" value={activeWeddingId} onChange={(event) => onSelectWedding(event.target.value)}>
+              {sortedWeddings.map((wedding) => (
+                <option value={wedding.id} key={wedding.id}>{wedding.profile.couple} · {wedding.profile.date}</option>
+              ))}
+            </select>
+            <small>Switching here changes the wedding shown throughout the owner workspace.</small>
+          </div>
+        )}
+
+        {!ownerAuthenticated && coupleAuthenticated && (
           <div className="nav-drawer__wedding">
-            <span>Active wedding</span>
-            <strong>{activeWeddingName || 'Active wedding'}</strong>
+            <span>Signed into wedding</span>
+            <strong>{activeWeddingName || 'Wedding workspace'}</strong>
+            <button className="nav-inline-signout" type="button" onClick={() => { setMenuOpen(false); onCoupleLogout() }}>Sign out of wedding</button>
+          </div>
+        )}
+
+        {!ownerAuthenticated && !coupleAuthenticated && (
+          <div className="nav-drawer__wedding nav-drawer__wedding--public">
+            <span>Wedding access</span>
+            <strong>Use your couple link or access code</strong>
           </div>
         )}
 
@@ -99,7 +147,7 @@ export default function Header({ page, onNavigate, selectionCount, unreadMessage
 
         <div className="nav-drawer__footer">
           <button className="nav-drawer__owner" onClick={() => go('admin')}>
-            <span><strong>Owner View</strong><small>Venue dashboard & wedding workspaces</small></span>
+            <span><strong>{ownerAuthenticated ? 'Owner Dashboard' : 'Owner View'}</strong><small>{ownerAuthenticated ? 'Manage and switch weddings' : 'Venue dashboard & wedding workspaces'}</small></span>
             <span aria-hidden="true">›</span>
           </button>
           <button className="nav-drawer__reset" onClick={() => { setMenuOpen(false); onResetDemo() }}>Reset demo data</button>

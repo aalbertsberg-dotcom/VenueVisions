@@ -19,9 +19,11 @@ const categories: Array<'All' | Category> = [
 type CatalogProps = {
   selections: Selection[]
   onSetQuantity: (itemId: string, quantity: number) => void
+  canEdit: boolean
+  onRequireAccess: () => void
 }
 
-export default function Catalog({ selections, onSetQuantity }: CatalogProps) {
+export default function Catalog({ selections, onSetQuantity, canEdit, onRequireAccess }: CatalogProps) {
   const [category, setCategory] = useState<'All' | Category>('All')
   const [query, setQuery] = useState('')
   const [detailId, setDetailId] = useState<string | null>(null)
@@ -55,6 +57,7 @@ export default function Catalog({ selections, onSetQuantity }: CatalogProps) {
           <h1>Explore what the real catalog could look like.</h1>
           <p>These are example decorations, quantities and details only. A live version would replace them with the venue's photographed inventory.</p>
           <div className="sample-data-note"><strong>Sample data</strong><span>Nothing on this page represents the venue's actual inventory yet.</span></div>
+          {!canEdit && <div className="catalog-access-note"><strong>Browsing is public in the demo.</strong><span>Sign into a wedding workspace before adding décor to a couple's plan.</span><button className="text-link" onClick={onRequireAccess}>Wedding access →</button></div>}
         </div>
         <div className="selection-summary">
           <span className="mini-label">YOUR SELECTION</span>
@@ -87,7 +90,9 @@ export default function Catalog({ selections, onSetQuantity }: CatalogProps) {
                 <div className="catalog-card__meta"><span>{item.category}</span><span>{item.quantity} available</span></div>
                 <h3><button onClick={() => setDetailId(item.id)}>{item.name}</button></h3>
                 <p className="catalog-card__color">{item.color} · {item.dimensions}</p>
-                {qty === 0 ? (
+                {!canEdit ? (
+                  <button className="button button--small button--ghost full-width" onClick={onRequireAccess}>Sign in to select</button>
+                ) : qty === 0 ? (
                   <button className="button button--small button--primary full-width" onClick={() => onSetQuantity(item.id, 1)}>Add to my wedding</button>
                 ) : (
                   <div className="quantity-control">
@@ -119,8 +124,11 @@ export default function Catalog({ selections, onSetQuantity }: CatalogProps) {
                 <div><dt>Available</dt><dd>{detail.quantity}</dd></div>
               </dl>
               <p className="owner-only-note">Storage location is intentionally hidden from customer view.</p>
-              <button className="button button--primary full-width" onClick={() => { onSetQuantity(detail.id, Math.max(1, selectedQuantity(detail.id))); setDetailId(null) }}>
-                {selectedQuantity(detail.id) ? 'Keep in my wedding' : 'Add to my wedding'}
+              <button className="button button--primary full-width" onClick={() => {
+                if (!canEdit) { setDetailId(null); onRequireAccess(); return }
+                onSetQuantity(detail.id, Math.max(1, selectedQuantity(detail.id))); setDetailId(null)
+              }}>
+                {!canEdit ? 'Sign in to select' : selectedQuantity(detail.id) ? 'Keep in my wedding' : 'Add to my wedding'}
               </button>
             </div>
           </section>

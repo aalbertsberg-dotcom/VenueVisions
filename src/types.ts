@@ -88,6 +88,8 @@ export type WeddingMessage = {
 export type WeddingWorkspace = {
   id: string
   venueId: string
+  accessSlug: string
+  accessCode: string
   status: WeddingStatus
   profile: WeddingProfile
   selections: Selection[]

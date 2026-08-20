@@ -6,10 +6,12 @@ import Wedding from './pages/Wedding'
 import Planner from './pages/Planner'
 import Messages from './pages/Messages'
 import Admin from './pages/Admin'
+import CoupleAccess from './pages/CoupleAccess'
 import { inventory } from './data'
 import type { MessageContext, MessageRole, PlacedItem, Selection, WeddingMessage, WeddingProfile, WeddingStatus, WeddingWorkspace } from './types'
 
 const DEMO_VENUE_ID = 'demo-venue-1'
+const OWNER_DEMO_CODE = '123456'
 
 const defaultProfile: WeddingProfile = {
   couple: 'Sarah & John',
@@ -83,6 +85,8 @@ const demoWeddings: WeddingWorkspace[] = [
   {
     id: 'wedding-sarah-john',
     venueId: DEMO_VENUE_ID,
+    accessSlug: 'sarah-john',
+    accessCode: '111111',
     status: 'Ready',
     profile: defaultProfile,
     selections: starterSelections,
@@ -92,6 +96,8 @@ const demoWeddings: WeddingWorkspace[] = [
   {
     id: 'wedding-ashley-mark',
     venueId: DEMO_VENUE_ID,
+    accessSlug: 'ashley-mark',
+    accessCode: '222222',
     status: 'Designing',
     profile: {
       couple: 'Ashley & Mark',
@@ -122,6 +128,8 @@ const demoWeddings: WeddingWorkspace[] = [
   {
     id: 'wedding-jennifer-matt',
     venueId: DEMO_VENUE_ID,
+    accessSlug: 'jennifer-matt',
+    accessCode: '333333',
     status: 'Not started',
     profile: {
       couple: 'Jennifer & Matt',
@@ -135,9 +143,15 @@ const demoWeddings: WeddingWorkspace[] = [
   },
 ]
 
-function parseHash(): PageKey {
-  const value = window.location.hash.replace('#/', '').replace('#', '')
-  return ['catalog', 'wedding', 'planner', 'messages', 'admin'].includes(value) ? value as PageKey : 'home'
+type RouteState = { page: PageKey; coupleSlug: string | null }
+
+function parseRoute(): RouteState {
+  const value = window.location.hash.replace(/^#\/?/, '')
+  if (value.startsWith('couple/')) {
+    return { page: 'wedding', coupleSlug: decodeURIComponent(value.slice('couple/'.length)) }
+  }
+  const page = ['catalog', 'wedding', 'planner', 'messages', 'admin'].includes(value) ? value as PageKey : 'home'
+  return { page, coupleSlug: null }
 }
 
 function readLocal<T>(key: string, fallback: T): T {
@@ -149,11 +163,45 @@ function readLocal<T>(key: string, fallback: T): T {
   }
 }
 
+function readSession<T>(key: string, fallback: T): T {
+  try {
+    const value = sessionStorage.getItem(key)
+    return value ? JSON.parse(value) as T : fallback
+  } catch {
+    return fallback
+  }
+}
+
+function slugify(value: string) {
+  return value.toLowerCase().trim().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'wedding'
+}
+
+function migrateWeddingAccess(weddings: WeddingWorkspace[]): WeddingWorkspace[] {
+  const knownCodes: Record<string, string> = {
+    'wedding-sarah-john': '111111',
+    'wedding-ashley-mark': '222222',
+    'wedding-jennifer-matt': '333333',
+  }
+  const used = new Set<string>()
+  return weddings.map((wedding, index) => {
+    let slug = wedding.accessSlug || slugify(wedding.profile.couple)
+    const base = slug
+    let suffix = 2
+    while (used.has(slug)) slug = `${base}-${suffix++}`
+    used.add(slug)
+    return {
+      ...wedding,
+      venueId: wedding.venueId || DEMO_VENUE_ID,
+      accessSlug: slug,
+      accessCode: wedding.accessCode || knownCodes[wedding.id] || String(444444 + index),
+    }
+  })
+}
+
 function initialWeddings(): WeddingWorkspace[] {
   const current = readLocal<WeddingWorkspace[] | null>('venueVisions.weddings.v1', null)
-  if (current?.length) return current
+  if (current?.length) return migrateWeddingAccess(current)
 
-  // Migrate the original single-wedding demo into Sarah & John's workspace if it exists.
   const oldProfile = readLocal<WeddingProfile>('venueVisions.profile', defaultProfile)
   const oldSelections = readLocal<Selection[]>('venueVisions.selections', starterSelections)
   const oldPlan = readLocal<PlacedItem[]>('venueVisions.plan', starterPlan)
@@ -164,55 +212,78 @@ function initialWeddings(): WeddingWorkspace[] {
 }
 
 export default function App() {
-  const [page, setPage] = useState<PageKey>(() => parseHash())
+  const initialRoute = parseRoute()
+  const [page, setPage] = useState<PageKey>(initialRoute.page)
+  const [requestedCoupleSlug, setRequestedCoupleSlug] = useState<string | null>(initialRoute.coupleSlug)
   const [weddings, setWeddings] = useState<WeddingWorkspace[]>(() => initialWeddings())
   const [activeWeddingId, setActiveWeddingId] = useState<string>(() => readLocal('venueVisions.activeWeddingId', 'wedding-sarah-john'))
   const [messageRole, setMessageRole] = useState<MessageRole>(() => readLocal('venueVisions.messageRole', 'bride'))
   const [notificationsEnabled, setNotificationsEnabled] = useState<boolean>(() => readLocal('venueVisions.notifications', false))
-  const [adminDemoAcknowledged, setAdminDemoAcknowledged] = useState(false)
+  const [ownerAuthenticated, setOwnerAuthenticated] = useState<boolean>(() => readSession('venueVisions.ownerSession', false))
+  const [coupleAuthenticatedWeddingId, setCoupleAuthenticatedWeddingId] = useState<string | null>(() => readSession('venueVisions.coupleSessionWeddingId', null))
 
   const activeWedding = weddings.find((wedding) => wedding.id === activeWeddingId) ?? weddings[0]
   const selections = activeWedding?.selections ?? []
   const profile = activeWedding?.profile ?? defaultProfile
   const placedItems = activeWedding?.placedItems ?? []
   const messages = activeWedding?.messages ?? []
+  const hasWorkspaceAccess = Boolean(activeWedding && (ownerAuthenticated || coupleAuthenticatedWeddingId === activeWedding.id))
 
   useEffect(() => {
     const onHashChange = () => {
-      const next = parseHash()
-      if (next === 'admin') setAdminDemoAcknowledged(false)
-      setPage(next)
+      const next = parseRoute()
+      setPage(next.page)
+      setRequestedCoupleSlug(next.coupleSlug)
     }
     window.addEventListener('hashchange', onHashChange)
     return () => window.removeEventListener('hashchange', onHashChange)
   }, [])
 
+  useEffect(() => {
+    if (!requestedCoupleSlug) return
+    const wedding = weddings.find((item) => item.accessSlug === requestedCoupleSlug)
+    if (!wedding) return
+    setActiveWeddingId(wedding.id)
+    if (!ownerAuthenticated) setMessageRole('bride')
+  }, [requestedCoupleSlug, weddings, ownerAuthenticated])
+
   useEffect(() => localStorage.setItem('venueVisions.weddings.v1', JSON.stringify(weddings)), [weddings])
   useEffect(() => localStorage.setItem('venueVisions.activeWeddingId', JSON.stringify(activeWeddingId)), [activeWeddingId])
   useEffect(() => localStorage.setItem('venueVisions.messageRole', JSON.stringify(messageRole)), [messageRole])
   useEffect(() => localStorage.setItem('venueVisions.notifications', JSON.stringify(notificationsEnabled)), [notificationsEnabled])
+  useEffect(() => sessionStorage.setItem('venueVisions.ownerSession', JSON.stringify(ownerAuthenticated)), [ownerAuthenticated])
+  useEffect(() => {
+    if (coupleAuthenticatedWeddingId) sessionStorage.setItem('venueVisions.coupleSessionWeddingId', JSON.stringify(coupleAuthenticatedWeddingId))
+    else sessionStorage.removeItem('venueVisions.coupleSessionWeddingId')
+  }, [coupleAuthenticatedWeddingId])
 
   const updateActiveWedding = (updater: (current: WeddingWorkspace) => WeddingWorkspace) => {
     setWeddings((current) => current.map((wedding) => wedding.id === activeWeddingId ? updater(wedding) : wedding))
   }
 
   useEffect(() => {
-    if (page !== 'messages' || !activeWedding) return
+    if (page !== 'messages' || !activeWedding || !hasWorkspaceAccess) return
+    const role: MessageRole = ownerAuthenticated ? 'venue' : 'bride'
+    if (messageRole !== role) setMessageRole(role)
     const nextMessages = activeWedding.messages.map((message) => {
-      if (message.senderRole === messageRole) return message
-      if (messageRole === 'bride' && !message.readByBride) return { ...message, readByBride: true }
-      if (messageRole === 'venue' && !message.readByVenue) return { ...message, readByVenue: true }
+      if (message.senderRole === role) return message
+      if (role === 'bride' && !message.readByBride) return { ...message, readByBride: true }
+      if (role === 'venue' && !message.readByVenue) return { ...message, readByVenue: true }
       return message
     })
     if (nextMessages.some((message, index) => message !== activeWedding.messages[index])) {
       updateActiveWedding((wedding) => ({ ...wedding, messages: nextMessages }))
     }
-  }, [page, messageRole, activeWeddingId])
+  }, [page, ownerAuthenticated, activeWeddingId, hasWorkspaceAccess])
 
   const navigate = (next: PageKey) => {
-    if (next === 'admin') setAdminDemoAcknowledged(false)
-    window.location.hash = next === 'home' ? '#/' : `#/${next}`
+    let hash = next === 'home' ? '#/' : `#/${next}`
+    if (next === 'wedding' && !ownerAuthenticated && coupleAuthenticatedWeddingId === activeWedding?.id) {
+      hash = `#/couple/${encodeURIComponent(activeWedding.accessSlug)}`
+    }
+    window.location.hash = hash
     setPage(next)
+    setRequestedCoupleSlug(next === 'wedding' && hash.includes('/couple/') ? activeWedding.accessSlug : null)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -227,6 +298,10 @@ export default function App() {
   }
 
   const setQuantity = (itemId: string, requested: number) => {
+    if (!hasWorkspaceAccess) {
+      navigate('wedding')
+      return
+    }
     const available = inventory.find((item) => item.id === itemId)?.quantity ?? 0
     const quantity = Math.max(0, Math.min(requested, available))
     updateActiveWedding((wedding) => {
@@ -241,6 +316,7 @@ export default function App() {
   }
 
   const updateProfile = (next: WeddingProfile) => {
+    if (!hasWorkspaceAccess) return
     if (next.date && weddings.some((wedding) => wedding.id !== activeWeddingId && wedding.profile.date === next.date)) {
       const conflict = weddings.find((wedding) => wedding.id !== activeWeddingId && wedding.profile.date === next.date)
       window.alert(`${next.date} is already booked for ${conflict?.profile.couple}. This demo allows one wedding per calendar date.`)
@@ -250,6 +326,7 @@ export default function App() {
   }
 
   const setPlacedItems = (next: PlacedItem[] | ((current: PlacedItem[]) => PlacedItem[])) => {
+    if (!hasWorkspaceAccess) return
     updateActiveWedding((wedding) => ({
       ...wedding,
       placedItems: typeof next === 'function' ? next(wedding.placedItems) : next,
@@ -258,16 +335,26 @@ export default function App() {
   }
 
   const setMessages = (next: WeddingMessage[] | ((current: WeddingMessage[]) => WeddingMessage[])) => {
+    if (!hasWorkspaceAccess) return
     updateActiveWedding((wedding) => ({
       ...wedding,
       messages: typeof next === 'function' ? next(wedding.messages) : next,
     }))
   }
 
+  const selectActiveWedding = (id: string) => {
+    if (!weddings.some((wedding) => wedding.id === id)) return
+    setActiveWeddingId(id)
+    if (ownerAuthenticated) setMessageRole('venue')
+  }
+
   const openWedding = (id: string, destination: PageKey = 'wedding') => {
     setActiveWeddingId(id)
     setMessageRole('venue')
-    navigate(destination)
+    window.location.hash = destination === 'home' ? '#/' : `#/${destination}`
+    setPage(destination)
+    setRequestedCoupleSlug(null)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const addWedding = (couple: string, date: string, guests: number): string | null => {
@@ -278,9 +365,16 @@ export default function App() {
     if (conflict) return `${date} is already booked for ${conflict.profile.couple}. Choose another date.`
 
     const id = `wedding-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
+    const baseSlug = slugify(cleanCouple)
+    let accessSlug = baseSlug
+    let suffix = 2
+    while (weddings.some((wedding) => wedding.accessSlug === accessSlug)) accessSlug = `${baseSlug}-${suffix++}`
+    const accessCode = String(Math.floor(100000 + Math.random() * 900000))
     const newWedding: WeddingWorkspace = {
       id,
       venueId: DEMO_VENUE_ID,
+      accessSlug,
+      accessCode,
       status: 'Not started' as WeddingStatus,
       profile: { couple: cleanCouple, date, guests: Math.max(1, guests || 1), notes: '' },
       selections: [],
@@ -292,33 +386,101 @@ export default function App() {
     return null
   }
 
+  const authenticateOwner = (code: string) => {
+    if (code.trim() !== OWNER_DEMO_CODE) return false
+    setOwnerAuthenticated(true)
+    setCoupleAuthenticatedWeddingId(null)
+    setMessageRole('venue')
+    return true
+  }
+
+  const authenticateCouple = (code: string) => {
+    if (!activeWedding || code.trim() !== activeWedding.accessCode) return false
+    setCoupleAuthenticatedWeddingId(activeWedding.id)
+    setOwnerAuthenticated(false)
+    setMessageRole('bride')
+    return true
+  }
+
+  const logoutOwner = () => {
+    setOwnerAuthenticated(false)
+    setMessageRole('bride')
+    sessionStorage.removeItem('venueVisions.ownerSession')
+    navigate('home')
+  }
+
+  const logoutCouple = () => {
+    setCoupleAuthenticatedWeddingId(null)
+    setMessageRole('bride')
+    navigate('home')
+  }
+
   const selectionCount = useMemo(() => selections.reduce((sum, item) => sum + item.quantity, 0), [selections])
   const unreadMessages = useMemo(() => messages.filter((message) => {
-    if (message.senderRole === messageRole) return false
-    return messageRole === 'bride' ? !message.readByBride : !message.readByVenue
-  }).length, [messages, messageRole])
+    const role: MessageRole = ownerAuthenticated ? 'venue' : 'bride'
+    if (message.senderRole === role) return false
+    return role === 'bride' ? !message.readByBride : !message.readByVenue
+  }).length, [messages, ownerAuthenticated])
+
+  const protectedPage = page === 'wedding' || page === 'planner' || page === 'messages'
+  const showCoupleGate = protectedPage && !hasWorkspaceAccess
 
   return (
     <div className="app-shell">
-      <Header page={page} onNavigate={navigate} selectionCount={selectionCount} unreadMessages={unreadMessages} activeWeddingName={profile.couple} onResetDemo={() => {
-        if (!window.confirm('Reset the Venue Visions demo back to its original sample data?')) return
-        setWeddings(demoWeddings)
-        setActiveWeddingId('wedding-sarah-john')
-        setMessageRole('bride')
-        setNotificationsEnabled(false)
-      }} />
+      <Header
+        page={page}
+        onNavigate={navigate}
+        selectionCount={selectionCount}
+        unreadMessages={unreadMessages}
+        activeWeddingName={profile.couple}
+        weddings={weddings}
+        activeWeddingId={activeWeddingId}
+        ownerAuthenticated={ownerAuthenticated}
+        coupleAuthenticated={coupleAuthenticatedWeddingId === activeWeddingId}
+        onSelectWedding={selectActiveWedding}
+        onOwnerLogout={logoutOwner}
+        onCoupleLogout={logoutCouple}
+        onResetDemo={() => {
+          if (!window.confirm('Reset the Venue Visions demo back to its original sample data?')) return
+          setWeddings(demoWeddings)
+          setActiveWeddingId('wedding-sarah-john')
+          setMessageRole('bride')
+          setNotificationsEnabled(false)
+          setOwnerAuthenticated(false)
+          setCoupleAuthenticatedWeddingId(null)
+          sessionStorage.removeItem('venueVisions.ownerSession')
+          sessionStorage.removeItem('venueVisions.coupleSessionWeddingId')
+        }}
+      />
       <div className="prototype-banner" role="note">
         <div className="shell prototype-banner__inner">
           <strong>DEMO PROTOTYPE</strong>
-          <span>Sample data only · Multiple wedding workspaces are separated in this browser · Production will use secure accounts and a database.</span>
+          <span>Sample data only · Couples have separate demo access · Production will use secure accounts and a database.</span>
         </div>
       </div>
-      {page === 'home' && <Home onNavigate={navigate} />}
-      {page === 'catalog' && <Catalog selections={selections} onSetQuantity={setQuantity} />}
-      {page === 'wedding' && <Wedding profile={profile} selections={selections} unreadMessages={unreadMessages} onProfileChange={updateProfile} onSetQuantity={setQuantity} onNavigate={navigate} />}
-      {page === 'planner' && <Planner selections={selections} placedItems={placedItems} setPlacedItems={setPlacedItems} onSetQuantity={setQuantity} />}
-      {page === 'messages' && <Messages profile={profile} selections={selections} placedItems={placedItems} messages={messages} setMessages={setMessages} currentRole={messageRole} setCurrentRole={setMessageRole} notificationsEnabled={notificationsEnabled} setNotificationsEnabled={setNotificationsEnabled} onOpenContext={openMessageContext} />}
-      {page === 'admin' && <Admin weddings={weddings} activeWeddingId={activeWeddingId} onOpenWedding={openWedding} onAddWedding={addWedding} demoAcknowledged={adminDemoAcknowledged} onAcknowledgeDemo={() => setAdminDemoAcknowledged(true)} onExitDemo={() => navigate('home')} />}
+
+      {showCoupleGate && activeWedding && (
+        <CoupleAccess wedding={activeWedding} onSubmitCode={authenticateCouple} onBackHome={() => navigate('home')} />
+      )}
+
+      {!showCoupleGate && page === 'home' && <Home onNavigate={navigate} />}
+      {!showCoupleGate && page === 'catalog' && <Catalog selections={selections} onSetQuantity={setQuantity} canEdit={hasWorkspaceAccess} onRequireAccess={() => navigate('wedding')} />}
+      {!showCoupleGate && page === 'wedding' && <Wedding profile={profile} selections={selections} unreadMessages={unreadMessages} onProfileChange={updateProfile} onSetQuantity={setQuantity} onNavigate={navigate} />}
+      {!showCoupleGate && page === 'planner' && <Planner selections={selections} placedItems={placedItems} setPlacedItems={setPlacedItems} onSetQuantity={setQuantity} />}
+      {!showCoupleGate && page === 'messages' && <Messages profile={profile} selections={selections} placedItems={placedItems} messages={messages} setMessages={setMessages} currentRole={ownerAuthenticated ? 'venue' : 'bride'} notificationsEnabled={notificationsEnabled} setNotificationsEnabled={setNotificationsEnabled} onOpenContext={openMessageContext} />}
+      {page === 'admin' && (
+        <Admin
+          weddings={weddings}
+          activeWeddingId={activeWeddingId}
+          onSelectWedding={selectActiveWedding}
+          onOpenWedding={openWedding}
+          onAddWedding={addWedding}
+          authenticated={ownerAuthenticated}
+          onAuthenticate={authenticateOwner}
+          onExitDemo={() => navigate('home')}
+          onLogout={logoutOwner}
+        />
+      )}
       <footer className="site-footer">
         <div className="shell"><span>Venue Visions</span><span>Demo prototype · Sample data · Local browser storage only</span></div>
       </footer>
