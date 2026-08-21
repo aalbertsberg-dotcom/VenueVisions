@@ -156,7 +156,18 @@ export default function App() {
     window.location.hash = hash; setPage(next); setRequestedCoupleSlug(hash.includes('/couple/') ? activeWedding?.accessSlug ?? null : null); window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const openCoupleDemo = () => { const wedding = weddings[0]; setActiveWeddingId(wedding.id); setCoupleAuthenticatedWeddingId(null); setOwnerAuthenticated(false); window.location.hash = `#/couple/${wedding.accessSlug}`; setPage('wedding'); setRequestedCoupleSlug(wedding.accessSlug); window.scrollTo({ top: 0, behavior: 'smooth' }) }
+  const openCoupleDemoBySlug = (slug: string) => {
+    const wedding = weddings.find((entry) => entry.accessSlug === slug) ?? weddings[0]
+    setActiveWeddingId(wedding.id)
+    setCoupleAuthenticatedWeddingId(null)
+    setOwnerAuthenticated(false)
+    setPlatformAuthenticated(false)
+    window.location.hash = `#/couple/${wedding.accessSlug}`
+    setPage('wedding')
+    setRequestedCoupleSlug(wedding.accessSlug)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+  const openCoupleDemo = () => openCoupleDemoBySlug(weddings[0].accessSlug)
 
   const openMessageContext = (context: MessageContext) => { if (context.kind === 'inventory') { localStorage.setItem('venueVisions.catalogFocus', context.id); navigate('catalog') } else { localStorage.setItem('venueVisions.plannerArea', context.id); navigate('planner') } }
 
@@ -227,7 +238,7 @@ export default function App() {
       {showCoupleGate && activeWedding && <CoupleAccess wedding={activeWedding} onSubmitCode={authenticateCouple} onBackHome={() => navigate('venue')} />}
       {showCalendarGate && <Admin weddings={weddings} activeWeddingId={activeWeddingId} onSelectWedding={selectActiveWedding} onOpenWedding={openWedding} onAddWedding={addWedding} authenticated={ownerAuthenticated} onAuthenticate={authenticateOwner} onExitDemo={() => navigate('venue')} onLogout={logoutOwner} onNavigate={navigate} />}
 
-      {!showCoupleGate && !showCalendarGate && page === 'home' && <Home onNavigate={navigate} />}
+      {!showCoupleGate && !showCalendarGate && page === 'home' && <Home onNavigate={navigate} onOpenCouple={openCoupleDemoBySlug} />}
       {!showCoupleGate && !showCalendarGate && page === 'for-venues' && <ForVenues leads={venueLeads} setLeads={setVenueLeads} onOpenPlatform={() => navigate('platform')} />}
       {!showCoupleGate && !showCalendarGate && page === 'venue' && <VenuePortal onNavigate={navigate} onOpenCoupleDemo={openCoupleDemo} />}
       {!showCoupleGate && !showCalendarGate && page === 'catalog' && <Catalog selections={selections} onSetQuantity={setQuantity} canEdit={hasWorkspaceAccess} onRequireAccess={openCoupleDemo} packageTier={packageInfo.tier} packageName={packageInfo.name} />}

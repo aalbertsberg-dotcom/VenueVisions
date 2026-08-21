@@ -1427,15 +1427,21 @@ h3 { color: var(--brown); }
 .saas-hero__visual { position: relative; min-height: 560px; }
 .saas-hero__visual::before { content:''; position:absolute; inset: 5% 4% 8% 8%; border-radius: 48% 52% 45% 55% / 50%; background: linear-gradient(145deg,#e8eee8,#efe3d7); transform: rotate(-4deg); }
 .platform-stack { position: relative; z-index: 1; width: min(480px, 94%); margin: 20px auto 0; padding: 30px; border: 1px solid #e3d9d0; border-radius: 28px; background: rgba(255,255,255,.96); box-shadow: 0 32px 80px rgba(60,48,41,.16); }
+.platform-stack__explore { margin-bottom: 18px; color: #7f6b5c; font-size: 10px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
 .platform-stack__top { display: flex; align-items: center; gap: 13px; }
 .platform-stack__top .brand__mark { width: 42px; height: 42px; }
 .platform-stack__top > div { display: flex; flex-direction: column; }
 .platform-stack__top span { color: #9c7b65; font-size: 9px; font-weight: 800; letter-spacing: .13em; }
 .platform-stack__top strong { font-family: 'Playfair Display', Georgia, serif; color: var(--brown); font-size: 23px; }
 .platform-stack__line { width: 1px; height: 34px; margin: 8px 0 8px 20px; background: #d5c8bd; }
-.tenant-card { display: flex; align-items: center; gap: 15px; padding: 17px; border: 1px solid #dfd7d0; border-radius: 16px; background: white; }
+.tenant-card { width: 100%; display: flex; align-items: center; gap: 15px; padding: 17px; border: 1px solid #dfd7d0; border-radius: 16px; background: white; color: inherit; text-align: left; font: inherit; }
+.tenant-card--interactive { position: relative; cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease; }
+.tenant-card--interactive:hover, .tenant-card--interactive:focus-visible { transform: translateY(-3px); border-color: #adbfaf; background: #fdfefd; box-shadow: 0 16px 32px rgba(57,80,63,.14); outline: none; }
+.platform-link-arrow { margin-left: auto; color: #7f6c60 !important; font-size: 24px !important; font-weight: 400 !important; letter-spacing: 0 !important; transition: transform .18s ease; }
+.tenant-card--interactive:hover .platform-link-arrow, .tenant-card--interactive:focus-visible .platform-link-arrow { transform: translateX(3px); }
 .tenant-card--featured { border-color: #c9d4cb; box-shadow: 0 12px 28px rgba(57,80,63,.11); }
-.tenant-card--future { margin-top: 12px; opacity: .72; border-style: dashed; }
+.tenant-card--future { margin-top: 12px; opacity: .82; border-style: dashed; }
+.tenant-card--future:hover, .tenant-card--future:focus-visible { opacity: 1; }
 .tenant-mark { width: 48px; height: 48px; flex: 0 0 48px; display: grid; place-items: center; border-radius: 50%; background: var(--co-green); color: #fff; font-family: 'Playfair Display', Georgia, serif; font-size: 18px; }
 .tenant-card--future .tenant-mark { background: #eef0ed; color: #66736a; }
 .tenant-card > div:last-child { display: flex; flex-direction: column; min-width: 0; }
@@ -1443,7 +1449,12 @@ h3 { color: var(--brown); }
 .tenant-card strong { margin: 2px 0; color: var(--brown); font-size: 15px; }
 .tenant-card small { color: #93877f; font-size: 9px; }
 .tenant-couples { display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; margin: 10px 0 0 24px; }
-.tenant-couples span { padding: 9px 7px; border: 1px solid #e7dfd8; border-radius: 9px; background: #faf8f5; color: #756a63; text-align: center; font-size: 9px; }
+.tenant-couples button { min-width: 0; padding: 9px 7px; border: 1px solid #e7dfd8; border-radius: 9px; background: #faf8f5; color: #756a63; text-align: center; font: inherit; cursor: pointer; transition: transform .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease; }
+.tenant-couples button:hover, .tenant-couples button:focus-visible { transform: translateY(-2px); border-color: #b8c7ba; background: #f2f6f1; box-shadow: 0 8px 18px rgba(57,80,63,.09); outline: none; }
+.tenant-couples button span, .tenant-couples button small { display: block; }
+.tenant-couples button span { font-size: 9px; }
+.tenant-couples button small { margin-top: 3px; color: #9b8d84; font-size: 7px; }
+.platform-stack__hint { margin-top: 14px; color: #a09288; text-align: center; font-size: 8px; }
 .feature-six-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
 .feature-six-grid article { padding: 25px; border: 1px solid #e4dcd4; border-radius: 18px; background: #fff; }
 .feature-six-grid article > span { display: inline-grid; place-items: center; width: 35px; height: 35px; margin-bottom: 18px; border-radius: 50%; background: #eff3ee; color: #66806a; font-weight: 800; font-size: 11px; }

@@ -1,7 +1,7 @@
 import type { PageKey } from '../components/Header'
 import Logo from '../components/Logo'
 
-export default function Home({ onNavigate }: { onNavigate: (page: PageKey) => void }) {
+export default function Home({ onNavigate, onOpenCouple }: { onNavigate: (page: PageKey) => void; onOpenCouple: (slug: string) => void }) {
   return (
     <main className="saas-home">
       <section className="saas-hero shell">
@@ -20,17 +20,26 @@ export default function Home({ onNavigate }: { onNavigate: (page: PageKey) => vo
           </div>
         </div>
         <div className="saas-hero__visual">
-          <div className="platform-stack">
+          <div className="platform-stack" aria-label="Interactive Venue Visions product example">
+            <div className="platform-stack__explore">Explore a working Venue Visions example</div>
             <div className="platform-stack__top"><Logo compact /><div><span>VENUE VISIONS</span><strong>Platform</strong></div></div>
             <div className="platform-stack__line" />
-            <article className="tenant-card tenant-card--featured">
+            <button className="tenant-card tenant-card--featured tenant-card--interactive" type="button" onClick={() => onNavigate('venue')}>
               <div className="tenant-mark">CO</div>
               <div><span>VENUE DEMO</span><strong>Chandelier Oaks</strong><small>Example owner dashboard · packages · Pinrose Prop Shop · weddings</small></div>
-            </article>
-            <div className="tenant-couples">
-              <span>Sarah & John</span><span>Ashley & Mark</span><span>Jennifer & Matt</span>
+              <span className="platform-link-arrow" aria-hidden="true">›</span>
+            </button>
+            <div className="tenant-couples" aria-label="Open a private couple demo">
+              <button type="button" onClick={() => onOpenCouple('sarah-john')}><span>Sarah & John</span><small>Open wedding</small></button>
+              <button type="button" onClick={() => onOpenCouple('ashley-mark')}><span>Ashley & Mark</span><small>Open wedding</small></button>
+              <button type="button" onClick={() => onOpenCouple('jennifer-matt')}><span>Jennifer & Matt</span><small>Open wedding</small></button>
             </div>
-            <article className="tenant-card tenant-card--future"><div className="tenant-mark">+</div><div><span>YOUR VENUE</span><strong>Configured next</strong><small>Your branding · your spaces · your inventory · your couples</small></div></article>
+            <button className="tenant-card tenant-card--future tenant-card--interactive" type="button" onClick={() => onNavigate('for-venues')}>
+              <div className="tenant-mark">+</div>
+              <div><span>YOUR VENUE</span><strong>Configured next</strong><small>Your branding · your spaces · your inventory · your couples</small></div>
+              <span className="platform-link-arrow" aria-hidden="true">›</span>
+            </button>
+            <div className="platform-stack__hint">Select any card to explore the experience.</div>
           </div>
         </div>
       </section>

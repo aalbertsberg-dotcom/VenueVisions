@@ -1,4 +1,4 @@
-# Venue Visions v1.1 — Company Prototype + Venue Demo
+# Venue Visions v1.1.1 — Company Prototype + Venue Demo
 
 Venue Visions is structured as the product/company, with Chandelier Oaks used as the first **Venue Demo** showing how a customer venue experience can be configured.
 
@@ -83,3 +83,11 @@ The current GitHub Pages version is intentionally browser-only. A real release s
 - production audit/security controls
 
 The purpose of the current version is to validate **what Venue Visions should be as a company** and **what a venue receives as a customer** before committing to those backend decisions.
+
+
+## v1.1.1
+- Makes the homepage platform diagram interactive.
+- Chandelier Oaks opens the venue demo.
+- Each sample couple opens its own private wedding access page.
+- “Your Venue” opens the venue demo request/onboarding page.
+- Adds hover, keyboard focus, and clear interaction cues.
