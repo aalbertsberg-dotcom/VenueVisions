@@ -1,3 +1,7 @@
+# Venue Visions v1.5.2
+
+Public homepage hero alignment and venue portal card polish.
+
 # Venue Visions v1.5.1 — Multi-Venue SaaS Preview
 
 Venue Visions is the company/product. v1.5.1 proves that one SaaS platform can host separate venue brands, operations, inventories and private couple workspaces without mixing venue data.

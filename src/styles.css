@@ -2008,3 +2008,59 @@ body { font-size: 16px; line-height: 1.5; }
   .venue-comparison-card > b { grid-column:2; }
   .multi-venue-stack { padding:18px; }
 }
+
+/* v1.5.2 — public home hero alignment */
+.saas-hero {
+  min-height: auto;
+  grid-template-columns: minmax(0, 1.04fr) minmax(480px, .96fr);
+  gap: 56px;
+  align-items: start;
+  padding-top: 74px;
+  padding-bottom: 54px;
+}
+.saas-hero__copy { padding-top: 16px; }
+.saas-hero__visual {
+  min-height: 0;
+  align-items: flex-start;
+  padding-top: 30px;
+}
+.multi-venue-stack {
+  width: min(570px, 100%);
+  margin: 0;
+  padding: 34px;
+  border-radius: 24px;
+  box-shadow: 0 22px 54px rgba(70,52,42,.11);
+}
+.multi-venue-stack::before { content: none; }
+.multi-venue-stack > p { margin: 16px 0 22px; font-size: 14px; }
+.multi-venue-stack__cards { gap: 11px; }
+.multi-venue-mini,
+.multi-venue-stack__next { gap: 14px; padding: 16px; border-radius: 15px; }
+.multi-venue-mini > span,
+.multi-venue-stack__next > span { width: 48px; height: 48px; font-size: 18px; }
+.multi-venue-mini small,
+.multi-venue-stack__next small { font-size: 8.5px; }
+.multi-venue-mini strong,
+.multi-venue-stack__next strong { font-size: 16px; }
+.multi-venue-mini em,
+.multi-venue-stack__next em { font-size: 11px; }
+.saas-proof-section { padding-top: 6px; padding-bottom: 70px; }
+.saas-proof-section .saas-proof-row { margin-top: 0; gap: 14px; }
+.saas-proof-section .saas-proof-row div { padding: 20px; background: #fff; }
+.saas-proof-section .saas-proof-row strong { font-size: 14px; }
+.saas-proof-section .saas-proof-row span { font-size: 11px; }
+
+@media (max-width: 1050px) {
+  .saas-hero { grid-template-columns: 1fr; gap: 26px; padding-bottom: 38px; }
+  .saas-hero__copy { padding-top: 0; }
+  .saas-hero__visual { min-height: 0; padding-top: 0; }
+  .multi-venue-stack { width: min(650px, 100%); margin: 0; }
+  .saas-proof-section { padding-bottom: 55px; }
+}
+
+@media (max-width: 760px) {
+  .saas-hero { padding-top: 42px; padding-bottom: 32px; }
+  .multi-venue-stack { padding: 22px; }
+  .saas-proof-section { padding-top: 0; padding-bottom: 48px; }
+  .saas-proof-section .saas-proof-row { grid-template-columns: 1fr; }
+}

@@ -20,11 +20,6 @@ export default function Home({ onNavigate, onOpenVenue, venues }: {
             <button className="button button--ghost" onClick={() => onNavigate('for-venues')}>For Venues</button>
             <button className="text-link home-signin-link" onClick={() => onNavigate('signin')}>Sign In</button>
           </div>
-          <div className="saas-proof-row">
-            <div><strong>Venue-owned workflow</strong><span>Inventory, packages, spaces and weddings</span></div>
-            <div><strong>Venue-based couple portals</strong><span>Each wedding lives inside its booked venue</span></div>
-            <div><strong>Reusable SaaS platform</strong><span>One product configured differently for every venue</span></div>
-          </div>
         </div>
 
         <div className="saas-hero__visual">
@@ -47,6 +42,14 @@ export default function Home({ onNavigate, onOpenVenue, venues }: {
             </div>
             <button className="multi-venue-stack__next" onClick={() => onNavigate('for-venues')}><span>+</span><div><small>YOUR VENUE</small><strong>See Venue Visions for your property</strong><em>Your logo · colors · spaces · inventory · couples</em></div><b>›</b></button>
           </div>
+        </div>
+      </section>
+
+      <section className="saas-proof-section shell" aria-label="Venue Visions platform highlights">
+        <div className="saas-proof-row">
+          <div><strong>Venue-owned workflow</strong><span>Inventory, packages, spaces and weddings</span></div>
+          <div><strong>Venue-based couple portals</strong><span>Each wedding lives inside its booked venue</span></div>
+          <div><strong>Reusable SaaS platform</strong><span>One product configured differently for every venue</span></div>
         </div>
       </section>
 
