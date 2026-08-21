@@ -1,4 +1,4 @@
-# Venue Visions v1.6
+# Venue Visions v1.6.1
 
 Venue Visions is now presented as a broader **event venue management & planning SaaS**, not wedding-only software.
 

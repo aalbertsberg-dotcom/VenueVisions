@@ -277,7 +277,7 @@ export default function App() {
       {showCalendarGate && <Admin venueId={activeVenueId} weddings={venueWeddings} activeWeddingId={activeWedding?.id ?? ''} onSelectWedding={selectActiveWedding} onOpenWedding={openWedding} onAddWedding={addWedding} authenticated={ownerAuthenticated} onAuthenticate={authenticateOwner} onExitPreview={() => navigate('venue')} onLogout={logoutOwner} onNavigate={navigate} />}
 
       {!showCoupleGate && !showCalendarGate && page === 'home' && <Home onNavigate={navigate} onOpenVenue={openVenueBySlug} venues={venueConfigs} />}
-      {!showCoupleGate && !showCalendarGate && page === 'venues' && <Venues venues={venueConfigs} weddings={weddings} onOpenVenue={openVenueBySlug} onOpenCouple={openCoupleBySlug} />}
+      {!showCoupleGate && !showCalendarGate && page === 'venues' && <Venues venues={venueConfigs} weddings={weddings} onOpenVenue={openVenueBySlug} onOpenCouple={openCoupleBySlug} onForVenues={() => navigate('for-venues')} />}
       {!showCoupleGate && !showCalendarGate && page === 'for-venues' && <ForVenues leads={venueLeads} setLeads={setVenueLeads} onBackHome={() => navigate('home')} onViewVenueDemo={() => navigate('venues')} />}
       {!showCoupleGate && !showCalendarGate && page === 'signin' && <SignIn venues={venueConfigs} activeVenueId={activeVenueId} onSelectVenue={selectVenue} onVenueOwner={() => navigate('admin')} onCouple={openFirstCouple} onBackHome={() => navigate('home')} />}
       {!showCoupleGate && !showCalendarGate && page === 'venue' && <VenuePortal venueId={activeVenueId} weddings={venueWeddings} onNavigate={navigate} onOpenCouple={openCoupleByWeddingId} />}
