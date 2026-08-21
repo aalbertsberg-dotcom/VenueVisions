@@ -67,14 +67,14 @@ export default function Header({
         ]
       : platformAuthenticated
         ? [
-            { key: 'platform', label: 'Founder Dashboard', description: 'Venue Visions SaaS administration' },
-            { key: 'for-venues', label: 'Venue Onboarding', description: 'See the signup and branding flow' },
-            { key: 'venue', label: 'Chandelier Oaks Demo', description: 'Open the first venue experience' },
+            { key: 'platform', label: 'VV Admin · POC', description: 'Proof of concept for Venue Visions company operations' },
+            { key: 'for-venues', label: 'Demo Requests', description: 'See the venue inquiry and branding flow' },
+            { key: 'venue', label: 'Venue Demo', description: 'Chandelier Oaks example venue experience' },
           ]
         : [
-            { key: 'home', label: 'Venue Visions', description: 'SaaS platform overview' },
-            { key: 'venue', label: 'Chandelier Oaks Demo', description: 'See the first venue portal' },
-            { key: 'for-venues', label: 'For Venues', description: 'Apply, brand and launch a venue portal' },
+            { key: 'home', label: 'Venue Visions', description: 'Company and product overview' },
+            { key: 'venue', label: 'Venue Demo', description: 'See how Venue Visions works for a venue' },
+            { key: 'for-venues', label: 'For Venues', description: 'Request a demo for your venue' },
           ]
 
   const go = (next: PageKey) => {
@@ -82,7 +82,7 @@ export default function Header({
     onNavigate(next)
   }
 
-  const sessionLabel = ownerAuthenticated ? `Owner · ${activeWeddingName}` : coupleAuthenticated ? activeWeddingName : platformAuthenticated ? 'Founder demo' : 'Public demo'
+  const sessionLabel = ownerAuthenticated ? `Owner · ${activeWeddingName}` : coupleAuthenticated ? activeWeddingName : platformAuthenticated ? 'VV Admin · POC' : 'Venue Visions'
 
   return (
     <>
@@ -108,7 +108,7 @@ export default function Header({
       {menuOpen && <button className="nav-menu-backdrop" aria-label="Close menu" onClick={() => setMenuOpen(false)} />}
       <nav id="venue-visions-menu" className={menuOpen ? 'nav-drawer nav-drawer--open' : 'nav-drawer'} aria-label="Primary navigation">
         <div className="nav-drawer__heading">
-          <div><span className="mini-label">VENUE VISIONS</span><strong>{ownerAuthenticated ? 'Chandelier Oaks Owner' : coupleAuthenticated ? 'Wedding Portal' : platformAuthenticated ? 'Founder Console' : 'Platform Demo'}</strong></div>
+          <div><span className="mini-label">VENUE VISIONS</span><strong>{ownerAuthenticated ? 'Chandelier Oaks Owner' : coupleAuthenticated ? 'Wedding Portal' : platformAuthenticated ? 'Admin Proof of Concept' : 'Venue Visions'}</strong></div>
           <button className="nav-drawer__close" type="button" aria-label="Close navigation menu" onClick={() => setMenuOpen(false)}>×</button>
         </div>
 
@@ -128,11 +128,11 @@ export default function Header({
         )}
 
         {platformAuthenticated && !ownerAuthenticated && !coupleAuthenticated && (
-          <div className="nav-drawer__wedding"><span>Venue Visions</span><strong>Founder demo session</strong><button className="nav-inline-signout" type="button" onClick={() => { setMenuOpen(false); onPlatformLogout() }}>Sign out</button></div>
+          <div className="nav-drawer__wedding"><span>Venue Visions Admin</span><strong>Proof of concept session</strong><button className="nav-inline-signout" type="button" onClick={() => { setMenuOpen(false); onPlatformLogout() }}>Sign out</button></div>
         )}
 
         {!ownerAuthenticated && !coupleAuthenticated && !platformAuthenticated && (
-          <div className="nav-drawer__wedding nav-drawer__wedding--public"><span>SaaS demo</span><strong>Venue Visions owns the platform. Venues subscribe to use it.</strong></div>
+          <div className="nav-drawer__wedding nav-drawer__wedding--public"><span>Venue Visions</span><strong>Explore the company, then open the Chandelier Oaks venue demo.</strong></div>
         )}
 
         <div className="nav-drawer__links">
@@ -150,7 +150,7 @@ export default function Header({
 
         <div className="nav-drawer__footer">
           {!ownerAuthenticated && <button className="nav-drawer__owner" onClick={() => go('admin')}><span><strong>Chandelier Oaks Owner Login</strong><small>Demo password 123456</small></span><span>›</span></button>}
-          {!platformAuthenticated && <button className="nav-drawer__owner nav-drawer__owner--platform" onClick={() => go('platform')}><span><strong>Venue Visions Founder Login</strong><small>SaaS-level administration</small></span><span>›</span></button>}
+          {!platformAuthenticated && <button className="nav-drawer__owner nav-drawer__owner--platform" onClick={() => go('platform')}><span><strong>VV Admin · Proof of Concept</strong><small>Internal company-side concept for review</small></span><span>›</span></button>}
           <button className="nav-drawer__reset" onClick={() => { setMenuOpen(false); onResetDemo() }}>Reset all demo data</button>
         </div>
       </nav>

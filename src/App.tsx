@@ -17,7 +17,7 @@ import type { MessageContext, MessageRole, PlacedItem, Selection, VenueLead, Wed
 
 const DEMO_VENUE_ID = chandelierOaks.id
 const OWNER_DEMO_CODE = '123456'
-const FOUNDER_DEMO_CODE = '654321'
+const ADMIN_POC_CODE = '654321'
 
 const starterMessages: WeddingMessage[] = [
   {
@@ -198,7 +198,7 @@ export default function App() {
   }
 
   const authenticateOwner = (code: string) => { if (code.trim() !== OWNER_DEMO_CODE) return false; setOwnerAuthenticated(true); setPlatformAuthenticated(false); setCoupleAuthenticatedWeddingId(null); return true }
-  const authenticatePlatform = (code: string) => { if (code.trim() !== FOUNDER_DEMO_CODE) return false; setPlatformAuthenticated(true); setOwnerAuthenticated(false); setCoupleAuthenticatedWeddingId(null); return true }
+  const authenticatePlatform = (code: string) => { if (code.trim() !== ADMIN_POC_CODE) return false; setPlatformAuthenticated(true); setOwnerAuthenticated(false); setCoupleAuthenticatedWeddingId(null); return true }
   const authenticateCouple = (code: string) => { if (!activeWedding || code.trim() !== activeWedding.accessCode) return false; setCoupleAuthenticatedWeddingId(activeWedding.id); setOwnerAuthenticated(false); setPlatformAuthenticated(false); return true }
   const logoutOwner = () => { setOwnerAuthenticated(false); sessionStorage.removeItem('venueVisions.saas.ownerSession'); navigate('venue') }
   const logoutPlatform = () => { setPlatformAuthenticated(false); sessionStorage.removeItem('venueVisions.saas.platformSession'); navigate('home') }
@@ -212,9 +212,9 @@ export default function App() {
   const showCalendarGate = page === 'calendar' && !ownerAuthenticated
 
   const resetDemo = () => {
-    if (!window.confirm('Reset the Venue Visions SaaS demo, all Chandelier Oaks wedding workspaces and onboarding leads?')) return
+    if (!window.confirm('Reset the Venue Visions prototype, Chandelier Oaks venue demo, wedding workspaces and venue requests?')) return
     setWeddings(demoWeddings); setActiveWeddingId('wedding-sarah-john'); setNotificationsEnabled(false); setOwnerAuthenticated(false); setPlatformAuthenticated(false); setCoupleAuthenticatedWeddingId(null); setVenueLeads([])
-    Object.keys(localStorage).filter((key) => key.startsWith('venueVisions.saas.')).forEach((key) => localStorage.removeItem(key))
+    Object.keys(localStorage).filter((key) => key.startsWith('venueVisions.saas.') || key.startsWith('venueVisions.poc.')).forEach((key) => localStorage.removeItem(key))
     Object.keys(sessionStorage).filter((key) => key.startsWith('venueVisions.saas.')).forEach((key) => sessionStorage.removeItem(key))
     navigate('home')
   }
@@ -222,7 +222,7 @@ export default function App() {
   return (
     <div className="app-shell">
       <Header page={page} onNavigate={navigate} selectionCount={selectionCount} unreadMessages={unreadMessages} activeWeddingName={profile?.couple ?? ''} weddings={weddings} activeWeddingId={activeWeddingId} ownerAuthenticated={ownerAuthenticated} coupleAuthenticated={coupleAuthenticatedWeddingId === activeWeddingId} platformAuthenticated={platformAuthenticated} onSelectWedding={selectActiveWedding} onOwnerLogout={logoutOwner} onCoupleLogout={logoutCouple} onPlatformLogout={logoutPlatform} onResetDemo={resetDemo} />
-      <div className="prototype-banner" role="note"><div className="shell prototype-banner__inner"><strong>SAAS DEMO PROTOTYPE</strong><span>Venue Visions platform · Chandelier Oaks is the first demo venue · Public venue facts + clearly marked sample operational data.</span></div></div>
+      <div className="prototype-banner" role="note"><div className="shell prototype-banner__inner"><strong>VENUE VISIONS PROTOTYPE</strong><span>Company site · VV Admin proof of concept · Chandelier Oaks venue demo · public venue facts + clearly marked sample operational data.</span></div></div>
 
       {showCoupleGate && activeWedding && <CoupleAccess wedding={activeWedding} onSubmitCode={authenticateCouple} onBackHome={() => navigate('venue')} />}
       {showCalendarGate && <Admin weddings={weddings} activeWeddingId={activeWeddingId} onSelectWedding={selectActiveWedding} onOpenWedding={openWedding} onAddWedding={addWedding} authenticated={ownerAuthenticated} onAuthenticate={authenticateOwner} onExitDemo={() => navigate('venue')} onLogout={logoutOwner} onNavigate={navigate} />}
@@ -239,7 +239,7 @@ export default function App() {
       {page === 'admin' && <Admin weddings={weddings} activeWeddingId={activeWeddingId} onSelectWedding={selectActiveWedding} onOpenWedding={openWedding} onAddWedding={addWedding} authenticated={ownerAuthenticated} onAuthenticate={authenticateOwner} onExitDemo={() => navigate('venue')} onLogout={logoutOwner} onNavigate={navigate} />}
       {page === 'platform' && <PlatformAdmin authenticated={platformAuthenticated} onAuthenticate={authenticatePlatform} onLogout={logoutPlatform} onNavigate={navigate} leads={venueLeads} weddings={weddings} />}
 
-      <footer className="site-footer saas-footer"><div className="shell"><span>Venue Visions</span><span>Platform demo · Chandelier Oaks first venue structure · browser-only sample data</span></div></footer>
+      <footer className="site-footer saas-footer"><div className="shell"><span>Venue Visions</span><span>Company prototype · Chandelier Oaks venue demo · VV Admin proof of concept · browser-only sample data</span></div></footer>
     </div>
   )
 }

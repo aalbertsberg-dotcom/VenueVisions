@@ -14,7 +14,7 @@ export default function ForVenues({ leads, setLeads, onOpenPlatform }: ForVenues
   const logoInput = useRef<HTMLInputElement>(null)
   const [submittedId, setSubmittedId] = useState<string | null>(null)
   const [form, setForm] = useState({
-    venueName: 'Sample Venue', website: 'https://', contactName: '', email: '', phone: '', address: '', eventSpaces: 3,
+    venueName: '', website: '', contactName: '', email: '', phone: '', address: '', eventSpaces: 3,
     weddingsPerMonth: 4, inventorySize: '100–250 items', packages: '3–5 packages', notes: '', brandPrimary: '#34483b', brandAccent: '#b58a55', logoDataUrl: '',
   })
   const [needs, setNeeds] = useState<string[]>(['Digital décor catalog', 'Couple portals', 'Venue designer'])
@@ -27,7 +27,7 @@ export default function ForVenues({ leads, setLeads, onOpenPlatform }: ForVenues
   const handleLogo = (file: File | undefined) => {
     if (!file) return
     if (file.size > 800_000) {
-      window.alert('For this browser-only demo, keep the logo under 800 KB.')
+      window.alert('For this browser-only prototype, keep the logo under 800 KB.')
       return
     }
     const reader = new FileReader()
@@ -38,7 +38,7 @@ export default function ForVenues({ leads, setLeads, onOpenPlatform }: ForVenues
   const submit = (event: FormEvent) => {
     event.preventDefault()
     if (!form.venueName.trim() || !form.contactName.trim() || !form.email.trim()) {
-      window.alert('Venue name, contact name and email are required for the demo form.')
+      window.alert('Venue name, contact name and email are required.')
       return
     }
     const lead: VenueLead = {
@@ -58,15 +58,15 @@ export default function ForVenues({ leads, setLeads, onOpenPlatform }: ForVenues
       <main className="page-main shell venue-signup-success">
         <section className="panel success-card">
           <div className="success-check">✓</div>
-          <p className="eyebrow">DEMO ONBOARDING RECEIVED</p>
-          <h1>{submitted.venueName} is in the Venue Visions pipeline.</h1>
-          <p>This did not send anything externally. It is saved in this browser so the Venue Visions founder dashboard can demonstrate an onboarding lead.</p>
+          <p className="eyebrow">VENUE DEMO REQUEST · PROTOTYPE</p>
+          <h1>{submitted.venueName} demo request is saved.</h1>
+          <p>This prototype does not send anything externally. It is saved in this browser so the Venue Visions Admin POC can show how a venue demo request could enter the company workflow.</p>
           <div className="signup-summary-grid">
             <article><span>Contact</span><strong>{submitted.contactName}</strong><small>{submitted.email}</small></article>
             <article><span>Event spaces</span><strong>{submitted.eventSpaces}</strong><small>{submitted.weddingsPerMonth}/month</small></article>
             <article><span>Inventory</span><strong>{submitted.inventorySize}</strong><small>{submitted.packages}</small></article>
           </div>
-          <div className="hero__actions"><button className="button button--primary" onClick={onOpenPlatform}>View in founder dashboard</button><button className="button button--ghost" onClick={() => setSubmittedId(null)}>Submit another venue</button></div>
+          <div className="hero__actions"><button className="button button--primary" onClick={onOpenPlatform}>View in VV Admin POC</button><button className="button button--ghost" onClick={() => setSubmittedId(null)}>Submit another request</button></div>
         </section>
       </main>
     )
@@ -75,7 +75,7 @@ export default function ForVenues({ leads, setLeads, onOpenPlatform }: ForVenues
   return (
     <main className="page-main shell for-venues-page">
       <section className="page-intro page-intro--split venue-onboarding-intro">
-        <div><p className="eyebrow">VENUE VISIONS · FOR VENUES</p><h1>Turn the way you already run weddings into a branded planning portal.</h1><p>Tell Venue Visions about the property, brand, inventory and workflow. This demo builds a live preview while you fill out the onboarding form.</p></div>
+        <div><p className="eyebrow">VENUE VISIONS · FOR VENUES</p><h1>See what Venue Visions could look like for your venue.</h1><p>Tell us about the property, brand, inventory and workflow. This prototype form builds a live preview and shows the information Venue Visions would use to configure a venue demo.</p></div>
         <div className="onboarding-steps"><span><b>1</b>Venue details</span><span><b>2</b>Brand + inventory</span><span><b>3</b>Configure portal</span><span><b>4</b>Invite couples</span></div>
       </section>
 
@@ -115,8 +115,8 @@ export default function ForVenues({ leads, setLeads, onOpenPlatform }: ForVenues
             <label className="notes-field"><span>Anything unique about the workflow?</span><textarea value={form.notes} onChange={(e) => change('notes', e.target.value)} placeholder="Storage locations, appointment process, packages, unusual venue areas, setup team, etc." /></label>
           </section>
 
-          <div className="demo-submit-note"><strong>Demo behavior:</strong> submitting saves this lead only in your browser and surfaces it in the founder dashboard.</div>
-          <button className="button button--primary full-width" type="submit">Submit venue onboarding demo</button>
+          <div className="demo-submit-note"><strong>Prototype behavior:</strong> submitting saves this request only in your browser and surfaces it in the VV Admin POC. Nothing is sent externally.</div>
+          <button className="button button--primary full-width" type="submit">Request Venue Demo</button>
         </form>
 
         <aside className="portal-preview-sticky">
@@ -129,7 +129,7 @@ export default function ForVenues({ leads, setLeads, onOpenPlatform }: ForVenues
             <div className="portal-preview__hero"><span>YOUR WEDDING PORTAL</span><strong>Everything for your day, in one place.</strong><button type="button">Open my wedding</button></div>
             <div className="portal-preview__tiles"><i/><i/><i/></div>
           </div>
-          <div className="panel onboarding-includes"><p className="mini-label">VENUE VISIONS CONFIGURES</p><ul><li>Venue-branded customer portal</li><li>Owner/admin access</li><li>Separate couple workspaces</li><li>Inventory and package rules</li><li>Venue design areas</li><li>Messaging and setup summaries</li></ul></div>
+          <div className="panel onboarding-includes"><p className="mini-label">A VENUE DEMO CAN INCLUDE</p><ul><li>Venue-branded customer portal</li><li>Owner/admin access</li><li>Separate couple workspaces</li><li>Inventory and package rules</li><li>Venue design areas</li><li>Messaging and setup summaries</li></ul></div>
         </aside>
       </div>
     </main>

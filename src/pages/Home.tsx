@@ -6,17 +6,17 @@ export default function Home({ onNavigate }: { onNavigate: (page: PageKey) => vo
     <main className="saas-home">
       <section className="saas-hero shell">
         <div className="saas-hero__copy">
-          <span className="saas-pill">VENUE MANAGEMENT + COUPLE PLANNING</span>
+          <span className="saas-pill">VENUE VISIONS · WEDDING VENUE SOFTWARE</span>
           <h1>One platform for the venue. One private workspace for every couple.</h1>
-          <p>Venue Visions turns a venue's décor, spaces, packages, wedding calendar, couple communication and setup plans into one organized customer experience.</p>
+          <p>Venue Visions gives wedding venues a branded planning system for décor, spaces, packages, couples, communication and final setup — while each couple gets a private workspace for their own wedding.</p>
           <div className="hero__actions">
-            <button className="button button--primary" onClick={() => onNavigate('venue')}>Explore Chandelier Oaks demo</button>
-            <button className="button button--ghost" onClick={() => onNavigate('for-venues')}>Bring Venue Visions to a venue</button>
+            <button className="button button--primary" onClick={() => onNavigate('venue')}>View Venue Demo</button>
+            <button className="button button--ghost" onClick={() => onNavigate('for-venues')}>For Venues</button>
           </div>
           <div className="saas-proof-row">
-            <div><strong>Venue-owned data</strong><span>Inventory, packages, spaces and weddings</span></div>
+            <div><strong>Your venue, your workflow</strong><span>Inventory, packages, spaces and weddings</span></div>
             <div><strong>Private couple portals</strong><span>Only their wedding, plans and messages</span></div>
-            <div><strong>Venue Visions platform</strong><span>Reusable across future venue customers</span></div>
+            <div><strong>Venue Visions platform</strong><span>One product configured for each venue</span></div>
           </div>
         </div>
         <div className="saas-hero__visual">
@@ -25,12 +25,12 @@ export default function Home({ onNavigate }: { onNavigate: (page: PageKey) => vo
             <div className="platform-stack__line" />
             <article className="tenant-card tenant-card--featured">
               <div className="tenant-mark">CO</div>
-              <div><span>FIRST DEMO VENUE</span><strong>Chandelier Oaks</strong><small>Owner dashboard · packages · Pinrose Prop Shop · weddings</small></div>
+              <div><span>VENUE DEMO</span><strong>Chandelier Oaks</strong><small>Example owner dashboard · packages · Pinrose Prop Shop · weddings</small></div>
             </article>
             <div className="tenant-couples">
               <span>Sarah & John</span><span>Ashley & Mark</span><span>Jennifer & Matt</span>
             </div>
-            <article className="tenant-card tenant-card--future"><div className="tenant-mark">+</div><div><span>NEXT CUSTOMER</span><strong>Another venue</strong><small>Same platform · separate branding and data</small></div></article>
+            <article className="tenant-card tenant-card--future"><div className="tenant-mark">+</div><div><span>YOUR VENUE</span><strong>Configured next</strong><small>Your branding · your spaces · your inventory · your couples</small></div></article>
           </div>
         </div>
       </section>
@@ -51,10 +51,10 @@ export default function Home({ onNavigate }: { onNavigate: (page: PageKey) => vo
 
       <section className="section shell case-study-section">
         <div className="case-study-copy">
-          <p className="eyebrow">FIRST STRUCTURE · CHANDELIER OAKS</p>
-          <h2>A real venue workflow, built into the demo now.</h2>
-          <p>The demo uses Chandelier Oaks as the first venue tenant, with its public package structure, property areas and Pinrose Prop Shop concept represented inside Venue Visions.</p>
-          <button className="button button--primary" onClick={() => onNavigate('venue')}>Open the venue portal</button>
+          <p className="eyebrow">VENUE DEMO · CHANDELIER OAKS</p>
+          <h2>See what Venue Visions can look like for a real venue.</h2>
+          <p>Chandelier Oaks is the example venue in this working demo. Its public package structure, property areas and Pinrose Prop Shop concept show how Venue Visions can be configured around a venue instead of forcing every venue into the same template.</p>
+          <button className="button button--primary" onClick={() => onNavigate('venue')}>Open Venue Demo</button>
         </div>
         <div className="case-study-map">
           <div className="oak-illustration"><span className="oak-trunk"/><span className="oak-canopy oak-canopy--1"/><span className="oak-canopy oak-canopy--2"/><span className="oak-canopy oak-canopy--3"/><i className="oak-light oak-light--1"/><i className="oak-light oak-light--2"/></div>
@@ -63,8 +63,8 @@ export default function Home({ onNavigate }: { onNavigate: (page: PageKey) => vo
       </section>
 
       <section className="cta-section shell saas-cta">
-        <div><p className="eyebrow">FOR VENUES</p><h2>Build the portal around your property.</h2><p>Submit venue details, branding, website, spaces, inventory and package information in the demo onboarding flow.</p></div>
-        <button className="button button--light" onClick={() => onNavigate('for-venues')}>Open venue signup</button>
+        <div><p className="eyebrow">FOR VENUES</p><h2>Build the portal around your property.</h2><p>Tell us about your venue, branding, website, spaces, inventory and workflow. The proof-of-concept request form shows what Venue Visions would collect to build your venue demo.</p></div>
+        <button className="button button--light" onClick={() => onNavigate('for-venues')}>Request a Venue Demo</button>
       </section>
     </main>
   )

@@ -17,7 +17,7 @@ export default function VenuePortal({ onNavigate, onOpenCoupleDemo }: VenuePorta
             <div><span>CHANDELIER OAKS</span><small>Wedding Venue · Kiln, Mississippi</small></div>
           </div>
           <div className="venue-brand-hero__copy">
-            <span className="venue-powered">Powered by Venue Visions</span>
+            <span className="venue-powered">Venue Demo · Powered by Venue Visions</span>
             <h1>Your Chandelier Oaks wedding, organized from first selection to final setup.</h1>
             <p>Browse the Pinrose Prop Shop, review your package, design venue spaces and keep every question attached to your wedding plan.</p>
             <div className="hero__actions">
@@ -31,9 +31,9 @@ export default function VenuePortal({ onNavigate, onOpenCoupleDemo }: VenuePorta
 
       <section className="section shell venue-overview">
         <div className="venue-overview__intro">
-          <p className="eyebrow">CHANDELIER OAKS · VENUE VISIONS DEMO</p>
-          <h2>A venue-specific portal without giving away the platform.</h2>
-          <p>{chandelierOaks.shortName} is the first demo tenant. The customer-facing experience carries the venue identity while the underlying software remains Venue Visions.</p>
+          <p className="eyebrow">VENUE DEMO · CHANDELIER OAKS</p>
+          <h2>An example of what Venue Visions can become for any venue.</h2>
+          <p>{chandelierOaks.shortName} is the example venue for this demo. A future venue would receive the same core tools configured with its own brand, property, inventory, packages and couples.</p>
         </div>
         <div className="venue-facts">
           <article><strong>32</strong><span>acre property</span></article>
@@ -45,7 +45,7 @@ export default function VenuePortal({ onNavigate, onOpenCoupleDemo }: VenuePorta
 
       <section className="section venue-spaces-section">
         <div className="shell">
-          <div className="section-heading"><div><p className="eyebrow">DESIGNABLE PROPERTY AREAS</p><h2>Choose the place, then build the plan.</h2><p className="section-lead">The demo now lets couples switch between real Chandelier Oaks area concepts instead of a generic reception hall.</p></div></div>
+          <div className="section-heading"><div><p className="eyebrow">DESIGNABLE PROPERTY AREAS</p><h2>Choose the place, then build the plan.</h2><p className="section-lead">This venue demo lets couples switch between Chandelier Oaks area concepts instead of a generic reception hall.</p></div></div>
           <div className="venue-area-grid">
             {venueAreas.map((area) => (
               <article className={`venue-area-card venue-area-card--${area.visual}`} key={area.id}>
@@ -76,7 +76,7 @@ export default function VenuePortal({ onNavigate, onOpenCoupleDemo }: VenuePorta
         <div className="shell venue-contact-strip__inner">
           <div><span>CHANDELIER OAKS</span><strong>{chandelierOaks.address}</strong></div>
           <div><span>VENUE CONTACT</span><strong>{chandelierOaks.phone} · {chandelierOaks.email}</strong></div>
-          <div><span>DEMO NOTE</span><strong>Public venue facts + sample planning data</strong></div>
+          <div><span>VENUE DEMO</span><strong>Public venue facts + sample planning data</strong></div>
         </div>
       </section>
     </main>
