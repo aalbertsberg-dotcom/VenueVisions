@@ -5,12 +5,13 @@ import type { VenueLead } from '../types'
 type ForVenuesProps = {
   leads: VenueLead[]
   setLeads: Dispatch<SetStateAction<VenueLead[]>>
-  onOpenPlatform: () => void
+  onBackHome: () => void
+  onViewVenueDemo: () => void
 }
 
 const needOptions = ['Digital décor catalog', 'Couple portals', 'Venue designer', 'Messaging', 'Calendar & milestones', 'Setup / pull sheets', 'Package-aware access']
 
-export default function ForVenues({ leads, setLeads, onOpenPlatform }: ForVenuesProps) {
+export default function ForVenues({ leads, setLeads, onBackHome, onViewVenueDemo }: ForVenuesProps) {
   const logoInput = useRef<HTMLInputElement>(null)
   const [submittedId, setSubmittedId] = useState<string | null>(null)
   const [form, setForm] = useState({
@@ -27,7 +28,7 @@ export default function ForVenues({ leads, setLeads, onOpenPlatform }: ForVenues
   const handleLogo = (file: File | undefined) => {
     if (!file) return
     if (file.size > 800_000) {
-      window.alert('For this browser-only prototype, keep the logo under 800 KB.')
+      window.alert('For this demo, keep the logo under 800 KB.')
       return
     }
     const reader = new FileReader()
@@ -58,15 +59,15 @@ export default function ForVenues({ leads, setLeads, onOpenPlatform }: ForVenues
       <main className="page-main shell venue-signup-success">
         <section className="panel success-card">
           <div className="success-check">✓</div>
-          <p className="eyebrow">VENUE DEMO REQUEST · PROTOTYPE</p>
-          <h1>{submitted.venueName} demo request is saved.</h1>
-          <p>This prototype does not send anything externally. It is saved in this browser so the Venue Visions Admin POC can show how a venue demo request could enter the company workflow.</p>
+          <p className="eyebrow">VENUE DEMO REQUEST</p>
+          <h1>Your {submitted.venueName} demo request preview is saved.</h1>
+          <p>This public demonstration does not send the form externally. The request is stored only in this browser so the intake experience can be reviewed safely.</p>
           <div className="signup-summary-grid">
             <article><span>Contact</span><strong>{submitted.contactName}</strong><small>{submitted.email}</small></article>
             <article><span>Event spaces</span><strong>{submitted.eventSpaces}</strong><small>{submitted.weddingsPerMonth}/month</small></article>
             <article><span>Inventory</span><strong>{submitted.inventorySize}</strong><small>{submitted.packages}</small></article>
           </div>
-          <div className="hero__actions"><button className="button button--primary" onClick={onOpenPlatform}>View in VV Admin POC</button><button className="button button--ghost" onClick={() => setSubmittedId(null)}>Submit another request</button></div>
+          <div className="hero__actions"><button className="button button--primary" onClick={onViewVenueDemo}>View Venue Demo</button><button className="button button--ghost" onClick={onBackHome}>Back to Venue Visions</button><button className="text-link" onClick={() => setSubmittedId(null)}>Start another request</button></div>
         </section>
       </main>
     )
@@ -75,7 +76,7 @@ export default function ForVenues({ leads, setLeads, onOpenPlatform }: ForVenues
   return (
     <main className="page-main shell for-venues-page">
       <section className="page-intro page-intro--split venue-onboarding-intro">
-        <div><p className="eyebrow">VENUE VISIONS · FOR VENUES</p><h1>See what Venue Visions could look like for your venue.</h1><p>Tell us about the property, brand, inventory and workflow. This prototype form builds a live preview and shows the information Venue Visions would use to configure a venue demo.</p></div>
+        <div><p className="eyebrow">VENUE VISIONS · FOR VENUES</p><h1>See what Venue Visions could look like for your venue.</h1><p>Tell us about the property, brand, inventory and workflow. The form builds a live preview and shows the information Venue Visions would use to configure a venue-branded demo.</p></div>
         <div className="onboarding-steps"><span><b>1</b>Venue details</span><span><b>2</b>Brand + inventory</span><span><b>3</b>Configure portal</span><span><b>4</b>Invite couples</span></div>
       </section>
 
@@ -115,7 +116,7 @@ export default function ForVenues({ leads, setLeads, onOpenPlatform }: ForVenues
             <label className="notes-field"><span>Anything unique about the workflow?</span><textarea value={form.notes} onChange={(e) => change('notes', e.target.value)} placeholder="Storage locations, appointment process, packages, unusual venue areas, setup team, etc." /></label>
           </section>
 
-          <div className="demo-submit-note"><strong>Prototype behavior:</strong> submitting saves this request only in your browser and surfaces it in the VV Admin POC. Nothing is sent externally.</div>
+          <div className="demo-submit-note"><strong>Demo environment:</strong> this form is not connected to a live intake system. Use sample information only; submissions stay in this browser.</div>
           <button className="button button--primary full-width" type="submit">Request Venue Demo</button>
         </form>
 

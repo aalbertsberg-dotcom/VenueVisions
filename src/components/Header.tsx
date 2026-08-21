@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import Logo from './Logo'
 import type { WeddingWorkspace } from '../types'
 
-export type PageKey = 'home' | 'for-venues' | 'venue' | 'catalog' | 'wedding' | 'planner' | 'messages' | 'calendar' | 'summary' | 'admin' | 'platform'
+export type PageKey = 'home' | 'for-venues' | 'signin' | 'venue' | 'catalog' | 'wedding' | 'planner' | 'messages' | 'calendar' | 'summary' | 'admin' | 'platform'
 
 type HeaderProps = {
   page: PageKey
@@ -73,8 +73,9 @@ export default function Header({
           ]
         : [
             { key: 'home', label: 'Venue Visions', description: 'Company and product overview' },
-            { key: 'venue', label: 'Venue Demo', description: 'See how Venue Visions works for a venue' },
+            { key: 'venue', label: 'View Venue Demo', description: 'Explore the Chandelier Oaks example' },
             { key: 'for-venues', label: 'For Venues', description: 'Request a demo for your venue' },
+            { key: 'signin', label: 'Sign In', description: 'Venue owner or couple access' },
           ]
 
   const go = (next: PageKey) => {
@@ -82,7 +83,7 @@ export default function Header({
     onNavigate(next)
   }
 
-  const sessionLabel = ownerAuthenticated ? `Owner · ${activeWeddingName}` : coupleAuthenticated ? activeWeddingName : platformAuthenticated ? 'VV Admin · POC' : 'Venue Visions'
+  const sessionLabel = ownerAuthenticated ? `Owner · ${activeWeddingName}` : coupleAuthenticated ? activeWeddingName : platformAuthenticated ? 'VV Admin · POC' : page === 'venue' ? 'Venue Demo' : page === 'signin' ? 'Sign In' : 'Venue Visions'
 
   return (
     <>
@@ -100,7 +101,7 @@ export default function Header({
           >
             <span className="menu-toggle__bars" aria-hidden="true"><i /><i /><i /></span>
             <span className="menu-toggle__label">Menu</span>
-            {(selectionCount > 0 || unreadMessages > 0) && <span className="menu-toggle__badge">{unreadMessages > 0 ? unreadMessages : selectionCount}</span>}
+            {(ownerAuthenticated || coupleAuthenticated) && (selectionCount > 0 || unreadMessages > 0) && <span className="menu-toggle__badge">{unreadMessages > 0 ? unreadMessages : selectionCount}</span>}
           </button>
         </div>
       </header>
@@ -132,7 +133,7 @@ export default function Header({
         )}
 
         {!ownerAuthenticated && !coupleAuthenticated && !platformAuthenticated && (
-          <div className="nav-drawer__wedding nav-drawer__wedding--public"><span>Venue Visions</span><strong>Explore the company, then open the Chandelier Oaks venue demo.</strong></div>
+          <div className="nav-drawer__wedding nav-drawer__wedding--public"><span>Venue Visions</span><strong>Wedding venue planning software with branded owner and couple portals.</strong></div>
         )}
 
         <div className="nav-drawer__links">
@@ -148,11 +149,12 @@ export default function Header({
           ))}
         </div>
 
-        <div className="nav-drawer__footer">
-          {!ownerAuthenticated && <button className="nav-drawer__owner" onClick={() => go('admin')}><span><strong>Chandelier Oaks Owner Login</strong><small>Demo password 123456</small></span><span>›</span></button>}
-          {!platformAuthenticated && <button className="nav-drawer__owner nav-drawer__owner--platform" onClick={() => go('platform')}><span><strong>VV Admin · Proof of Concept</strong><small>Internal company-side concept for review</small></span><span>›</span></button>}
-          <button className="nav-drawer__reset" onClick={() => { setMenuOpen(false); onResetDemo() }}>Reset all demo data</button>
-        </div>
+        {(ownerAuthenticated || coupleAuthenticated || platformAuthenticated) && (
+          <div className="nav-drawer__footer">
+            {(ownerAuthenticated || coupleAuthenticated) && <button className="nav-drawer__reset" onClick={() => { setMenuOpen(false); onResetDemo() }}>Reset venue demo data</button>}
+            {platformAuthenticated && <button className="nav-drawer__reset" onClick={() => { setMenuOpen(false); onResetDemo() }}>Reset proof-of-concept data</button>}
+          </div>
+        )}
       </nav>
     </>
   )

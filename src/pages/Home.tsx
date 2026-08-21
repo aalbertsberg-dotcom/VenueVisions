@@ -12,6 +12,7 @@ export default function Home({ onNavigate, onOpenCouple }: { onNavigate: (page: 
           <div className="hero__actions">
             <button className="button button--primary" onClick={() => onNavigate('venue')}>View Venue Demo</button>
             <button className="button button--ghost" onClick={() => onNavigate('for-venues')}>For Venues</button>
+            <button className="text-link home-signin-link" onClick={() => onNavigate('signin')}>Sign In</button>
           </div>
           <div className="saas-proof-row">
             <div><strong>Your venue, your workflow</strong><span>Inventory, packages, spaces and weddings</span></div>

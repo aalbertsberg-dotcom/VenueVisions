@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import Header, { type PageKey } from './components/Header'
 import Home from './pages/Home'
 import ForVenues from './pages/ForVenues'
+import SignIn from './pages/SignIn'
 import VenuePortal from './pages/VenuePortal'
 import Catalog from './pages/Catalog'
 import Wedding from './pages/Wedding'
@@ -88,7 +89,7 @@ function parseRoute(): RouteState {
   const value = window.location.hash.replace(/^#\/?/, '')
   if (value.startsWith('couple/')) return { page: 'wedding', coupleSlug: decodeURIComponent(value.slice('couple/'.length)) }
   if (value.startsWith('venue/')) return { page: 'venue', coupleSlug: null }
-  const allowed: PageKey[] = ['home', 'for-venues', 'venue', 'catalog', 'wedding', 'planner', 'messages', 'calendar', 'summary', 'admin', 'platform']
+  const allowed: PageKey[] = ['home', 'for-venues', 'signin', 'venue', 'catalog', 'wedding', 'planner', 'messages', 'calendar', 'summary', 'admin', 'platform']
   return { page: allowed.includes(value as PageKey) ? value as PageKey : 'home', coupleSlug: null }
 }
 
@@ -223,7 +224,7 @@ export default function App() {
   const showCalendarGate = page === 'calendar' && !ownerAuthenticated
 
   const resetDemo = () => {
-    if (!window.confirm('Reset the Venue Visions prototype, Chandelier Oaks venue demo, wedding workspaces and venue requests?')) return
+    if (!window.confirm('Reset the Chandelier Oaks venue demo, wedding workspaces, and saved venue-request examples?')) return
     setWeddings(demoWeddings); setActiveWeddingId('wedding-sarah-john'); setNotificationsEnabled(false); setOwnerAuthenticated(false); setPlatformAuthenticated(false); setCoupleAuthenticatedWeddingId(null); setVenueLeads([])
     Object.keys(localStorage).filter((key) => key.startsWith('venueVisions.saas.') || key.startsWith('venueVisions.poc.')).forEach((key) => localStorage.removeItem(key))
     Object.keys(sessionStorage).filter((key) => key.startsWith('venueVisions.saas.')).forEach((key) => sessionStorage.removeItem(key))
@@ -233,13 +234,12 @@ export default function App() {
   return (
     <div className="app-shell">
       <Header page={page} onNavigate={navigate} selectionCount={selectionCount} unreadMessages={unreadMessages} activeWeddingName={profile?.couple ?? ''} weddings={weddings} activeWeddingId={activeWeddingId} ownerAuthenticated={ownerAuthenticated} coupleAuthenticated={coupleAuthenticatedWeddingId === activeWeddingId} platformAuthenticated={platformAuthenticated} onSelectWedding={selectActiveWedding} onOwnerLogout={logoutOwner} onCoupleLogout={logoutCouple} onPlatformLogout={logoutPlatform} onResetDemo={resetDemo} />
-      <div className="prototype-banner" role="note"><div className="shell prototype-banner__inner"><strong>VENUE VISIONS PROTOTYPE</strong><span>Company site · VV Admin proof of concept · Chandelier Oaks venue demo · public venue facts + clearly marked sample operational data.</span></div></div>
-
       {showCoupleGate && activeWedding && <CoupleAccess wedding={activeWedding} onSubmitCode={authenticateCouple} onBackHome={() => navigate('venue')} />}
       {showCalendarGate && <Admin weddings={weddings} activeWeddingId={activeWeddingId} onSelectWedding={selectActiveWedding} onOpenWedding={openWedding} onAddWedding={addWedding} authenticated={ownerAuthenticated} onAuthenticate={authenticateOwner} onExitDemo={() => navigate('venue')} onLogout={logoutOwner} onNavigate={navigate} />}
 
       {!showCoupleGate && !showCalendarGate && page === 'home' && <Home onNavigate={navigate} onOpenCouple={openCoupleDemoBySlug} />}
-      {!showCoupleGate && !showCalendarGate && page === 'for-venues' && <ForVenues leads={venueLeads} setLeads={setVenueLeads} onOpenPlatform={() => navigate('platform')} />}
+      {!showCoupleGate && !showCalendarGate && page === 'for-venues' && <ForVenues leads={venueLeads} setLeads={setVenueLeads} onBackHome={() => navigate('home')} onViewVenueDemo={() => navigate('venue')} />}
+      {!showCoupleGate && !showCalendarGate && page === 'signin' && <SignIn onVenueOwner={() => navigate('admin')} onCouple={() => openCoupleDemo()} onBackHome={() => navigate('home')} />}
       {!showCoupleGate && !showCalendarGate && page === 'venue' && <VenuePortal onNavigate={navigate} onOpenCoupleDemo={openCoupleDemo} />}
       {!showCoupleGate && !showCalendarGate && page === 'catalog' && <Catalog selections={selections} onSetQuantity={setQuantity} canEdit={hasWorkspaceAccess} onRequireAccess={openCoupleDemo} packageTier={packageInfo.tier} packageName={packageInfo.name} />}
       {!showCoupleGate && !showCalendarGate && page === 'wedding' && profile && <Wedding profile={profile} selections={selections} unreadMessages={unreadMessages} paymentStepsCompleted={activeWedding.paymentStepsCompleted} onProfileChange={updateProfile} onSetQuantity={setQuantity} onNavigate={navigate} ownerMode={ownerAuthenticated} />}
@@ -250,7 +250,7 @@ export default function App() {
       {page === 'admin' && <Admin weddings={weddings} activeWeddingId={activeWeddingId} onSelectWedding={selectActiveWedding} onOpenWedding={openWedding} onAddWedding={addWedding} authenticated={ownerAuthenticated} onAuthenticate={authenticateOwner} onExitDemo={() => navigate('venue')} onLogout={logoutOwner} onNavigate={navigate} />}
       {page === 'platform' && <PlatformAdmin authenticated={platformAuthenticated} onAuthenticate={authenticatePlatform} onLogout={logoutPlatform} onNavigate={navigate} leads={venueLeads} weddings={weddings} />}
 
-      <footer className="site-footer saas-footer"><div className="shell"><span>Venue Visions</span><span>Company prototype · Chandelier Oaks venue demo · VV Admin proof of concept · browser-only sample data</span></div></footer>
+      <footer className="site-footer saas-footer"><div className="shell"><span>Venue Visions</span><span>Wedding venue planning software for modern venues</span></div></footer>
     </div>
   )
 }
