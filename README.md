@@ -1,4 +1,4 @@
-# Venue Visions v1.3 — Public SaaS Site + Venue Demo + Internal POC
+# Venue Visions v1.4 — Separated SaaS, Venue Owner, and Couple Experiences
 
 Venue Visions is presented as the company/product. Chandelier Oaks is the clearly labeled venue demo. The Venue Visions Admin area remains a separate internal **Proof of Concept** for founder review.
 
@@ -58,3 +58,13 @@ A production release still needs a real backend for secure authentication, tenan
 - AI Preview Studio consumes venue reference photos, the active 2D layout, selected decor, inspiration count and style controls.
 - Because GitHub Pages cannot safely hold an AI API key, the demo generates a local concept composite; production replaces that one generation step with a secure server-side image-model call.
 - Generated demo concepts can be saved back into the wedding Media Library.
+
+
+## v1.4 navigation + 2D-first workflow
+- Public Venue Visions, Chandelier Oaks owner, couple, and VV Admin now use clearly different application shells instead of one changing menu.
+- Owner header uses Chandelier Oaks branding, a persistent active-wedding selector, and only core venue operations in the main navigation.
+- Couple header uses Chandelier Oaks branding and a clickable couple-name menu; mobile adds a five-item bottom navigation for Home, Decor, Design, Messages, and More.
+- AI Preview is intentionally removed from primary navigation. The couple/owner starts in the 2D Designer, then continues to AI Preview only after the layout is built.
+- The current 2D area is passed into AI Preview and the preview page explicitly identifies the structured 2D plan as its placement source.
+- Planner, AI Preview, and supporting controls use larger type and higher-contrast helper text for easier reading.
+- Owner quick actions now point to the 2D Designer instead of presenting AI generation as a first-step tool.

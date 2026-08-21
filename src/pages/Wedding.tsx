@@ -41,9 +41,8 @@ export default function Wedding({ profile, selections, unreadMessages, paymentSt
 
       <section className="wedding-action-grid">
         <button onClick={() => onNavigate('catalog')}><span>PINROSE PROP SHOP</span><strong>{selectedPieces} pieces selected</strong><small>Browse décor included in your demo package tier.</small><b>→</b></button>
-        <button onClick={() => onNavigate('planner')}><span>VENUE DESIGNER</span><strong>Design multiple property areas</strong><small>Pavilion, live oaks, gazebo, greenhouse, lakeside and pool/patio.</small><b>→</b></button>
+        <button onClick={() => onNavigate('planner')}><span>2D VENUE DESIGNER</span><strong>Build the layout first</strong><small>Pavilion, live oaks, gazebo, greenhouse, lakeside and pool/patio. AI Preview follows the finished 2D plan.</small><b>→</b></button>
         <button onClick={() => onNavigate('media')}><span>MEDIA & INSPIRATION</span><strong>Photos, videos and planning files</strong><small>Keep venue references and wedding inspiration in one place.</small><b>→</b></button>
-        <button onClick={() => onNavigate('ai-preview')}><span>AI PREVIEW</span><strong>Visualize your 2D layout</strong><small>Combine venue photos, décor and the overhead plan into a concept preview.</small><b>→</b></button>
         <button onClick={() => onNavigate('messages')}><span>MESSAGES</span><strong>{unreadMessages ? `${unreadMessages} unread` : 'Conversation up to date'}</strong><small>Questions, files and linked décor stay with this wedding.</small><b>→</b></button>
       </section>
 

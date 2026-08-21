@@ -28,7 +28,11 @@ function loadImage(src: string) {
 
 export default function AiPreview({ weddingId, weddingName, preferredAreaId, placedItems, selections, ownerMode, onNavigate }: AiPreviewProps) {
   const [assets, setAssets] = useState<MediaAssetRecord[]>([])
-  const [areaId, setAreaId] = useState(preferredAreaId || 'pecan-pavilion')
+  const [areaId, setAreaId] = useState(() => {
+    const fromPlanner = localStorage.getItem('venueVisions.aiPreviewArea')
+    localStorage.removeItem('venueVisions.aiPreviewArea')
+    return fromPlanner || preferredAreaId || 'pecan-pavilion'
+  })
   const [referenceId, setReferenceId] = useState('sample')
   const [style, setStyle] = useState('Romantic')
   const [time, setTime] = useState('Golden hour')
@@ -105,13 +109,18 @@ export default function AiPreview({ weddingId, weddingName, preferredAreaId, pla
 
   return (
     <main className="page-main shell ai-preview-page">
-      <section className="page-intro page-intro--split ai-preview-intro"><div><p className="eyebrow">{ownerMode ? 'OWNER TOOL' : 'WEDDING TOOL'} · AI PREVIEW STUDIO</p><h1>Turn the overhead plan into a visual concept.</h1><p>Use a real venue-area photo, the current 2D layout, selected décor and a few style choices to create a visual preview for {weddingName}.</p></div><div className="ai-preview-intro__actions"><button className="button button--ghost" onClick={() => onNavigate('media')}>Media Library</button><button className="button button--ghost" onClick={() => onNavigate('planner')}>2D Designer</button></div></section>
+      <section className="page-intro page-intro--split ai-preview-intro"><div><p className="eyebrow">STEP 2 · AI VISUALIZATION</p><h1>Preview the layout you already designed.</h1><p>The 2D plan stays in control of placement. This step adds a venue reference photo, décor choices and visual style to help you picture the finished setup for {weddingName}.</p></div><div className="ai-preview-intro__actions"><button className="button button--primary" onClick={() => onNavigate('planner')}>Back to 2D Designer</button><button className="button button--ghost" onClick={() => onNavigate('media')}>Reference Photos</button></div></section>
 
-      <section className="panel ai-production-note"><div><span className="mini-label">HOW THIS DEMO WORKS</span><strong>The workflow is real; the final generative render is simulated locally.</strong></div><p>GitHub Pages cannot safely hold an AI API key. Production will send the chosen photo + structured 2D layout + décor list to a secure Venue Visions backend, then return a photorealistic generated image. This page already captures those inputs and saves preview results to the wedding.</p></section>
+      <section className="panel ai-layout-source">
+        <div><span className="mini-label">2D LAYOUT SOURCE</span><strong>{area.name}</strong><p>{areaItems.length} placed objects are being passed into this preview. Change placement in the 2D Designer, not here.</p></div>
+        <button className="button button--ghost button--small" onClick={() => onNavigate('planner')}>Edit 2D layout</button>
+      </section>
+
+      <section className="panel ai-production-note"><div><span className="mini-label">DEMO GENERATION</span><strong>The preview workflow is functional; photorealistic AI rendering comes with the secure backend.</strong></div><p>This demo packages the venue photo, structured 2D layout, selected décor and style choices exactly as the production renderer will. GitHub Pages cannot safely contain the private AI credentials needed for the final generative step.</p></section>
 
       <div className="ai-preview-layout">
         <section className="panel ai-preview-controls">
-          <div className="panel__heading"><div><p className="eyebrow">PREVIEW INPUTS</p><h2>Build the render request</h2></div></div>
+          <div className="panel__heading"><div><p className="eyebrow">VISUAL OPTIONS</p><h2>Choose how to visualize it</h2></div></div>
           <label><span>Venue area</span><select value={areaId} onChange={(e) => { setAreaId(e.target.value); setPreviewUrl(''); setPreviewBlob(null) }}>{venueAreas.filter((entry) => entry.plannerEnabled).map((entry) => <option key={entry.id} value={entry.id}>{entry.name}</option>)}</select></label>
           <label><span>Venue reference photo</span><select value={referenceId} onChange={(e) => setReferenceId(e.target.value)}><option value="sample">Built-in sample scene</option>{venueImages.map((asset) => <option key={asset.id} value={asset.id}>{asset.aiReference ? '★ ' : ''}{asset.name}</option>)}</select></label>
           <div className="ai-reference-help"><strong>{venueImages.length} uploaded reference photo{venueImages.length === 1 ? '' : 's'}</strong><span>{venueImages.length ? '★ indicates an owner-marked AI reference.' : 'Upload real venue photos in Media Library for a Chandelier Oaks-specific result.'}</span></div>
@@ -125,7 +134,7 @@ export default function AiPreview({ weddingId, weddingName, preferredAreaId, pla
 
         <section className="panel ai-preview-output">
           <div className="ai-preview-output__heading"><div><span className="mini-label">PREVIEW RESULT</span><strong>{area.name}</strong></div><span className="prototype-badge">AI demo</span></div>
-          <div className={previewUrl ? 'ai-preview-stage has-preview' : 'ai-preview-stage'}>{previewUrl ? <img src={previewUrl} alt={`${area.name} wedding concept`} /> : <><div className="ai-preview-placeholder"><span>✦</span><h2>Ready to visualize.</h2><p>Choose a reference photo and click Generate preview concept.</p></div></>}</div>
+          <div className={previewUrl ? 'ai-preview-stage has-preview' : 'ai-preview-stage'}>{previewUrl ? <img src={previewUrl} alt={`${area.name} wedding concept`} /> : <><div className="ai-preview-placeholder"><span>✦</span><h2>Ready to visualize.</h2><p>Your 2D layout is ready. Choose the visual options, then generate the concept.</p></div></>}</div>
           <canvas ref={canvasRef} className="visually-hidden" />
           <div className="ai-preview-actions"><button className="button button--primary" onClick={savePreview} disabled={!previewBlob || saved}>{saved ? 'Saved to wedding ✓' : 'Save to wedding'}</button><button className="button button--ghost" onClick={generatePreview}>Regenerate</button><button className="button button--ghost" onClick={() => onNavigate('media')}>View saved media</button></div>
           <p className="ai-preview-disclaimer">Conceptual preview for planning inspiration. The 2D plan remains the placement reference; final setup, measurements and availability are confirmed by the venue.</p>

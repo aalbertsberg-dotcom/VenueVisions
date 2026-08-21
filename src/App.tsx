@@ -255,7 +255,7 @@ export default function App() {
       {page === 'admin' && <Admin weddings={weddings} activeWeddingId={activeWeddingId} onSelectWedding={selectActiveWedding} onOpenWedding={openWedding} onAddWedding={addWedding} authenticated={ownerAuthenticated} onAuthenticate={authenticateOwner} onExitDemo={() => navigate('venue')} onLogout={logoutOwner} onNavigate={navigate} />}
       {page === 'platform' && <PlatformAdmin authenticated={platformAuthenticated} onAuthenticate={authenticatePlatform} onLogout={logoutPlatform} onNavigate={navigate} leads={venueLeads} weddings={weddings} />}
 
-      <footer className="site-footer saas-footer"><div className="shell"><span>Venue Visions</span><span>Wedding venue planning software for modern venues</span></div></footer>
+      <footer className="site-footer saas-footer"><div className="shell">{ownerAuthenticated || coupleAuthenticatedWeddingId === activeWeddingId ? <><span>Chandelier Oaks</span><span>Powered by Venue Visions · Venue Demo</span></> : platformAuthenticated ? <><span>Venue Visions Admin</span><span>Internal proof of concept</span></> : <><span>Venue Visions</span><span>Wedding venue planning software for modern venues</span></>}</div></footer>
     </div>
   )
 }

@@ -1736,3 +1736,158 @@ h3 { color: var(--brown); }
 @media (max-width: 700px) {
   .media-demo-note,.ai-production-note,.media-controls { align-items:flex-start;flex-direction:column; }.media-upload-options { width:100%; }.media-upload-options label { width:100%; }.media-upload-options select { width:100%; }.media-stat-grid { grid-template-columns:repeat(2,1fr); }.media-grid { grid-template-columns:1fr; }.media-card__preview { height:235px; }.media-card__controls { grid-template-columns:1fr; }.media-ai-check { padding:0; }.ai-preview-stage { min-height:300px; }.ai-preview-actions .button { flex:1 1 100%;justify-content:center; }.venue-ai-demo-grid,.owner-quick-grid,.wedding-action-grid { grid-template-columns:1fr; }.media-intro__actions,.ai-preview-intro__actions { justify-content:flex-start; }
 }
+
+/* ---------- v1.4 Hard-separated SaaS / venue / couple shells ---------- */
+body { font-size: 16px; line-height: 1.5; }
+.app-header { min-height: 78px; padding-block: 10px; }
+.app-header__brand { min-width: 0; display:flex; align-items:center; }
+.app-header__desktop-nav { display:flex; align-items:center; justify-content:center; gap:4px; margin-left:auto; }
+.app-nav-link { position:relative; border:0; border-radius:999px; padding:10px 13px; background:transparent; color:#675f5a; font-weight:700; font-size:13px; cursor:pointer; }
+.app-nav-link:hover,.app-nav-link.active { background:#f3eee8; color:var(--brown); }
+.app-nav-badge { position:absolute; top:1px; right:1px; min-width:17px; height:17px; display:grid; place-items:center; padding:0 4px; border-radius:999px; background:#b8694c; color:#fff; font-size:9px; }
+.app-header__actions { position:relative; display:flex; align-items:center; gap:9px; margin-left:12px; }
+.app-header--owner { border-top:4px solid var(--co-green); background:rgba(249,250,247,.97); }
+.app-header--couple { border-top:4px solid #b58a55; background:rgba(252,250,247,.97); }
+.app-header--platform { border-top:4px solid #263f48; background:#f8fafb; }
+
+.tenant-brand,.platform-brand { display:flex; align-items:center; gap:10px; border:0; padding:0; background:transparent; text-align:left; cursor:pointer; }
+.tenant-brand__mark { width:44px; height:44px; display:grid; place-items:center; flex:0 0 44px; border-radius:50%; background:var(--co-green); color:#f3dfb4; font-family:'Playfair Display',Georgia,serif; font-size:18px; border:1px solid rgba(255,255,255,.35); }
+.tenant-brand__words,.platform-brand > span { display:flex; flex-direction:column; min-width:0; }
+.tenant-brand__words strong,.platform-brand strong { color:#2f4638; font-family:'Playfair Display',Georgia,serif; font-size:19px; line-height:1.05; white-space:nowrap; }
+.tenant-brand__words small,.platform-brand small { margin-top:3px; color:#8b7c72; font-size:9px; font-weight:700; letter-spacing:.04em; white-space:nowrap; }
+.platform-brand .brand__mark { width:39px; height:39px; }
+.platform-brand strong { color:#263f48; }
+
+.owner-wedding-switcher { display:flex; flex-direction:column; gap:2px; min-width:240px; }
+.owner-wedding-switcher > span { color:#8f8177; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; }
+.owner-wedding-switcher select { width:100%; padding:8px 31px 8px 10px; border:1px solid #d7d1cb; border-radius:10px; background:#fff; color:#3f4f44; font-weight:700; font-size:12px; }
+
+.profile-menu-wrap { position:relative; }
+.couple-profile-button { display:flex; align-items:center; gap:7px; max-width:230px; padding:9px 12px; border:1px solid #ddd4cc; border-radius:999px; background:#fff; color:#514943; font-weight:800; cursor:pointer; }
+.couple-profile-button span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.couple-profile-button b { color:#a27d5e; font-size:14px; }
+.couple-profile-popover { position:absolute; top:calc(100% + 10px); right:0; z-index:70; width:245px; padding:15px; border:1px solid var(--line); border-radius:16px; background:#fff; box-shadow:0 18px 45px rgba(58,44,36,.16); }
+.couple-profile-popover > strong { display:block; margin:3px 0 10px; color:var(--brown); font-family:'Playfair Display',Georgia,serif; font-size:20px; }
+.couple-profile-popover button { width:100%; padding:10px 8px; border:0; border-top:1px solid #eee8e2; background:transparent; color:#665d57; text-align:left; font-weight:700; cursor:pointer; }
+.couple-profile-popover button:hover { color:var(--co-green); background:#faf9f6; }
+
+.compact-menu-button { display:flex; align-items:center; gap:8px; min-height:42px; padding:8px 12px; border:1px solid #ded6cf; border-radius:999px; background:#fff; color:#584e47; font-weight:800; cursor:pointer; }
+.compact-menu-button__bars { width:19px; display:grid; gap:4px; }
+.compact-menu-button__bars i { display:block; height:2px; border-radius:2px; background:#705c50; }
+.compact-menu-button b { min-width:19px; height:19px; display:grid; place-items:center; border-radius:999px; background:#6a5145; color:white; font-size:9px; }
+.app-header--public .compact-menu-button,.app-header--platform .compact-menu-button { display:none; }
+
+.clean-drawer { position:fixed; z-index:60; top:0; right:0; width:min(390px,92vw); height:100dvh; overflow:auto; padding:20px; transform:translateX(105%); transition:transform .2s ease; background:#fff; box-shadow:-24px 0 60px rgba(51,39,32,.18); }
+.clean-drawer--open { transform:translateX(0); }
+.clean-drawer__heading { display:flex; align-items:flex-start; justify-content:space-between; gap:15px; padding-bottom:16px; border-bottom:1px solid var(--line); }
+.clean-drawer__heading strong { display:block; margin-top:4px; color:var(--brown); font-family:'Playfair Display',Georgia,serif; font-size:24px; }
+.clean-drawer__heading > button { width:38px; height:38px; border:0; border-radius:50%; background:#f5f1ec; color:#665950; font-size:25px; cursor:pointer; }
+.clean-drawer__switcher { display:grid; gap:6px; margin:16px 0; padding:14px; border:1px solid #dbe3dc; border-radius:13px; background:#f7faf7; }
+.clean-drawer__switcher label { color:#728176; font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:.08em; }
+.clean-drawer__switcher select { width:100%; padding:10px; border:1px solid #ced9d0; border-radius:9px; background:white; color:#3d5042; font-weight:700; }
+.clean-drawer__switcher small { color:#79857c; font-size:11px; line-height:1.4; }
+.clean-drawer__links { display:grid; margin-top:12px; }
+.clean-drawer__link { width:100%; display:flex; align-items:center; justify-content:space-between; gap:14px; padding:14px 8px; border:0; border-bottom:1px solid #eee8e2; background:transparent; text-align:left; cursor:pointer; }
+.clean-drawer__link:hover,.clean-drawer__link.active { background:#faf8f5; }
+.clean-drawer__link > span:first-child { display:flex; flex-direction:column; gap:3px; }
+.clean-drawer__link strong { color:#514741; font-size:14px; }
+.clean-drawer__link small { color:#8d8179; font-size:11px; line-height:1.35; }
+.clean-drawer__meta { display:flex; align-items:center; gap:6px; }
+.clean-drawer__meta b { min-width:20px; height:20px; display:grid; place-items:center; border-radius:999px; background:#7b5d4f; color:white; font-size:9px; }
+.clean-drawer__meta i { color:#a59081; font-size:21px; font-style:normal; }
+.clean-drawer__footer { display:grid; gap:7px; margin-top:20px; padding-top:15px; border-top:1px solid var(--line); }
+.clean-drawer__footer button { padding:10px; border:1px solid var(--line); border-radius:10px; background:#fff; color:#6e625b; font-weight:700; cursor:pointer; }
+.clean-drawer__footer .clean-drawer__reset { color:#9a6259; background:#fff8f6; border-color:#efd9d4; }
+
+.couple-bottom-nav { display:none; }
+.couple-bottom-spacer { display:none; }
+
+/* 2D-first planning workflow */
+.planner-topbar { align-items:center; }
+.planner-topbar__lead { max-width:650px; margin:10px 0 0; color:#766b64; font-size:15px; line-height:1.6; }
+.planner-next-step { margin-top:22px; padding:24px 26px; display:flex; align-items:center; justify-content:space-between; gap:28px; border-left:5px solid #b58a55; background:linear-gradient(110deg,#fffaf1,#fff); }
+.planner-next-step h2 { margin:5px 0 7px; font-size:29px; }
+.planner-next-step p { max-width:760px; margin:0; color:#766d66; font-size:14px; line-height:1.55; }
+.planner-next-step .button { flex:0 0 auto; }
+.planner-tip { font-size:13px; line-height:1.55; }
+.planner-tip b { color:#4f6855; }
+
+/* Make planning controls readable instead of tiny demo text */
+.mini-label { font-size:11px; letter-spacing:.12em; }
+.area-select span { font-size:11px; }
+.area-select select { font-size:14px; }
+.toolbox__heading h2 { font-size:23px; }
+.tool-grid button small { font-size:11px; line-height:1.25; }
+.decor-tools button > span:nth-child(2) { font-size:12px; line-height:1.3; }
+.decor-tools button small { font-size:10px; }
+.toolbox-empty { font-size:12px; }
+.inventory-tools strong { font-size:11px; }
+.inventory-tools small { font-size:9px; }
+.canvas-panel__heading strong { font-size:15px; }
+.floor-label,.floor-feature { font-size:9px; }
+.canvas-help { font-size:11px; line-height:1.4; }
+.properties__content h3 { font-size:20px; }
+.properties__content label { font-size:11px; }
+.property-control__heading strong { font-size:12px; }
+.property-control small { font-size:10px; }
+.properties-empty p,.room-stats { font-size:11px; }
+
+/* AI is step two, with larger controls and explicit 2D source */
+.ai-layout-source { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:18px; padding:18px 20px; border-left:4px solid var(--co-green); background:#f6faf6; }
+.ai-layout-source strong { display:block; margin:3px 0 4px; color:#35503d; font-family:'Playfair Display',Georgia,serif; font-size:21px; }
+.ai-layout-source p { margin:0; color:#6f786f; font-size:13px; line-height:1.5; }
+.media-upload-options label,.media-card__controls label,.ai-preview-controls label { font-size:11px; line-height:1.35; }
+.ai-preview-controls select,.ai-preview-controls textarea { padding:12px; font-size:14px; }
+.ai-reference-help { padding:11px 12px; font-size:11px; line-height:1.45; }
+.ai-reference-help strong { font-size:12px; }
+.ai-input-summary span { font-size:9px; font-weight:800; }
+.ai-input-summary strong { font-size:21px; }
+.ai-preview-output__heading strong { font-size:19px; }
+.ai-preview-placeholder p,.ai-preview-disclaimer { font-size:12px; line-height:1.5; }
+.media-demo-note p,.ai-production-note p { font-size:12px; line-height:1.55; }
+
+@media (max-width: 1120px) {
+  .owner-wedding-switcher { min-width:205px; }
+  .app-nav-link { padding-inline:9px; font-size:12px; }
+  .tenant-brand__words small { display:none; }
+}
+
+@media (max-width: 900px) {
+  .app-header { min-height:70px; padding:9px 14px; }
+  .app-header__desktop-nav,.owner-wedding-switcher,.header-demo-cta { display:none; }
+  .app-header--public .compact-menu-button,.app-header--platform .compact-menu-button { display:flex; }
+  .app-header__actions { margin-left:auto; }
+  .tenant-brand__mark { width:39px; height:39px; flex-basis:39px; font-size:16px; }
+  .tenant-brand__words strong { font-size:17px; }
+  .tenant-brand__words small { display:block; font-size:8px; }
+  .brand__venue { font-size:22px; }
+  .brand__mark { width:42px; height:42px; }
+  .brand__visions { font-size:8px; }
+  .planner-next-step,.ai-layout-source { align-items:flex-start; flex-direction:column; }
+}
+
+@media (max-width: 700px) {
+  .app-header--couple { padding-right:10px; }
+  .app-header--couple .tenant-brand__words small { display:none; }
+  .app-header--couple .tenant-brand__words strong { font-size:15px; }
+  .couple-profile-button { max-width:155px; padding:8px 10px; font-size:12px; }
+  .couple-profile-popover { position:fixed; top:75px; left:14px; right:14px; width:auto; }
+  .couple-bottom-nav { position:fixed; z-index:45; left:8px; right:8px; bottom:max(8px,env(safe-area-inset-bottom)); height:64px; display:grid; grid-template-columns:repeat(5,1fr); padding:5px; border:1px solid #ddd5ce; border-radius:18px; background:rgba(255,255,255,.97); box-shadow:0 12px 40px rgba(55,42,34,.2); backdrop-filter:blur(14px); }
+  .couple-bottom-nav button { position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; border:0; border-radius:12px; background:transparent; color:#7b716a; cursor:pointer; }
+  .couple-bottom-nav button.active { background:#f3eee8; color:#58483f; }
+  .couple-bottom-nav button > span { font-size:18px; line-height:1; }
+  .couple-bottom-nav small { font-size:9px; font-weight:800; }
+  .couple-bottom-nav b { position:absolute; top:2px; right:18%; min-width:16px; height:16px; display:grid; place-items:center; border-radius:999px; background:#b7684b; color:#fff; font-size:8px; }
+  .app-shell:has(.couple-bottom-nav) { padding-bottom:82px; }
+  .planner-topbar__lead { font-size:14px; }
+  .planner-next-step { margin-top:16px; padding:20px; }
+  .planner-next-step h2 { font-size:25px; }
+  .planner-next-step .button { width:100%; }
+  .ai-layout-source .button { width:100%; }
+  .mini-label { font-size:10px; }
+  .tool-grid button small { font-size:10px; }
+  .canvas-help { flex-direction:column; gap:4px; font-size:10px; }
+}
+.wedding-action-grid { grid-template-columns:repeat(4,1fr); }
+@media (max-width:1050px) { .wedding-action-grid { grid-template-columns:repeat(2,1fr); } }
+@media (max-width:700px) { .wedding-action-grid { grid-template-columns:1fr; } }

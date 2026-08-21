@@ -277,22 +277,27 @@ export default function Planner({ selections, placedItems, setPlacedItems, onSet
   const selectedTableChairCount = isTable(selectedObject) ? areaItems.filter((item) => item.parentTableId === selectedObject.id).length : 0
   const linkedChairCount = areaItems.filter((item) => item.type === 'chair' && item.parentTableId).length
 
+  const continueToPreview = () => {
+    localStorage.setItem('venueVisions.aiPreviewArea', area)
+    onNavigate('ai-preview')
+  }
+
   return (
     <main className="planner-page">
       <div className="planner-topbar shell">
         <div>
-          <p className="eyebrow">CHANDELIER OAKS · VENUE DESIGNER</p>
-          <h1>Design each part of the property.</h1>
+          <p className="eyebrow">STEP 1 · 2D VENUE DESIGNER</p>
+          <h1>Build the layout first.</h1>
+          <p className="planner-topbar__lead">This overhead plan is the placement source of truth. Add tables, chairs and décor here before creating an AI visualization.</p>
         </div>
         <div className="planner-topbar__actions">
           <label className="area-select"><span>Design area</span><select value={area} onChange={(e) => { setArea(e.target.value); setSelectedId(null) }}>{venueAreas.filter((item) => item.plannerEnabled).map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
-          <button className="button button--primary button--small" onClick={() => onNavigate('ai-preview')}>Generate AI Preview</button>
           <button className="button button--ghost button--small" onClick={() => onNavigate('media')}>Area photos</button>
           <button className="button button--ghost button--small" onClick={clearRoom}>Clear room</button>
         </div>
       </div>
 
-      <div className="planner-tip shell" role="note"><strong>{currentArea.name}:</strong> {currentArea.description} Select a table to add chairs, resize or rotate it. Each venue area saves separately in this demo.</div>
+      <div className="planner-tip shell" role="note"><strong>{currentArea.name}:</strong> {currentArea.description} Select a table to add chairs, resize or rotate it. <b>The AI Preview uses this exact 2D layout as its structured placement input.</b></div>
 
       <div className="planner-shell shell">
         <aside className="toolbox panel">
@@ -406,6 +411,17 @@ export default function Planner({ selections, placedItems, setPlacedItems, onSet
           <div className="room-stats"><span>Décor pieces shown</span><strong>{areaItems.filter((item) => item.type === 'decor').length}</strong></div>
         </aside>
       </div>
+
+      <section className="planner-next-step shell panel">
+        <div>
+          <span className="mini-label">STEP 2 · VISUALIZE</span>
+          <h2>Ready to see this layout in the venue?</h2>
+          <p>AI Preview combines the current {currentArea.name} 2D plan with venue reference photos, selected décor and wedding style choices. Your overhead plan remains the placement reference.</p>
+        </div>
+        <button className="button button--primary" onClick={continueToPreview} disabled={areaItems.length === 0}>
+          {areaItems.length === 0 ? 'Add layout pieces first' : 'Continue to AI Preview'}
+        </button>
+      </section>
     </main>
   )
 }

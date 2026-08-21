@@ -22,7 +22,19 @@ type HeaderProps = {
   onResetDemo: () => void
 }
 
-type NavItem = { key: PageKey; label: string; description: string }
+type NavItem = { key: PageKey; label: string; description?: string }
+
+function ChandelierBrand({ onClick, subtitle }: { onClick: () => void; subtitle: string }) {
+  return (
+    <button className="tenant-brand" type="button" onClick={onClick} aria-label="Chandelier Oaks home">
+      <span className="tenant-brand__mark">CO</span>
+      <span className="tenant-brand__words">
+        <strong>Chandelier Oaks</strong>
+        <small>{subtitle}</small>
+      </span>
+    </button>
+  )
+}
 
 export default function Header({
   page,
@@ -42,124 +54,183 @@ export default function Header({
   onResetDemo,
 }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false)
-  useEffect(() => setMenuOpen(false), [page])
+  const [profileOpen, setProfileOpen] = useState(false)
+
+  useEffect(() => {
+    setMenuOpen(false)
+    setProfileOpen(false)
+  }, [page])
 
   const sortedWeddings = useMemo(() => [...weddings].sort((a, b) => a.profile.date.localeCompare(b.profile.date)), [weddings])
+  const mode = ownerAuthenticated ? 'owner' : coupleAuthenticated ? 'couple' : platformAuthenticated ? 'platform' : 'public'
 
-  const navItems: NavItem[] = ownerAuthenticated
-    ? [
-        { key: 'admin', label: 'Owner Dashboard', description: 'Weddings, access and venue operations' },
-        { key: 'calendar', label: 'Calendar & Payments', description: 'Booked dates and payment milestones' },
-        { key: 'catalog', label: 'Pinrose Prop Shop', description: 'Inventory and package access' },
-        { key: 'wedding', label: 'Active Wedding', description: 'Couple details, package and checklist' },
-        { key: 'planner', label: 'Venue Designer', description: 'Design each Chandelier Oaks area' },
-        { key: 'media', label: 'Media Library', description: 'Photos, video, files and AI references' },
-        { key: 'ai-preview', label: 'AI Preview Studio', description: 'Turn the 2D plan into a visual concept' },
-        { key: 'messages', label: 'Messages', description: 'Venue and couple conversation' },
-        { key: 'summary', label: 'Setup Sheet', description: 'Printable pull list and final handoff' },
-      ]
-    : coupleAuthenticated
-      ? [
-          { key: 'venue', label: 'Chandelier Oaks', description: 'Your venue portal' },
-          { key: 'wedding', label: 'My Wedding', description: 'Package, timeline and details' },
-          { key: 'catalog', label: 'Pinrose Prop Shop', description: 'Browse the décor available to you' },
-          { key: 'planner', label: 'Venue Designer', description: 'Build your ceremony and reception plan' },
-          { key: 'media', label: 'Media & Inspiration', description: 'Upload inspiration, video and planning files' },
-          { key: 'ai-preview', label: 'AI Preview Studio', description: 'Visualize your layout in the venue' },
-          { key: 'messages', label: 'Messages', description: 'Keep questions with your wedding' },
-          { key: 'summary', label: 'Setup Sheet', description: 'Preview the final venue handoff' },
-        ]
-      : platformAuthenticated
-        ? [
-            { key: 'platform', label: 'VV Admin · POC', description: 'Proof of concept for Venue Visions company operations' },
-            { key: 'for-venues', label: 'Demo Requests', description: 'See the venue inquiry and branding flow' },
-            { key: 'venue', label: 'Venue Demo', description: 'Chandelier Oaks example venue experience' },
-          ]
-        : [
-            { key: 'home', label: 'Venue Visions', description: 'Company and product overview' },
-            { key: 'venue', label: 'View Venue Demo', description: 'Explore the Chandelier Oaks example' },
-            { key: 'for-venues', label: 'For Venues', description: 'Request a demo for your venue' },
-            { key: 'signin', label: 'Sign In', description: 'Venue owner or couple access' },
-          ]
+  const publicNav: NavItem[] = [
+    { key: 'home', label: 'Home' },
+    { key: 'venue', label: 'Venue Demo' },
+    { key: 'for-venues', label: 'For Venues' },
+    { key: 'signin', label: 'Sign In' },
+  ]
+
+  const ownerNav: NavItem[] = [
+    { key: 'admin', label: 'Dashboard' },
+    { key: 'calendar', label: 'Calendar' },
+    { key: 'catalog', label: 'Inventory' },
+    { key: 'messages', label: 'Messages' },
+  ]
+
+  const ownerMore: NavItem[] = [
+    { key: 'wedding', label: 'Active wedding', description: 'Details, package and planning checklist' },
+    { key: 'planner', label: '2D Designer', description: 'Build the source-of-truth floor plan first' },
+    { key: 'media', label: 'Media Library', description: 'Venue photos, video, files and AI references' },
+    { key: 'summary', label: 'Setup Sheet', description: 'Final pull list and venue handoff' },
+  ]
+
+  const coupleNav: NavItem[] = [
+    { key: 'wedding', label: 'Home' },
+    { key: 'catalog', label: 'Décor' },
+    { key: 'planner', label: 'Design' },
+    { key: 'messages', label: 'Messages' },
+  ]
+
+  const coupleMore: NavItem[] = [
+    { key: 'media', label: 'Media & Inspiration', description: 'Photos, videos and planning files' },
+    { key: 'summary', label: 'Setup Summary', description: 'Review the venue handoff' },
+    { key: 'venue', label: 'Chandelier Oaks Demo', description: 'Return to the venue demo landing page' },
+  ]
+
+  const platformNav: NavItem[] = [
+    { key: 'platform', label: 'Admin POC' },
+    { key: 'for-venues', label: 'Demo Requests' },
+    { key: 'venue', label: 'Venue Demo' },
+  ]
 
   const go = (next: PageKey) => {
     setMenuOpen(false)
+    setProfileOpen(false)
     onNavigate(next)
   }
 
-  const sessionLabel = ownerAuthenticated ? `Owner · ${activeWeddingName}` : coupleAuthenticated ? activeWeddingName : platformAuthenticated ? 'VV Admin · POC' : page === 'venue' ? 'Venue Demo' : page === 'signin' ? 'Sign In' : 'Venue Visions'
+  const desktopItems = mode === 'owner' ? ownerNav : mode === 'couple' ? coupleNav : mode === 'platform' ? platformNav : publicNav
+  const drawerItems = mode === 'owner' ? [...ownerNav, ...ownerMore] : mode === 'couple' ? [...coupleNav, ...coupleMore] : mode === 'platform' ? platformNav : publicNav
 
   return (
     <>
-      <header className="site-header vv-header">
-        <button className="brand-button" onClick={() => go('home')} aria-label="Venue Visions home"><Logo /></button>
-        <div className="header-controls">
-          <span className="header-context-chip" title="Current demo context">{sessionLabel}</span>
-          <button
-            className={menuOpen ? 'menu-toggle menu-toggle--open' : 'menu-toggle'}
-            type="button"
-            aria-expanded={menuOpen}
-            aria-controls="venue-visions-menu"
-            aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-            onClick={() => setMenuOpen((current) => !current)}
-          >
-            <span className="menu-toggle__bars" aria-hidden="true"><i /><i /><i /></span>
-            <span className="menu-toggle__label">Menu</span>
-            {(ownerAuthenticated || coupleAuthenticated) && (selectionCount > 0 || unreadMessages > 0) && <span className="menu-toggle__badge">{unreadMessages > 0 ? unreadMessages : selectionCount}</span>}
-          </button>
+      <header className={`site-header app-header app-header--${mode}`}>
+        <div className="app-header__brand">
+          {mode === 'public' && <button className="brand-button" onClick={() => go('home')} aria-label="Venue Visions home"><Logo /></button>}
+          {mode === 'platform' && (
+            <button className="platform-brand" type="button" onClick={() => go('platform')}>
+              <Logo compact />
+              <span><strong>Venue Visions Admin</strong><small>Proof of Concept</small></span>
+            </button>
+          )}
+          {mode === 'owner' && <ChandelierBrand onClick={() => go('admin')} subtitle="Owner Portal · Powered by Venue Visions" />}
+          {mode === 'couple' && <ChandelierBrand onClick={() => go('wedding')} subtitle="Wedding Portal · Powered by Venue Visions" />}
+        </div>
+
+        <nav className="app-header__desktop-nav" aria-label="Primary navigation">
+          {desktopItems.map((item) => (
+            <button key={item.key} className={page === item.key ? 'app-nav-link active' : 'app-nav-link'} onClick={() => go(item.key)}>
+              {item.label}
+              {item.key === 'messages' && unreadMessages > 0 && <span className="app-nav-badge">{unreadMessages}</span>}
+            </button>
+          ))}
+        </nav>
+
+        <div className="app-header__actions">
+          {mode === 'owner' && (
+            <label className="owner-wedding-switcher" title="Switch the active wedding across all owner tools">
+              <span>Active wedding</span>
+              <select value={activeWeddingId} onChange={(event) => onSelectWedding(event.target.value)}>
+                {sortedWeddings.map((wedding) => <option value={wedding.id} key={wedding.id}>{wedding.profile.couple} · {wedding.profile.date}</option>)}
+              </select>
+            </label>
+          )}
+
+          {mode === 'couple' && (
+            <div className="profile-menu-wrap">
+              <button className="couple-profile-button" type="button" aria-expanded={profileOpen} onClick={() => setProfileOpen((current) => !current)}>
+                <span>{activeWeddingName}</span><b aria-hidden="true">⌄</b>
+              </button>
+              {profileOpen && (
+                <div className="couple-profile-popover">
+                  <span className="mini-label">YOUR WEDDING</span>
+                  <strong>{activeWeddingName}</strong>
+                  <button onClick={() => go('wedding')}>Wedding home</button>
+                  <button onClick={() => go('media')}>Media & inspiration</button>
+                  <button onClick={() => go('summary')}>Setup summary</button>
+                  <button onClick={() => { setProfileOpen(false); onCoupleLogout() }}>Sign out</button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {mode === 'public' && <button className="button button--primary header-demo-cta" onClick={() => go('venue')}>View Demo</button>}
+          {mode === 'platform' && <button className="button button--ghost button--small" onClick={onPlatformLogout}>Sign out</button>}
+
+          {(mode === 'owner' || mode === 'platform' || mode === 'public') && (
+            <button className="compact-menu-button" type="button" aria-expanded={menuOpen} onClick={() => setMenuOpen((current) => !current)}>
+              <span className="compact-menu-button__bars" aria-hidden="true"><i /><i /><i /></span>
+              <span>Menu</span>
+              {mode === 'owner' && unreadMessages > 0 && <b>{unreadMessages}</b>}
+            </button>
+          )}
         </div>
       </header>
 
       {menuOpen && <button className="nav-menu-backdrop" aria-label="Close menu" onClick={() => setMenuOpen(false)} />}
-      <nav id="venue-visions-menu" className={menuOpen ? 'nav-drawer nav-drawer--open' : 'nav-drawer'} aria-label="Primary navigation">
-        <div className="nav-drawer__heading">
-          <div><span className="mini-label">VENUE VISIONS</span><strong>{ownerAuthenticated ? 'Chandelier Oaks Owner' : coupleAuthenticated ? 'Wedding Portal' : platformAuthenticated ? 'Admin Proof of Concept' : 'Venue Visions'}</strong></div>
-          <button className="nav-drawer__close" type="button" aria-label="Close navigation menu" onClick={() => setMenuOpen(false)}>×</button>
+      <aside className={menuOpen ? 'clean-drawer clean-drawer--open' : 'clean-drawer'} aria-label="Application menu">
+        <div className="clean-drawer__heading">
+          <div>
+            <span className="mini-label">{mode === 'owner' || mode === 'couple' ? 'CHANDELIER OAKS' : 'VENUE VISIONS'}</span>
+            <strong>{mode === 'owner' ? 'Owner Portal' : mode === 'couple' ? activeWeddingName : mode === 'platform' ? 'Admin · Proof of Concept' : 'Venue Visions'}</strong>
+          </div>
+          <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu">×</button>
         </div>
 
-        {ownerAuthenticated && (
-          <div className="nav-owner-switcher">
-            <div className="nav-owner-switcher__heading"><span>Owner session</span><button type="button" onClick={() => { setMenuOpen(false); onOwnerLogout() }}>Sign out</button></div>
-            <label htmlFor="nav-active-wedding">Active wedding</label>
-            <select id="nav-active-wedding" value={activeWeddingId} onChange={(event) => onSelectWedding(event.target.value)}>
+        {mode === 'owner' && (
+          <div className="clean-drawer__switcher">
+            <label htmlFor="drawer-active-wedding">Active wedding</label>
+            <select id="drawer-active-wedding" value={activeWeddingId} onChange={(event) => onSelectWedding(event.target.value)}>
               {sortedWeddings.map((wedding) => <option value={wedding.id} key={wedding.id}>{wedding.profile.couple} · {wedding.profile.date}</option>)}
             </select>
-            <small>Switch once here; every owner tool follows the selected wedding.</small>
+            <small>All wedding-specific tools follow this selection.</small>
           </div>
         )}
 
-        {coupleAuthenticated && !ownerAuthenticated && (
-          <div className="nav-drawer__wedding"><span>Signed into wedding</span><strong>{activeWeddingName}</strong><button className="nav-inline-signout" type="button" onClick={() => { setMenuOpen(false); onCoupleLogout() }}>Sign out</button></div>
-        )}
-
-        {platformAuthenticated && !ownerAuthenticated && !coupleAuthenticated && (
-          <div className="nav-drawer__wedding"><span>Venue Visions Admin</span><strong>Proof of concept session</strong><button className="nav-inline-signout" type="button" onClick={() => { setMenuOpen(false); onPlatformLogout() }}>Sign out</button></div>
-        )}
-
-        {!ownerAuthenticated && !coupleAuthenticated && !platformAuthenticated && (
-          <div className="nav-drawer__wedding nav-drawer__wedding--public"><span>Venue Visions</span><strong>Wedding venue planning software with branded owner and couple portals.</strong></div>
-        )}
-
-        <div className="nav-drawer__links">
-          {navItems.map((item) => (
-            <button key={item.key} className={page === item.key ? 'nav-drawer__link active' : 'nav-drawer__link'} onClick={() => go(item.key)}>
-              <span className="nav-drawer__link-copy"><strong>{item.label}</strong><small>{item.description}</small></span>
-              <span className="nav-drawer__link-meta">
-                {item.key === 'wedding' && selectionCount > 0 && <span className="nav-drawer__badge">{selectionCount}</span>}
-                {item.key === 'messages' && unreadMessages > 0 && <span className="nav-drawer__badge nav-drawer__badge--message">{unreadMessages}</span>}
-                <span aria-hidden="true">›</span>
+        <div className="clean-drawer__links">
+          {drawerItems.map((item) => (
+            <button key={`${item.key}-${item.label}`} className={page === item.key ? 'clean-drawer__link active' : 'clean-drawer__link'} onClick={() => go(item.key)}>
+              <span><strong>{item.label}</strong>{item.description && <small>{item.description}</small>}</span>
+              <span className="clean-drawer__meta">
+                {item.key === 'wedding' && selectionCount > 0 && <b>{selectionCount}</b>}
+                {item.key === 'messages' && unreadMessages > 0 && <b>{unreadMessages}</b>}
+                <i aria-hidden="true">›</i>
               </span>
             </button>
           ))}
         </div>
 
-        {(ownerAuthenticated || coupleAuthenticated || platformAuthenticated) && (
-          <div className="nav-drawer__footer">
-            {(ownerAuthenticated || coupleAuthenticated) && <button className="nav-drawer__reset" onClick={() => { setMenuOpen(false); onResetDemo() }}>Reset venue demo data</button>}
-            {platformAuthenticated && <button className="nav-drawer__reset" onClick={() => { setMenuOpen(false); onResetDemo() }}>Reset proof-of-concept data</button>}
-          </div>
-        )}
-      </nav>
+        <div className="clean-drawer__footer">
+          {mode === 'owner' && <button onClick={() => { setMenuOpen(false); onOwnerLogout() }}>Sign out of owner demo</button>}
+          {mode === 'couple' && <button onClick={() => { setMenuOpen(false); onCoupleLogout() }}>Sign out of wedding</button>}
+          {mode === 'platform' && <button onClick={() => { setMenuOpen(false); onPlatformLogout() }}>Sign out of admin POC</button>}
+          {(mode === 'owner' || mode === 'couple' || mode === 'platform') && <button className="clean-drawer__reset" onClick={() => { setMenuOpen(false); onResetDemo() }}>Reset demo data</button>}
+        </div>
+      </aside>
+
+      {mode === 'couple' && (
+        <nav className="couple-bottom-nav" aria-label="Wedding navigation">
+          {coupleNav.map((item) => (
+            <button key={item.key} className={page === item.key ? 'active' : ''} onClick={() => go(item.key)}>
+              <span aria-hidden="true">{item.key === 'wedding' ? '⌂' : item.key === 'catalog' ? '✿' : item.key === 'planner' ? '▦' : '✉'}</span>
+              <small>{item.label}</small>
+              {item.key === 'messages' && unreadMessages > 0 && <b>{unreadMessages}</b>}
+            </button>
+          ))}
+          <button className={menuOpen ? 'active' : ''} onClick={() => setMenuOpen(true)}><span aria-hidden="true">☰</span><small>More</small></button>
+        </nav>
+      )}
     </>
   )
 }
