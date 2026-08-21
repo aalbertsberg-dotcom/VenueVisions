@@ -2064,3 +2064,28 @@ body { font-size: 16px; line-height: 1.5; }
   .saas-proof-section { padding-top: 0; padding-bottom: 48px; }
   .saas-proof-section .saas-proof-row { grid-template-columns: 1fr; }
 }
+
+/* v1.6 — broader event-venue showcase */
+.venue-directory-grid {
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+}
+.venue-comparison-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.multi-venue-stack {
+  width: min(600px, 100%);
+}
+.multi-venue-stack__cards {
+  gap: 10px;
+}
+.multi-venue-mini,
+.multi-venue-stack__next {
+  min-height: 76px;
+}
+.multi-venue-mini small {
+  line-height: 1.25;
+}
+
+@media (max-width: 1180px) {
+  .venue-comparison-grid { grid-template-columns: 1fr; }
+}

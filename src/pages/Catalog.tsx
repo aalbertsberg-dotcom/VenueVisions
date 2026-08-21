@@ -18,6 +18,9 @@ type CatalogProps = {
 export default function Catalog({ venueId, selections, onSetQuantity, canEdit, onRequireAccess, packageTier, packageName }: CatalogProps) {
   const config = venueConfigById(venueId)
   const { profile: venue, inventory } = config
+  const eventLabel = venue.eventLabel ?? 'event'
+  const isWedding = eventLabel === 'wedding'
+  const inventoryName = venue.inventoryLabel ?? 'Venue Inventory'
   const [category, setCategory] = useState<'All' | Category>('All')
   const [query, setQuery] = useState('')
   const [detailId, setDetailId] = useState<string | null>(null)
@@ -44,19 +47,19 @@ export default function Catalog({ venueId, selections, onSetQuantity, canEdit, o
     <main className="page-main shell catalog-page pinrose-page">
       <section className="page-intro page-intro--split">
         <div>
-          <p className="eyebrow">{venue.shortName.toUpperCase()} · {venue.inventoryLabel?.toUpperCase() ?? 'DÉCOR COLLECTION'}</p>
-          <h1>Browse the venue's décor before stepping into storage.</h1>
-          <p>{venue.id === 'venue-chandelier-oaks' ? 'Chandelier Oaks publicly describes its Pinrose Prop Shop as including antique furniture, arches, arbors, French doors, champagne walls, swing beds, chandeliers and more. Venue Visions turns that collection into a searchable planning library.' : 'This sample venue uses a modern Design Library to show how a completely different inventory style and brand can use the same Venue Visions tools.'}</p>
-          <div className="sample-data-note"><strong>{venue.isSample ? 'Sample inventory' : 'Preview inventory'}</strong><span>{venue.isSample ? 'This venue and its inventory are fictional examples created to show multi-venue customization.' : 'Item categories are based on public venue information; quantities, storage locations, dimensions and exact package-tier rules remain sample data until Chandelier Oaks catalogs the real collection.'}</span></div>
-          {!canEdit && <div className="catalog-access-note"><strong>Public browsing preview.</strong><span>Enter a wedding workspace to make selections.</span><button className="text-link" onClick={onRequireAccess}>Wedding access →</button></div>}
+          <p className="eyebrow">{venue.shortName.toUpperCase()} · {inventoryName.toUpperCase()}</p>
+          <h1>Browse the venue's resources before setup day.</h1>
+          <p>{venue.id === 'venue-chandelier-oaks' ? 'Chandelier Oaks publicly describes its Pinrose Prop Shop as including antique furniture, arches, arbors, French doors, champagne walls, swing beds, chandeliers and more. Venue Visions turns that collection into a searchable planning library.' : venue.id === 'venue-foundry-rivergate' ? 'The Foundry uses an Event Resource Library to show how furniture, AV, staging, lighting and operational resources can live in the same planning workflow.' : 'Juniper & Stone uses a modern Design Library to show how a completely different inventory style and brand can use the same Venue Visions tools.'}</p>
+          <div className="sample-data-note"><strong>{venue.isSample ? 'Showcase inventory' : 'Configured inventory'}</strong><span>{venue.isSample ? 'This venue and its inventory are fictional examples created to show multi-venue customization.' : 'Item categories are based on public venue information; quantities, storage locations, dimensions and exact package-tier rules remain illustrative until Chandelier Oaks catalogs the real collection.'}</span></div>
+          {!canEdit && <div className="catalog-access-note"><strong>Public browsing preview.</strong><span>Enter an {eventLabel} workspace to make selections.</span><button className="text-link" onClick={onRequireAccess}>{eventLabel[0].toUpperCase() + eventLabel.slice(1)} access →</button></div>}
         </div>
         <div className="selection-summary pinrose-tier-summary"><span className="mini-label">ACTIVE PACKAGE</span><strong>{tierLabel[packageTier]}</strong><span>{packageName}</span><small>{selections.reduce((sum, item) => sum + item.quantity, 0)} pieces selected</small></div>
       </section>
 
       <section className="catalog-toolbar">
-        <div className="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={`Search ${venue.inventoryLabel ?? 'venue décor'}…`} /></div>
+        <div className="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={`Search ${inventoryName}…`} /></div>
         <label className="included-toggle"><input type="checkbox" checked={showOnlyIncluded} onChange={(e) => setShowOnlyIncluded(e.target.checked)} /><span>Show only included in active package</span></label>
-        <div className="filter-row" aria-label="Decoration categories">{categories.map((item) => <button key={item} className={category === item ? 'filter-pill active' : 'filter-pill'} onClick={() => setCategory(item)}>{item}</button>)}</div>
+        <div className="filter-row" aria-label="Inventory categories">{categories.map((item) => <button key={item} className={category === item ? 'filter-pill active' : 'filter-pill'} onClick={() => setCategory(item)}>{item}</button>)}</div>
       </section>
 
       <div className="catalog-grid">
@@ -71,14 +74,14 @@ export default function Catalog({ venueId, selections, onSetQuantity, canEdit, o
                 <h3><button onClick={() => setDetailId(item.id)}>{item.name}</button></h3>
                 <p className="catalog-card__color">{item.color} · {item.dimensions}</p>
                 <div className={allowed ? 'tier-chip tier-chip--included' : 'tier-chip'}>{allowed ? '✓ Included in this package' : `Tier ${item.accessTier} access`}</div>
-                {!canEdit ? <button className="button button--small button--ghost full-width" onClick={onRequireAccess}>Sign in to select</button> : !allowed ? <button className="button button--small button--ghost full-width" disabled>Not included in this package</button> : qty === 0 ? <button className="button button--small button--primary full-width" onClick={() => onSetQuantity(item.id, 1)}>Add to my wedding</button> : <div className="quantity-control"><button aria-label={`Remove one ${item.name}`} onClick={() => onSetQuantity(item.id, qty - 1)}>−</button><span><strong>{qty}</strong><small>selected</small></span><button aria-label={`Add one ${item.name}`} disabled={qty >= item.quantity} onClick={() => onSetQuantity(item.id, qty + 1)}>+</button></div>}
+                {!canEdit ? <button className="button button--small button--ghost full-width" onClick={onRequireAccess}>Sign in to select</button> : !allowed ? <button className="button button--small button--ghost full-width" disabled>Not included in this package</button> : qty === 0 ? <button className="button button--small button--primary full-width" onClick={() => onSetQuantity(item.id, 1)}>Add to my {eventLabel}</button> : <div className="quantity-control"><button aria-label={`Remove one ${item.name}`} onClick={() => onSetQuantity(item.id, qty - 1)}>−</button><span><strong>{qty}</strong><small>selected</small></span><button aria-label={`Add one ${item.name}`} disabled={qty >= item.quantity} onClick={() => onSetQuantity(item.id, qty + 1)}>+</button></div>}
               </div>
             </article>
           )
         })}
       </div>
 
-      {filtered.length === 0 && <div className="empty-state"><h3>No props matched that filter.</h3><p>Try another category or turn off the package-only filter.</p></div>}
+      {filtered.length === 0 && <div className="empty-state"><h3>No resources matched that filter.</h3><p>Try another category or turn off the package-only filter.</p></div>}
 
       {detail && (
         <div className="modal-backdrop" role="presentation" onMouseDown={() => setDetailId(null)}>

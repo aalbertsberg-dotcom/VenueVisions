@@ -73,6 +73,13 @@ export type VenueProfile = {
   locationLabel?: string
   inventoryLabel?: string
   previewLabel?: string
+  venueTypeLabel?: string
+  eventLabel?: string
+  eventPluralLabel?: string
+  clientLabel?: string
+  clientPluralLabel?: string
+  portalHeroTitle?: string
+  portalHeroBody?: string
   isSample?: boolean
   links?: VenueLink[]
 }

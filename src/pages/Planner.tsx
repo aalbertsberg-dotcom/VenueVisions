@@ -93,6 +93,8 @@ type PlannerProps = {
 export default function Planner({ venueId, selections, placedItems, setPlacedItems, onSetQuantity, packageTier, preferredAreaId, onNavigate }: PlannerProps) {
   const config = venueConfigById(venueId)
   const { profile: venue, inventory, areas: venueAreas } = config
+  const eventLabel = venue.eventLabel ?? 'event'
+  const isWedding = eventLabel === 'wedding'
   const defaultAreaId = preferredAreaId || venueAreas.find((item) => item.kind === 'Reception')?.id || venueAreas[0]?.id || ''
   const canvasRef = useRef<HTMLDivElement>(null)
   const [area, setArea] = useState(() => {
@@ -292,7 +294,7 @@ export default function Planner({ venueId, selections, placedItems, setPlacedIte
         <div>
           <p className="eyebrow">{venue.shortName.toUpperCase()} · STEP 1 · 2D VENUE DESIGNER</p>
           <h1>Build the layout first.</h1>
-          <p className="planner-topbar__lead">This overhead plan is the placement source of truth. Add tables, chairs and décor here before creating an AI visualization.</p>
+          <p className="planner-topbar__lead">This overhead plan is the placement source of truth. Add tables, chairs and venue resources here before creating an AI visualization.</p>
         </div>
         <div className="planner-topbar__actions">
           <label className="area-select"><span>Design area</span><select value={area} onChange={(e) => { setArea(e.target.value); setSelectedId(null) }}>{venueAreas.filter((item) => item.plannerEnabled).map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
@@ -301,7 +303,7 @@ export default function Planner({ venueId, selections, placedItems, setPlacedIte
         </div>
       </div>
 
-      <div className="planner-tip shell" role="note"><strong>{currentArea.name}:</strong> {currentArea.description} Select a table to add chairs, resize or rotate it. <b>The AI Preview uses this exact 2D layout as its structured placement input.</b></div>
+      <div className="planner-tip shell" role="note"><strong>{currentArea.name}:</strong> {currentArea.description} Select a table to add chairs, resize or rotate it. <b>The AI Preview uses this exact 2D layout as its structured placement input for this {isWedding ? 'wedding' : 'event'}.</b></div>
 
       <div className="planner-shell shell">
         <aside className="toolbox panel">
@@ -313,7 +315,7 @@ export default function Planner({ venueId, selections, placedItems, setPlacedIte
           </div>
 
           <div className="toolbox__divider" />
-          <div className="toolbox__heading"><span className="mini-label">YOUR DÉCOR</span><h2>Selected pieces</h2></div>
+          <div className="toolbox__heading"><span className="mini-label">YOUR RESOURCES</span><h2>Selected pieces</h2></div>
           {selectedDecor.length ? (
             <div className="decor-tools">
               {selectedDecor.map((item) => {
@@ -324,14 +326,14 @@ export default function Planner({ venueId, selections, placedItems, setPlacedIte
           ) : <p className="toolbox-empty">Nothing selected yet. You can still add directly from inventory below.</p>}
 
           <div className="toolbox__divider" />
-          <div className="toolbox__heading"><span className="mini-label">{(venue.inventoryLabel ?? 'ALL INVENTORY').toUpperCase()}</span><h2>Add décor directly</h2></div>
+          <div className="toolbox__heading"><span className="mini-label">{(venue.inventoryLabel ?? 'ALL INVENTORY').toUpperCase()}</span><h2>Add resources directly</h2></div>
           <input className="inventory-search" type="search" value={inventorySearch} onChange={(e) => setInventorySearch(e.target.value)} placeholder={`Search ${venue.inventoryLabel ?? 'inventory'}…`} />
           <div className="inventory-tools">
             {filteredInventory.map((item) => {
               const inRoom = areaItems.filter((placed) => placed.inventoryItemId === item.id).length
               const isSelected = selections.some((selection) => selection.itemId === item.id)
               return (
-                <button key={item.id} onClick={() => addInventoryItem(item)} disabled={inRoom >= item.quantity} title="Adds to the layout and to My Wedding when needed">
+                <button key={item.id} onClick={() => addInventoryItem(item)} disabled={inRoom >= item.quantity} title={`Adds to the layout and to this ${eventLabel} when needed`}>
                   <span className={`decor-dot decor-dot--${item.imageStyle}`} />
                   <span><strong>{item.name}</strong><small>{item.category} · {isSelected ? 'selected' : 'not selected'} · {inRoom}/{item.quantity} in room</small></span>
                   <b>+</b>
@@ -412,7 +414,7 @@ export default function Planner({ venueId, selections, placedItems, setPlacedIte
           <div className="toolbox__divider" />
           <div className="room-stats"><span>Objects in this area</span><strong>{areaItems.length}</strong></div>
           <div className="room-stats"><span>Table-linked chairs</span><strong>{linkedChairCount}</strong></div>
-          <div className="room-stats"><span>Décor pieces shown</span><strong>{areaItems.filter((item) => item.type === 'decor').length}</strong></div>
+          <div className="room-stats"><span>Resource pieces shown</span><strong>{areaItems.filter((item) => item.type === 'decor').length}</strong></div>
         </aside>
       </div>
 
@@ -420,7 +422,7 @@ export default function Planner({ venueId, selections, placedItems, setPlacedIte
         <div>
           <span className="mini-label">STEP 2 · VISUALIZE</span>
           <h2>Ready to see this layout in the venue?</h2>
-          <p>AI Preview combines the current {currentArea.name} 2D plan with venue reference photos, selected décor and wedding style choices. Your overhead plan remains the placement reference.</p>
+          <p>AI Preview combines the current {currentArea.name} 2D plan with venue reference photos, selected resources and {eventLabel} style choices. Your overhead plan remains the placement reference.</p>
         </div>
         <button className="button button--primary" onClick={continueToPreview} disabled={areaItems.length === 0}>
           {areaItems.length === 0 ? 'Add layout pieces first' : 'Continue to AI Preview'}

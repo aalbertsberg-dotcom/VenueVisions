@@ -24,11 +24,13 @@ function formatMessageTime(timestamp: string) {
   return date.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
 }
 
-function roleLabel(role: MessageRole) { return role === 'bride' ? 'Couple' : 'Venue Team' }
-
 export default function Messages({ venueId, profile, selections, placedItems, messages, setMessages, currentRole, notificationsEnabled, setNotificationsEnabled, onOpenContext }: MessagesProps) {
   const config = venueConfigById(venueId)
   const venue = config.profile
+  const eventLabel = venue.eventLabel ?? 'event'
+  const clientLabel = venue.clientLabel ?? 'client'
+  const clientDisplay = clientLabel[0].toUpperCase() + clientLabel.slice(1)
+  const roleLabel = (role: MessageRole) => role === 'bride' ? clientDisplay : 'Venue Team'
   const venueInventory = config.inventory
   const venueAreas = config.areas
   const fallbackArea = profile.receptionArea || venueAreas.find((area) => area.kind === 'Reception')?.id || venueAreas[0]?.id || ''
@@ -47,9 +49,9 @@ export default function Messages({ venueId, profile, selections, placedItems, me
   )
   const linkedAreas = useMemo(() => venueAreas.filter((area) => area.plannerEnabled).map((area) => ({ kind: 'area' as const, id: area.id, label: area.name })), [venueAreas, placedItems.length])
 
-  const senderName = currentRole === 'bride' ? (profile.couple || 'Couple') : `${venue.shortName} Team`
+  const senderName = currentRole === 'bride' ? (profile.couple || clientDisplay) : `${venue.shortName} Team`
   const otherRole: MessageRole = currentRole === 'bride' ? 'venue' : 'bride'
-  const otherName = otherRole === 'bride' ? (profile.couple || 'Couple') : `${venue.shortName} Team`
+  const otherName = otherRole === 'bride' ? (profile.couple || clientDisplay) : `${venue.shortName} Team`
 
   const sendMessage = () => {
     if (!draft.trim() && !attachments.length && !context) return
@@ -112,8 +114,8 @@ export default function Messages({ venueId, profile, selections, placedItems, me
     setSimulating(true)
     window.setTimeout(() => {
       const replyBody = otherRole === 'venue'
-        ? 'Thanks for the update! We have your note. We can use this thread to confirm décor and layout details as the wedding gets closer.'
-        : 'That works for us. I linked the reception layout so we can keep the setup discussion together.'
+        ? `Thanks for the update! We have your note. We can use this thread to confirm resources and layout details as the ${eventLabel} gets closer.`
+        : `That works for us. I linked the layout so we can keep the ${eventLabel} setup discussion together.`
       const reply: WeddingMessage = {
         id: `msg-preview-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
         senderRole: otherRole,
@@ -141,14 +143,14 @@ export default function Messages({ venueId, profile, selections, placedItems, me
     <main className="page-main shell messages-page">
       <section className="page-intro page-intro--split messages-intro">
         <div>
-          <p className="eyebrow">{venue.shortName.toUpperCase()} · WEDDING MESSAGES</p>
+          <p className="eyebrow">{venue.shortName.toUpperCase()} · {eventLabel.toUpperCase()} MESSAGES</p>
           <h1>Keep the conversation with the plan.</h1>
-          <p>Questions, confirmations, photos and linked décor stay attached to this wedding instead of getting scattered across texts and email.</p>
+          <p>Questions, confirmations, photos and linked resources stay attached to this {eventLabel} instead of getting scattered across texts and email.</p>
         </div>
         <div className="message-demo-role message-demo-role--locked">
           <span className="mini-label">SIGNED IN AS</span>
           <strong>{currentRole === 'venue' ? `${venue.shortName} Team` : profile.couple}</strong>
-          <small>Your role follows the venue-owner or couple access used to enter this workspace.</small>
+          <small>Your role follows the venue-owner or {clientLabel} access used to enter this workspace.</small>
         </div>
       </section>
 
@@ -156,7 +158,7 @@ export default function Messages({ venueId, profile, selections, placedItems, me
         <section className="panel conversation-panel">
           <div className="conversation-heading">
             <div className="conversation-avatar" style={{ background: venue.brandPrimary, color: '#fff' }}>{venue.logoText}</div>
-            <div><strong>{profile.couple || 'Wedding conversation'}</strong><span>{venue.shortName} · Wedding planning thread</span></div>
+            <div><strong>{profile.couple || `${eventLabel[0].toUpperCase() + eventLabel.slice(1)} conversation`}</strong><span>{venue.shortName} · {eventLabel[0].toUpperCase() + eventLabel.slice(1)} planning thread</span></div>
             <div className="conversation-status"><span className="status-dot" /> Active</div>
           </div>
 
@@ -166,11 +168,11 @@ export default function Messages({ venueId, profile, selections, placedItems, me
               const unreadForMe = !mine && (currentRole === 'bride' ? !message.readByBride : !message.readByVenue)
               return (
                 <article className={`message-row ${mine ? 'message-row--mine' : ''}`} key={message.id}>
-                  <div className={`message-avatar ${message.senderRole === 'venue' ? 'message-avatar--venue' : ''}`}>{message.senderRole === 'venue' ? 'V' : 'C'}</div>
+                  <div className={`message-avatar ${message.senderRole === 'venue' ? 'message-avatar--venue' : ''}`}>{message.senderRole === 'venue' ? 'V' : clientDisplay[0]}</div>
                   <div className={`message-bubble ${unreadForMe ? 'message-bubble--unread' : ''}`}>
                     <div className="message-meta"><strong>{message.senderName}</strong><span>{roleLabel(message.senderRole)} · {formatMessageTime(message.timestamp)}</span></div>
                     {message.body && <p>{message.body}</p>}
-                    {message.context && <button className="message-context" onClick={() => onOpenContext(message.context!)}><span>{message.context.kind === 'inventory' ? '✦' : '⌖'}</span><div><small>{message.context.kind === 'inventory' ? 'LINKED DÉCOR' : 'LINKED FLOOR PLAN'}</small><strong>{message.context.label}</strong></div><b>Open →</b></button>}
+                    {message.context && <button className="message-context" onClick={() => onOpenContext(message.context!)}><span>{message.context.kind === 'inventory' ? '✦' : '⌖'}</span><div><small>{message.context.kind === 'inventory' ? 'LINKED RESOURCE' : 'LINKED FLOOR PLAN'}</small><strong>{message.context.label}</strong></div><b>Open →</b></button>}
                     {message.attachments.length > 0 && <div className="message-attachments">{message.attachments.map((attachment) => <a key={attachment.id} className={attachment.mimeType.startsWith('image/') ? 'message-attachment message-attachment--image' : 'message-attachment'} href={attachment.dataUrl} download={attachment.name} target="_blank" rel="noreferrer">{attachment.mimeType.startsWith('image/') ? <img src={attachment.dataUrl} alt={attachment.name} /> : <span>📎</span>}<div><strong>{attachment.name}</strong><small>{Math.max(1, Math.round(attachment.size / 1024))} KB</small></div></a>)}</div>}
                   </div>
                 </article>
@@ -180,7 +182,7 @@ export default function Messages({ venueId, profile, selections, placedItems, me
 
           <div className="message-composer">
             <div className="composer-context-row">
-              <label><span>Link to this message</span><select value={context ? `${context.kind}::${context.id}` : ''} onChange={(e) => selectContext(e.target.value)}><option value="">No linked item</option><optgroup label="Floor plan">{linkedAreas.map((item) => <option key={item.id} value={`area::${item.id}`}>{item.label}</option>)}</optgroup>{selectedInventory.length > 0 && <optgroup label="Selected décor">{selectedInventory.map((item) => <option key={item.id} value={`inventory::${item.id}`}>{item.name}</option>)}</optgroup>}</select></label>
+              <label><span>Link to this message</span><select value={context ? `${context.kind}::${context.id}` : ''} onChange={(e) => selectContext(e.target.value)}><option value="">No linked item</option><optgroup label="Floor plan">{linkedAreas.map((item) => <option key={item.id} value={`area::${item.id}`}>{item.label}</option>)}</optgroup>{selectedInventory.length > 0 && <optgroup label="Selected resources">{selectedInventory.map((item) => <option key={item.id} value={`inventory::${item.id}`}>{item.name}</option>)}</optgroup>}</select></label>
               <button className="button button--ghost button--small" onClick={() => fileInputRef.current?.click()} disabled={attachments.length >= MAX_ATTACHMENTS}>＋ Photo / file</button>
               <input ref={fileInputRef} className="visually-hidden" type="file" multiple accept="image/*,.pdf,.doc,.docx,.txt" onChange={(e) => handleFiles(e.target.files)} />
             </div>
@@ -198,7 +200,7 @@ export default function Messages({ venueId, profile, selections, placedItems, me
             <button className="button button--ghost full-width" onClick={simulateReply} disabled={simulating}>{simulating ? 'Waiting for preview reply…' : `Simulate reply from ${otherName}`}</button>
             <small className="prototype-help">This simulation exists so the preview can show notifications without a live messaging backend.</small>
           </section>
-          <section className="panel message-info-card"><p className="eyebrow">THREAD DETAILS</p><h2>{profile.couple || 'Wedding'}</h2><dl><div><dt>Venue</dt><dd>{venue.shortName}</dd></div><div><dt>Wedding date</dt><dd>{profile.date ? new Date(`${profile.date}T12:00:00`).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' }) : 'Not set'}</dd></div><div><dt>Messages</dt><dd>{messages.length}</dd></div><div><dt>Selected décor</dt><dd>{selections.reduce((sum, item) => sum + item.quantity, 0)} pieces</dd></div><div><dt>Floor plan</dt><dd>{placedItems.length ? `${placedItems.length} objects placed` : 'Not started'}</dd></div></dl></section>
+          <section className="panel message-info-card"><p className="eyebrow">THREAD DETAILS</p><h2>{profile.couple || eventLabel[0].toUpperCase() + eventLabel.slice(1)}</h2><dl><div><dt>Venue</dt><dd>{venue.shortName}</dd></div><div><dt>{eventLabel[0].toUpperCase() + eventLabel.slice(1)} date</dt><dd>{profile.date ? new Date(`${profile.date}T12:00:00`).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' }) : 'Not set'}</dd></div><div><dt>Messages</dt><dd>{messages.length}</dd></div><div><dt>Selected resources</dt><dd>{selections.reduce((sum, item) => sum + item.quantity, 0)} pieces</dd></div><div><dt>Floor plan</dt><dd>{placedItems.length ? `${placedItems.length} objects placed` : 'Not started'}</dd></div></dl></section>
         </aside>
       </div>
     </main>

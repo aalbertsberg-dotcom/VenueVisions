@@ -18,7 +18,12 @@ export const chandelierOaks: VenueProfile = {
   brandText: '#23382d',
   locationLabel: 'Kiln, Mississippi',
   inventoryLabel: 'Pinrose Prop Shop',
-  previewLabel: 'Chandelier Oaks Preview',
+  previewLabel: 'Chandelier Oaks',
+  venueTypeLabel: 'Wedding venue',
+  eventLabel: 'wedding',
+  eventPluralLabel: 'weddings',
+  clientLabel: 'couple',
+  clientPluralLabel: 'couples',
   links: [
     { label: 'Official website', url: 'https://chandelieroaks.com/', kind: 'website' },
     { label: 'Wedding packages', url: 'https://chandelieroaks.com/wedding-packages', kind: 'resource' },
@@ -316,7 +321,12 @@ export const juniperStone: VenueProfile = {
   logoText: 'JS',
   locationLabel: 'Asheville, North Carolina',
   inventoryLabel: 'Design Library',
-  previewLabel: 'Sample Venue',
+  previewLabel: 'Juniper & Stone',
+  venueTypeLabel: 'Wedding venue',
+  eventLabel: 'wedding',
+  eventPluralLabel: 'weddings',
+  clientLabel: 'couple',
+  clientPluralLabel: 'couples',
   isSample: true,
   links: [],
 }
@@ -346,6 +356,62 @@ export const juniperInventory: InventoryItem[] = [
   { id: 'js-floral', name: 'Seasonal Neutral Floral Set', category: 'Florals', color: 'Ivory / sage', quantity: 14, dimensions: 'Assorted', storage: 'Design Library · Floral Room', description: 'Sample floral collection for previewing premium styling.', imageStyle: 'white-florals', accessTier: 3 },
 ]
 
+
+export const foundryRivergate: VenueProfile = {
+  id: 'venue-foundry-rivergate',
+  slug: 'foundry-rivergate',
+  name: 'The Foundry at Rivergate',
+  shortName: 'The Foundry',
+  tagline: 'Flexible industrial spaces for meetings, galas, launches and celebrations.',
+  website: '',
+  address: 'Showcase venue · Louisville, Kentucky',
+  phone: '(555) 014-0418',
+  email: 'events@foundryrivergate.example',
+  ownerName: 'Alex Morgan',
+  brandPrimary: '#26333d',
+  brandAccent: '#55a7b8',
+  logoText: 'FR',
+  brandSurface: '#edf3f5',
+  brandText: '#1f2d36',
+  locationLabel: 'Louisville, Kentucky',
+  inventoryLabel: 'Event Resource Library',
+  previewLabel: 'The Foundry',
+  venueTypeLabel: 'Multi-purpose event venue',
+  eventLabel: 'event',
+  eventPluralLabel: 'events',
+  clientLabel: 'client',
+  clientPluralLabel: 'clients',
+  portalHeroTitle: 'Plan every event from room setup to final handoff.',
+  portalHeroBody: 'Coordinate meetings, galas, launches and celebrations with room layouts, equipment, media, messages and a private client workspace.',
+  isSample: true,
+  links: [],
+}
+
+export const foundryPackages: VenuePackage[] = [
+  { id: 'fr-meeting', name: 'Day Meeting', price: 1800, duration: '8 hours', maxGuests: 120, tier: 1, description: 'A focused daytime package for meetings, trainings and workshops.', highlights: ['Main Hall or Studio A', 'Core tables + chairs', 'Presentation equipment', 'Client planning portal'] },
+  { id: 'fr-signature', name: 'Signature Event', price: 4200, duration: '12 hours', maxGuests: 250, tier: 2, description: 'Expanded access for galas, launches, reunions and large private events.', highlights: ['Main Hall + Gallery', 'Expanded furniture library', 'Stage + AV options', 'Two setup windows'] },
+  { id: 'fr-buyout', name: 'Full Venue Buyout', price: 7500, duration: 'Full day', maxGuests: 400, tier: 3, description: 'Whole-property access for conferences, fundraisers and large-scale productions.', highlights: ['All event spaces', 'Full resource library', 'Rooftop access', 'Extended setup + breakdown'] },
+]
+
+export const foundryAreas: VenueArea[] = [
+  { id: 'fr-main-hall', name: 'Main Hall', kind: 'Reception', description: 'Large industrial hall for conferences, galas, dinners, exhibits and stage programs.', plannerEnabled: true, visual: 'pavilion' },
+  { id: 'fr-studio-a', name: 'Studio A', kind: 'Reception', description: 'Flexible breakout room for meetings, workshops, lounges and smaller events.', plannerEnabled: true, visual: 'greenhouse' },
+  { id: 'fr-gallery', name: 'Gallery', kind: 'Hospitality', description: 'Entry and pre-function space for registration, cocktail hour, exhibits and sponsor displays.', plannerEnabled: true, visual: 'gazebo' },
+  { id: 'fr-rooftop', name: 'Rivergate Rooftop', kind: 'Hospitality', description: 'Open-air rooftop for receptions, networking and sunset gatherings.', plannerEnabled: true, visual: 'lake' },
+  { id: 'fr-boardroom', name: 'Boardroom', kind: 'Photos', description: 'Private meeting and green-room space for speakers, planners or VIP groups.', plannerEnabled: true, visual: 'pool' },
+]
+
+export const foundryInventory: InventoryItem[] = [
+  { id: 'fr-stage', name: 'Modular Stage Risers', category: 'Specialty', color: 'Black', quantity: 12, dimensions: '4 ft × 8 ft sections', storage: 'Equipment Room · Bay A', description: 'Configurable stage sections for keynotes, panels, awards and entertainment.', imageStyle: 'ribbed-wall', featured: true, accessTier: 2 },
+  { id: 'fr-podium', name: 'Presentation Podium', category: 'Furniture', color: 'Charcoal / oak', quantity: 2, dimensions: 'Standard lectern', storage: 'AV Room · Rack 1', description: 'Modern lectern for meetings, ceremonies and presentations.', imageStyle: 'welcome-easel', featured: true, accessTier: 1 },
+  { id: 'fr-cocktail', name: 'Cocktail Table Set', category: 'Furniture', color: 'Black', quantity: 30, dimensions: '30 in round', storage: 'Furniture Bay · Row C', description: 'Standing-height cocktail tables for networking and pre-function spaces.', imageStyle: 'antique-sofa', accessTier: 1 },
+  { id: 'fr-drape', name: 'Black Pipe & Drape', category: 'Backdrops', color: 'Black', quantity: 16, dimensions: '10 ft sections', storage: 'Equipment Room · Wall Rack', description: 'Flexible room division and backdrop system for exhibits, stages and service areas.', imageStyle: 'green-wall', accessTier: 1 },
+  { id: 'fr-uplights', name: 'Wireless LED Uplights', category: 'Lighting', color: 'RGB / tunable white', quantity: 36, dimensions: 'Battery fixtures', storage: 'AV Room · Charging Rack', description: 'Wireless architectural uplighting for brand colors, galas and evening events.', imageStyle: 'chandelier', featured: true, accessTier: 2 },
+  { id: 'fr-lounge', name: 'Modular Lounge Collection', category: 'Furniture', color: 'Slate / navy', quantity: 4, dimensions: 'Modular sets', storage: 'Furniture Bay · Row A', description: 'Contemporary lounge groupings for networking, VIP and sponsor areas.', imageStyle: 'antique-sofa', accessTier: 2 },
+  { id: 'fr-easels', name: 'Display Easel Set', category: 'Signs', color: 'Black', quantity: 12, dimensions: 'Floor standing', storage: 'Resource Library · Shelf B', description: 'Sign and display stands for agendas, sponsor boards, seating plans and wayfinding.', imageStyle: 'welcome-easel', accessTier: 1 },
+  { id: 'fr-linens', name: 'Black Linen Collection', category: 'Linens', color: 'Black', quantity: 40, dimensions: 'Assorted table sizes', storage: 'Textile Room · Rack 1', description: 'Neutral event linen collection for meetings, galas and private functions.', imageStyle: 'ivory-linens', accessTier: 3 },
+]
+
 export const chandelierConfig: VenueConfig = {
   profile: chandelierOaks,
   packages: chandelierPackages,
@@ -363,10 +429,20 @@ export const juniperConfig: VenueConfig = {
   inventory: juniperInventory,
   ownerAccessCode: '246810',
   oneEventPerDate: true,
-  ownerDashboardNote: 'Sample venue rule: one wedding per calendar date.',
+  ownerDashboardNote: 'Showcase venue rule: one wedding per calendar date.',
 }
 
-export const venueConfigs: VenueConfig[] = [chandelierConfig, juniperConfig]
+export const foundryConfig: VenueConfig = {
+  profile: foundryRivergate,
+  packages: foundryPackages,
+  areas: foundryAreas,
+  inventory: foundryInventory,
+  ownerAccessCode: '975310',
+  oneEventPerDate: true,
+  ownerDashboardNote: 'Showcase venue rule: one primary event booking per calendar date.',
+}
+
+export const venueConfigs: VenueConfig[] = [chandelierConfig, juniperConfig, foundryConfig]
 export const venueProfiles = venueConfigs.map((item) => item.profile)
 
 export const tierLabel: Record<PackageTier, string> = {

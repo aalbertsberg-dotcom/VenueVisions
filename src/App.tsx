@@ -17,7 +17,7 @@ import SetupSheet from './pages/SetupSheet'
 import Admin from './pages/Admin'
 import PlatformAdmin from './pages/PlatformAdmin'
 import CoupleAccess from './pages/CoupleAccess'
-import { chandelierOaks, itemAllowedForTier, juniperStone, packageById, venueConfigById, venueConfigBySlug, venueConfigs } from './data'
+import { chandelierOaks, foundryRivergate, itemAllowedForTier, juniperStone, packageById, venueConfigById, venueConfigBySlug, venueConfigs } from './data'
 import type { MessageContext, MessageRole, PlacedItem, VenueLead, WeddingMessage, WeddingProfile, WeddingStatus, WeddingWorkspace } from './types'
 
 const ADMIN_POC_CODE = '654321'
@@ -47,12 +47,23 @@ const juniperPlan: PlacedItem[] = [
   { id: 'juniper-arch', type: 'arch', x: 330, y: 90, rotation: 0, scale: 1, label: 'Ceremony arch', areaId: 'stone-courtyard' },
 ]
 
+const foundryPlan: PlacedItem[] = [
+  { id: 'foundry-stage', type: 'banquet-table', x: 330, y: 78, rotation: 0, scale: 1.8, label: 'Presentation stage', areaId: 'fr-main-hall' },
+  { id: 'foundry-table-1', type: 'banquet-table', x: 155, y: 165, rotation: 0, scale: 1, label: 'Training table', areaId: 'fr-main-hall' },
+  { id: 'foundry-table-2', type: 'banquet-table', x: 365, y: 165, rotation: 0, scale: 1, label: 'Training table', areaId: 'fr-main-hall' },
+  { id: 'foundry-table-3', type: 'banquet-table', x: 155, y: 285, rotation: 0, scale: 1, label: 'Training table', areaId: 'fr-main-hall' },
+  { id: 'foundry-table-4', type: 'banquet-table', x: 365, y: 285, rotation: 0, scale: 1, label: 'Training table', areaId: 'fr-main-hall' },
+  { id: 'foundry-bar', type: 'bar', x: 585, y: 345, rotation: 0, scale: 1, label: 'Refreshment station', areaId: 'fr-main-hall' },
+]
+
 const previewWeddings: WeddingWorkspace[] = [
   { id: 'wedding-sarah-john', venueId: chandelierOaks.id, accessSlug: 'sarah-john', accessCode: '111111', status: 'Designing', paymentStepsCompleted: 2, profile: { couple: 'Sarah & John', date: '2026-10-17', guests: 125, packageId: 'weekend', ceremonyArea: 'under-the-oaks', receptionArea: 'pecan-pavilion', primaryEmail: 'sarah@example.com', partnerEmail: 'john@example.com', contractSigned: true, reservationPaid: true, notes: 'Use warm lanterns and greenery on guest tables. Keep the pavilion entrance simple and leave plenty of dance-floor space.' }, selections: [{ itemId: 'gold-lantern', quantity: 12 }, { itemId: 'french-doors', quantity: 1 }, { itemId: 'green-wall', quantity: 1 }], placedItems: chandelierPlan, messages: chandelierMessages },
   { id: 'wedding-ashley-mark', venueId: chandelierOaks.id, accessSlug: 'ashley-mark', accessCode: '222222', status: 'Designing', paymentStepsCompleted: 1, profile: { couple: 'Ashley & Mark', date: '2026-10-24', guests: 58, packageId: 'classic', ceremonyArea: 'hilltop-gazebo', receptionArea: 'pecan-pavilion', primaryEmail: 'ashley@example.com', partnerEmail: 'mark@example.com', contractSigned: true, reservationPaid: true, notes: 'Simple ceremony at the gazebo and a traditional reception in the pavilion.' }, selections: [{ itemId: 'gold-lantern', quantity: 8 }, { itemId: 'welcome-easel', quantity: 1 }], placedItems: [{ id: 'ashley-table-1', type: 'round-table', x: 175, y: 145, rotation: 0, scale: 1, label: 'Round table', areaId: 'pecan-pavilion' }, { id: 'ashley-table-2', type: 'round-table', x: 355, y: 145, rotation: 0, scale: 1, label: 'Round table', areaId: 'pecan-pavilion' }, { id: 'ashley-dance', type: 'dance-floor', x: 520, y: 220, rotation: 0, scale: .9, label: 'Dance floor', areaId: 'pecan-pavilion' }], messages: [{ id: 'ashley-msg-1', senderRole: 'bride', senderName: 'Ashley & Mark', body: 'Can we keep the gazebo ceremony very simple and move most of the décor to the pavilion?', timestamp: '2026-08-19T16:10:00-05:00', attachments: [], context: { kind: 'area', id: 'hilltop-gazebo', label: 'Hilltop Gazebo' }, readByBride: true, readByVenue: false }] },
   { id: 'wedding-jennifer-matt', venueId: chandelierOaks.id, accessSlug: 'jennifer-matt', accessCode: '333333', status: 'Not started', paymentStepsCompleted: 1, profile: { couple: 'Jennifer & Matt', date: '2026-11-07', guests: 210, packageId: 'luxury', ceremonyArea: 'under-the-oaks', receptionArea: 'pecan-pavilion', primaryEmail: 'jennifer@example.com', partnerEmail: 'matt@example.com', contractSigned: true, reservationPaid: true, notes: '' }, selections: [], placedItems: [], messages: [] },
   { id: 'wedding-olivia-james', venueId: juniperStone.id, accessSlug: 'olivia-james', accessCode: '444444', status: 'Designing', paymentStepsCompleted: 2, profile: { couple: 'Olivia & James', date: '2026-09-12', guests: 132, packageId: 'js-signature', ceremonyArea: 'stone-courtyard', receptionArea: 'glass-hall', primaryEmail: 'olivia@example.com', partnerEmail: 'james@example.com', contractSigned: true, reservationPaid: true, notes: 'Long banquet tables, warm copper accents and a clean ceremony frame.' }, selections: [{ itemId: 'js-smoked-vases', quantity: 20 }, { itemId: 'js-copper-stands', quantity: 8 }, { itemId: 'js-oak-arch', quantity: 1 }], placedItems: juniperPlan, messages: [{ id: 'juniper-msg-1', senderRole: 'bride', senderName: 'Olivia & James', body: 'Can we keep the Glass Hall tables long and clean, with the copper stands only on every other table?', timestamp: '2026-08-20T11:15:00-05:00', attachments: [], context: { kind: 'area', id: 'glass-hall', label: 'Glass Hall' }, readByBride: true, readByVenue: false }] },
   { id: 'wedding-maya-theo', venueId: juniperStone.id, accessSlug: 'maya-theo', accessCode: '555555', status: 'Ready', paymentStepsCompleted: 3, profile: { couple: 'Maya & Theo', date: '2026-11-21', guests: 76, packageId: 'js-essential', ceremonyArea: 'orchard-lawn', receptionArea: 'glass-hall', primaryEmail: 'maya@example.com', partnerEmail: 'theo@example.com', contractSigned: true, reservationPaid: true, notes: 'Simple orchard ceremony with mostly candlelight and bud vases inside.' }, selections: [{ itemId: 'js-smoked-vases', quantity: 28 }, { itemId: 'js-hurricanes', quantity: 24 }], placedItems: [], messages: [] },
+  { id: 'event-northstar-summit', venueId: foundryRivergate.id, accessSlug: 'northstar-health-summit', accessCode: '666666', status: 'Designing', paymentStepsCompleted: 2, profile: { couple: 'Northstar Health Leadership Summit', date: '2026-10-08', guests: 180, packageId: 'fr-signature', ceremonyArea: 'fr-gallery', receptionArea: 'fr-main-hall', primaryEmail: 'events@northstar.example', partnerEmail: 'operations@northstar.example', contractSigned: true, reservationPaid: true, notes: 'Classroom seating in the Main Hall, registration in the Gallery, stage centered on the north wall and clear sponsor space near entry.' }, selections: [{ itemId: 'fr-stage', quantity: 6 }, { itemId: 'fr-podium', quantity: 1 }, { itemId: 'fr-uplights', quantity: 18 }], placedItems: foundryPlan, messages: [{ id: 'foundry-msg-1', senderRole: 'bride', senderName: 'Northstar Health Events Team', body: 'Can we keep registration in the Gallery and leave the Main Hall entry clear for sponsor displays?', timestamp: '2026-08-20T13:20:00-05:00', attachments: [], context: { kind: 'area', id: 'fr-gallery', label: 'Gallery' }, readByBride: true, readByVenue: false }] },
+  { id: 'event-river-city-gala', venueId: foundryRivergate.id, accessSlug: 'river-city-foundation-gala', accessCode: '777777', status: 'Ready', paymentStepsCompleted: 3, profile: { couple: 'River City Foundation Gala', date: '2026-11-14', guests: 240, packageId: 'fr-buyout', ceremonyArea: 'fr-gallery', receptionArea: 'fr-main-hall', primaryEmail: 'gala@rivercityfoundation.example', partnerEmail: 'director@rivercityfoundation.example', contractSigned: true, reservationPaid: true, notes: 'Black-tie gala with cocktail reception in the Gallery, dinner in Main Hall and rooftop donor reception after awards.' }, selections: [{ itemId: 'fr-cocktail', quantity: 16 }, { itemId: 'fr-uplights', quantity: 28 }, { itemId: 'fr-lounge', quantity: 3 }, { itemId: 'fr-linens', quantity: 24 }], placedItems: [], messages: [] },
 ]
 
 type RouteState = { page: PageKey; coupleSlug: string | null; venueSlug: string | null }
@@ -65,7 +76,7 @@ function parseRoute(): RouteState {
   if (parts[0] === 'couple' && parts[1]) return { page: 'wedding', coupleSlug: decodeURIComponent(parts[1]), venueSlug: chandelierOaks.slug }
   if (parts[0] === 'venue' && parts[1]) {
     const venueSlug = decodeURIComponent(parts[1])
-    if (parts[2] === 'couple' && parts[3]) return { page: 'wedding', coupleSlug: decodeURIComponent(parts[3]), venueSlug }
+    if ((parts[2] === 'couple' || parts[2] === 'client') && parts[3]) return { page: 'wedding', coupleSlug: decodeURIComponent(parts[3]), venueSlug }
     if (parts[2] === 'owner') return { page: 'admin', coupleSlug: null, venueSlug }
     if (parts[2] && scopedPages.includes(parts[2] as PageKey)) return { page: parts[2] as PageKey, coupleSlug: null, venueSlug }
     return { page: 'venue', coupleSlug: null, venueSlug }
@@ -76,7 +87,7 @@ function parseRoute(): RouteState {
 
 function readLocal<T>(key: string, fallback: T): T { try { const value = localStorage.getItem(key); return value ? JSON.parse(value) as T : fallback } catch { return fallback } }
 function readSession<T>(key: string, fallback: T): T { try { const value = sessionStorage.getItem(key); return value ? JSON.parse(value) as T : fallback } catch { return fallback } }
-function slugify(value: string) { return value.toLowerCase().trim().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'wedding' }
+function slugify(value: string) { return value.toLowerCase().trim().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'event' }
 function loadWeddings() {
   const saved = readLocal<WeddingWorkspace[]>('venueVisions.saas.weddings.v3', readLocal<WeddingWorkspace[]>('venueVisions.saas.weddings.v2', []))
   if (!saved.length) return previewWeddings
@@ -182,7 +193,8 @@ export default function App() {
     const wedding = weddings.find((entry) => entry.id === id); if (!wedding) return
     const venue = venueConfigById(wedding.venueId)
     setActiveVenueId(wedding.venueId); setActiveWeddingId(wedding.id); setCoupleAuthenticatedWeddingId(null); setOwnerAuthenticatedVenueId(null); setPlatformAuthenticated(false)
-    window.location.hash = `#/venue/${venue.profile.slug}/couple/${encodeURIComponent(wedding.accessSlug)}`; setPage('wedding'); setRequestedCoupleSlug(wedding.accessSlug); window.scrollTo({ top: 0, behavior: 'smooth' })
+    const accessSegment = (venue.profile.clientLabel ?? 'client') === 'couple' ? 'couple' : 'client'
+    window.location.hash = `#/venue/${venue.profile.slug}/${accessSegment}/${encodeURIComponent(wedding.accessSlug)}`; setPage('wedding'); setRequestedCoupleSlug(wedding.accessSlug); window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const openCoupleBySlug = (venueSlug: string, coupleSlug: string) => {
@@ -223,13 +235,15 @@ export default function App() {
   const openWedding = (id: string, destination: PageKey = 'wedding') => { const wedding = weddings.find((entry) => entry.id === id); if (!wedding) return; setActiveVenueId(wedding.venueId); setActiveWeddingId(id); const venue = venueConfigById(wedding.venueId); const hash = destination === 'admin' ? `#/venue/${venue.profile.slug}/owner` : `#/venue/${venue.profile.slug}/${destination}`; window.location.hash = hash; setPage(destination); setRequestedCoupleSlug(null); window.scrollTo({ top: 0, behavior: 'smooth' }) }
 
   const addWedding = (input: { couple: string; date: string; guests: number; packageId: string; primaryEmail: string }): string | null => {
-    const cleanCouple = input.couple.trim(); if (!cleanCouple) return 'Enter the couple names.'; if (!input.date) return 'Choose a wedding date.'
+    const eventLabel = activeVenue.profile.eventLabel ?? 'event'
+    const clientLabel = activeVenue.profile.clientLabel ?? 'client'
+    const cleanCouple = input.couple.trim(); if (!cleanCouple) return `Enter the ${clientLabel} or ${eventLabel} name.`; if (!input.date) return `Choose an ${eventLabel} date.`
     const conflict = venueWeddings.find((wedding) => wedding.profile.date === input.date); if (conflict) return `${input.date} is already booked for ${conflict.profile.couple} at ${activeVenue.profile.shortName}.`
     const pkg = packageById(input.packageId, activeVenueId); if (pkg.maxGuests !== null && input.guests > pkg.maxGuests) return `${pkg.name} is configured for a maximum of ${pkg.maxGuests} guests.`
-    const id = `wedding-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`; const baseSlug = slugify(cleanCouple); let accessSlug = baseSlug; let suffix = 2; while (venueWeddings.some((wedding) => wedding.accessSlug === accessSlug)) accessSlug = `${baseSlug}-${suffix++}`
-    const ceremony = activeVenue.areas.find((area) => area.kind === 'Ceremony')?.id ?? ''
-    const reception = activeVenue.areas.find((area) => area.kind === 'Reception')?.id ?? activeVenue.areas[0]?.id ?? ''
-    const newWedding: WeddingWorkspace = { id, venueId: activeVenueId, accessSlug, accessCode: String(Math.floor(100000 + Math.random() * 900000)), status: 'Not started' as WeddingStatus, paymentStepsCompleted: 1, profile: { couple: cleanCouple, date: input.date, guests: Math.max(1, input.guests || 1), packageId: input.packageId, ceremonyArea: ceremony, receptionArea: reception, primaryEmail: input.primaryEmail.trim(), partnerEmail: '', contractSigned: true, reservationPaid: true, notes: '' }, selections: [], placedItems: [], messages: [] }
+    const id = `${eventLabel}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`; const baseSlug = slugify(cleanCouple); let accessSlug = baseSlug; let suffix = 2; while (venueWeddings.some((wedding) => wedding.accessSlug === accessSlug)) accessSlug = `${baseSlug}-${suffix++}`
+    const secondary = activeVenue.areas.find((area) => area.kind === 'Ceremony')?.id ?? activeVenue.areas.find((area) => area.kind === 'Hospitality')?.id ?? ''
+    const primary = activeVenue.areas.find((area) => area.kind === 'Reception')?.id ?? activeVenue.areas[0]?.id ?? ''
+    const newWedding: WeddingWorkspace = { id, venueId: activeVenueId, accessSlug, accessCode: String(Math.floor(100000 + Math.random() * 900000)), status: 'Not started' as WeddingStatus, paymentStepsCompleted: 1, profile: { couple: cleanCouple, date: input.date, guests: Math.max(1, input.guests || 1), packageId: input.packageId, ceremonyArea: secondary, receptionArea: primary, primaryEmail: input.primaryEmail.trim(), partnerEmail: '', contractSigned: true, reservationPaid: true, notes: '' }, selections: [], placedItems: [], messages: [] }
     setWeddings((current) => [...current, newWedding]); setActiveWeddingId(id); return null
   }
 
@@ -247,7 +261,7 @@ export default function App() {
   const showCalendarGate = page === 'calendar' && !ownerAuthenticated
 
   const resetPreview = () => {
-    if (!window.confirm('Reset both venue previews, all five wedding workspaces, uploads and saved venue-request examples?')) return
+    if (!window.confirm('Reset all venue showcases, event workspaces, uploads and saved venue-request examples?')) return
     setWeddings(previewWeddings); setActiveVenueId(chandelierOaks.id); setActiveWeddingId('wedding-sarah-john'); setNotificationsEnabled(false); setOwnerAuthenticatedVenueId(null); setPlatformAuthenticated(false); setCoupleAuthenticatedWeddingId(null); setVenueLeads([])
     Object.keys(localStorage).filter((key) => key.startsWith('venueVisions.saas.') || key.startsWith('venueVisions.poc.')).forEach((key) => localStorage.removeItem(key))
     Object.keys(sessionStorage).filter((key) => key.startsWith('venueVisions.saas.')).forEach((key) => sessionStorage.removeItem(key))
@@ -278,7 +292,7 @@ export default function App() {
       {page === 'admin' && <Admin venueId={activeVenueId} weddings={venueWeddings} activeWeddingId={activeWedding?.id ?? ''} onSelectWedding={selectActiveWedding} onOpenWedding={openWedding} onAddWedding={addWedding} authenticated={ownerAuthenticated} onAuthenticate={authenticateOwner} onExitPreview={() => navigate('venue')} onLogout={logoutOwner} onNavigate={navigate} />}
       {page === 'platform' && <PlatformAdmin authenticated={platformAuthenticated} onAuthenticate={authenticatePlatform} onLogout={logoutPlatform} onNavigate={navigate} leads={venueLeads} weddings={weddings} venues={venueConfigs} onOpenVenue={openVenueBySlug} />}
 
-      <footer className="site-footer saas-footer"><div className="shell">{ownerAuthenticated || coupleAuthenticatedWeddingId === activeWedding?.id ? <><span>{activeVenue.profile.shortName}</span><span>Powered by Venue Visions · {activeVenue.profile.previewLabel}</span></> : platformAuthenticated ? <><span>Venue Visions Admin</span><span>Internal proof of concept · {venueConfigs.length} venue profiles</span></> : <><span>Venue Visions</span><span>Wedding venue planning software · venue-first private workspaces</span></>}</div></footer>
+      <footer className="site-footer saas-footer"><div className="shell">{ownerAuthenticated || coupleAuthenticatedWeddingId === activeWedding?.id ? <><span>{activeVenue.profile.shortName}</span><span>Powered by Venue Visions · {activeVenue.profile.previewLabel}</span></> : platformAuthenticated ? <><span>Venue Visions Admin</span><span>Internal proof of concept · {venueConfigs.length} venue profiles</span></> : <><span>Venue Visions</span><span>Event venue management & planning · venue-first private client workspaces</span></>}</div></footer>
     </div>
   )
 }

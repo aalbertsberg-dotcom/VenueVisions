@@ -31,6 +31,7 @@ type MediaLibraryProps = {
 export default function MediaLibrary({ venueId, weddingId, weddingName, ownerMode, onNavigate }: MediaLibraryProps) {
   const config = venueConfigById(venueId)
   const { profile: venue, inventory, areas: venueAreas } = config
+  const eventLabel = venue.eventLabel ?? 'event'
   const [assets, setAssets] = useState<MediaAssetRecord[]>([])
   const [scope, setScope] = useState<MediaScope>(ownerMode ? 'venue' : 'wedding')
   const [areaId, setAreaId] = useState('')
@@ -94,7 +95,7 @@ export default function MediaLibrary({ venueId, weddingId, weddingName, ownerMod
   return (
     <main className="page-main shell media-page">
       <section className="page-intro page-intro--split media-intro">
-        <div><p className="eyebrow">{ownerMode ? `${venue.shortName.toUpperCase()} · OWNER MEDIA` : `${venue.shortName.toUpperCase()} · ${weddingName.toUpperCase()} · WEDDING MEDIA`}</p><h1>Media Library</h1><p>Upload venue photos, short walkthrough videos, inspiration images and planning documents. The same files can feed the AI Preview Studio instead of being uploaded again.</p></div>
+        <div><p className="eyebrow">{ownerMode ? `${venue.shortName.toUpperCase()} · OWNER MEDIA` : `${venue.shortName.toUpperCase()} · ${weddingName.toUpperCase()} · ${eventLabel.toUpperCase()} MEDIA`}</p><h1>Media Library</h1><p>Upload venue photos, short walkthrough videos, inspiration images and planning documents. The same files can feed the AI Preview Studio instead of being uploaded again.</p></div>
         <div className="media-intro__actions"><button className="button button--primary" onClick={() => inputRef.current?.click()} disabled={uploading}>{uploading ? 'Uploading…' : '+ Upload files'}</button><button className="button button--ghost" onClick={() => onNavigate('ai-preview')}>AI Preview Studio</button></div>
       </section>
 
@@ -135,7 +136,7 @@ export default function MediaLibrary({ venueId, weddingId, weddingName, ownerMod
           })}
         </section>
       ) : (
-        <section className="panel media-empty"><div className="media-empty__icon">▧</div><h2>No files here yet.</h2><p>{ownerMode && scope === 'venue' ? 'Start with 3–6 clear photos of each venue area plus any walkthrough videos. Mark the best area photos as AI references.' : 'Upload inspiration images, vendor files, diagrams or short videos for this wedding.'}</p><button className="button button--primary" onClick={() => inputRef.current?.click()}>Upload first files</button></section>
+        <section className="panel media-empty"><div className="media-empty__icon">▧</div><h2>No files here yet.</h2><p>{ownerMode && scope === 'venue' ? 'Start with 3–6 clear photos of each venue area plus any walkthrough videos. Mark the best area photos as AI references.' : `Upload inspiration images, vendor files, diagrams or short videos for this ${eventLabel}.`}</p><button className="button button--primary" onClick={() => inputRef.current?.click()}>Upload first files</button></section>
       )}
     </main>
   )

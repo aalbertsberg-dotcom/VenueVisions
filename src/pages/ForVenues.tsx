@@ -9,16 +9,16 @@ type ForVenuesProps = {
   onViewVenueDemo: () => void
 }
 
-const needOptions = ['Digital décor catalog', 'Couple portals', 'Venue designer', 'Messaging', 'Calendar & milestones', 'Setup / pull sheets', 'Package-aware access']
+const needOptions = ['Digital inventory catalog', 'Client portals', 'Venue designer', 'Messaging', 'Calendar & milestones', 'Setup / pull sheets', 'Package-aware access']
 
 export default function ForVenues({ leads, setLeads, onBackHome, onViewVenueDemo }: ForVenuesProps) {
   const logoInput = useRef<HTMLInputElement>(null)
   const [submittedId, setSubmittedId] = useState<string | null>(null)
   const [form, setForm] = useState({
     venueName: '', website: '', contactName: '', email: '', phone: '', address: '', eventSpaces: 3,
-    weddingsPerMonth: 4, inventorySize: '100–250 items', packages: '3–5 packages', notes: '', brandPrimary: '#34483b', brandAccent: '#b58a55', logoDataUrl: '',
+    weddingsPerMonth: 6, inventorySize: '100–250 items', packages: '3–5 packages', notes: '', brandPrimary: '#34483b', brandAccent: '#b58a55', logoDataUrl: '',
   })
-  const [needs, setNeeds] = useState<string[]>(['Digital décor catalog', 'Couple portals', 'Venue designer'])
+  const [needs, setNeeds] = useState<string[]>(['Digital inventory catalog', 'Client portals', 'Venue designer'])
 
   const initials = useMemo(() => form.venueName.split(/\s+/).filter(Boolean).slice(0, 2).map((word) => word[0]?.toUpperCase()).join('') || 'VV', [form.venueName])
   const submitted = leads.find((lead) => lead.id === submittedId)
@@ -64,7 +64,7 @@ export default function ForVenues({ leads, setLeads, onBackHome, onViewVenueDemo
           <p>This public demonstration does not send the form externally. The request is stored only in this browser so the intake experience can be reviewed safely.</p>
           <div className="signup-summary-grid">
             <article><span>Contact</span><strong>{submitted.contactName}</strong><small>{submitted.email}</small></article>
-            <article><span>Event spaces</span><strong>{submitted.eventSpaces}</strong><small>{submitted.weddingsPerMonth}/month</small></article>
+            <article><span>Event spaces</span><strong>{submitted.eventSpaces}</strong><small>{submitted.weddingsPerMonth} events/month</small></article>
             <article><span>Inventory</span><strong>{submitted.inventorySize}</strong><small>{submitted.packages}</small></article>
           </div>
           <div className="hero__actions"><button className="button button--primary" onClick={onViewVenueDemo}>Explore Venues</button><button className="button button--ghost" onClick={onBackHome}>Back to Venue Visions</button><button className="text-link" onClick={() => setSubmittedId(null)}>Start another request</button></div>
@@ -77,7 +77,7 @@ export default function ForVenues({ leads, setLeads, onBackHome, onViewVenueDemo
     <main className="page-main shell for-venues-page">
       <section className="page-intro page-intro--split venue-onboarding-intro">
         <div><p className="eyebrow">VENUE VISIONS · FOR VENUES</p><h1>See what Venue Visions could look like for your venue.</h1><p>Tell us about the property, brand, inventory and workflow. The form builds a live preview and shows the information Venue Visions would use to configure a venue-branded experience.</p></div>
-        <div className="onboarding-steps"><span><b>1</b>Venue details</span><span><b>2</b>Brand + inventory</span><span><b>3</b>Configure portal</span><span><b>4</b>Invite couples</span></div>
+        <div className="onboarding-steps"><span><b>1</b>Venue details</span><span><b>2</b>Brand + inventory</span><span><b>3</b>Configure portal</span><span><b>4</b>Invite clients</span></div>
       </section>
 
       <div className="venue-onboarding-layout">
@@ -105,15 +105,15 @@ export default function ForVenues({ leads, setLeads, onBackHome, onViewVenueDemo
           <section><p className="mini-label">OPERATIONS</p><h2>How much needs to be organized?</h2>
             <div className="form-grid two-col">
               <label><span>Event / ceremony spaces</span><input type="number" min="1" value={form.eventSpaces} onChange={(e) => change('eventSpaces', Number(e.target.value))} /></label>
-              <label><span>Typical weddings per month</span><input type="number" min="1" value={form.weddingsPerMonth} onChange={(e) => change('weddingsPerMonth', Number(e.target.value))} /></label>
-              <label><span>Décor / prop inventory</span><select value={form.inventorySize} onChange={(e) => change('inventorySize', e.target.value)}><option>Under 50 items</option><option>50–100 items</option><option>100–250 items</option><option>250–500 items</option><option>500+ items</option></select></label>
+              <label><span>Typical events per month</span><input type="number" min="1" value={form.weddingsPerMonth} onChange={(e) => change('weddingsPerMonth', Number(e.target.value))} /></label>
+              <label><span>Inventory / resources</span><select value={form.inventorySize} onChange={(e) => change('inventorySize', e.target.value)}><option>Under 50 items</option><option>50–100 items</option><option>100–250 items</option><option>250–500 items</option><option>500+ items</option></select></label>
               <label><span>Package structure</span><select value={form.packages} onChange={(e) => change('packages', e.target.value)}><option>1 package</option><option>2–3 packages</option><option>3–5 packages</option><option>6+ packages</option><option>Custom / quote based</option></select></label>
             </div>
           </section>
 
           <section><p className="mini-label">FEATURES</p><h2>What should the venue use?</h2>
             <div className="needs-grid">{needOptions.map((item) => <label key={item} className={needs.includes(item) ? 'need-chip need-chip--selected' : 'need-chip'}><input type="checkbox" checked={needs.includes(item)} onChange={() => setNeeds((current) => current.includes(item) ? current.filter((value) => value !== item) : [...current, item])} /><span>{item}</span></label>)}</div>
-            <label className="notes-field"><span>Anything unique about the workflow?</span><textarea value={form.notes} onChange={(e) => change('notes', e.target.value)} placeholder="Storage locations, appointment process, packages, unusual venue areas, setup team, etc." /></label>
+            <label className="notes-field"><span>Anything unique about the workflow?</span><textarea value={form.notes} onChange={(e) => change('notes', e.target.value)} placeholder="Storage locations, booking process, packages, unusual venue areas, setup team, AV, catering rules, etc." /></label>
           </section>
 
           <div className="demo-submit-note"><strong>Preview environment:</strong> this form is not connected to a live intake system. Use sample information only; submissions stay in this browser.</div>
@@ -127,10 +127,10 @@ export default function ForVenues({ leads, setLeads, onBackHome, onViewVenueDemo
               <div className="portal-preview__logo">{form.logoDataUrl ? <img src={form.logoDataUrl} alt="" /> : initials}</div>
               <div><strong>{form.venueName || 'Your Venue'}</strong><span>Powered by Venue Visions</span></div>
             </div>
-            <div className="portal-preview__hero"><span>YOUR WEDDING PORTAL</span><strong>Everything for your day, in one place.</strong><button type="button">Open my wedding</button></div>
+            <div className="portal-preview__hero"><span>YOUR EVENT PORTAL</span><strong>Everything for your event, in one place.</strong><button type="button">Open my event</button></div>
             <div className="portal-preview__tiles"><i/><i/><i/></div>
           </div>
-          <div className="panel onboarding-includes"><p className="mini-label">A VENUE VISIONS EXPERIENCE CAN INCLUDE</p><ul><li>Venue-branded customer portal</li><li>Owner/admin access</li><li>Separate couple workspaces</li><li>Inventory and package rules</li><li>Venue design areas</li><li>Messaging and setup summaries</li></ul></div>
+          <div className="panel onboarding-includes"><p className="mini-label">A VENUE VISIONS EXPERIENCE CAN INCLUDE</p><ul><li>Venue-branded customer portal</li><li>Owner/admin access</li><li>Separate client workspaces</li><li>Inventory and package rules</li><li>Venue design areas</li><li>Messaging and setup summaries</li></ul></div>
         </aside>
       </div>
     </main>
