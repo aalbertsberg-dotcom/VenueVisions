@@ -1424,8 +1424,8 @@ h3 { color: var(--brown); }
 .saas-proof-row strong, .saas-proof-row span { display: block; }
 .saas-proof-row strong { margin-bottom: 5px; color: var(--brown); font-size: 13px; }
 .saas-proof-row span { color: var(--muted); font-size: 10px; line-height: 1.45; }
-.saas-hero__visual { position: relative; min-height: 560px; }
-.saas-hero__visual::before { content:''; position:absolute; inset: 5% 4% 8% 8%; border-radius: 48% 52% 45% 55% / 50%; background: linear-gradient(145deg,#e8eee8,#efe3d7); transform: rotate(-4deg); }
+.saas-hero__visual { position: relative; min-height: 560px; display:flex; align-items:center; }
+.saas-hero__visual::before { content:none; }
 .platform-stack { position: relative; z-index: 1; width: min(480px, 94%); margin: 20px auto 0; padding: 30px; border: 1px solid #e3d9d0; border-radius: 28px; background: rgba(255,255,255,.96); box-shadow: 0 32px 80px rgba(60,48,41,.16); }
 .platform-stack__explore { margin-bottom: 18px; color: #7f6b5c; font-size: 10px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
 .platform-stack__top { display: flex; align-items: center; gap: 13px; }
@@ -1940,16 +1940,17 @@ body { font-size: 16px; line-height: 1.5; }
 .venue-directory-card__note { display:block;margin-top:16px;color:#9a8d84;font-size:9px;line-height:1.5; }
 
 /* Home multi-venue visual */
-.multi-venue-stack { padding:27px;border:1px solid #e1dad3;border-radius:25px;background:#fff;box-shadow:0 24px 55px rgba(70,52,42,.12); }
-.multi-venue-stack > p { margin:13px 0 17px;color:#81756c;font-size:11px;line-height:1.5; }
+.multi-venue-stack { position:relative; z-index:1; width:min(520px,100%); margin:0 auto; padding:30px;border:1px solid #e1dad3;border-radius:25px;background:linear-gradient(160deg,#fff 0%,#fffdfa 100%);box-shadow:0 24px 55px rgba(70,52,42,.12); }
+.multi-venue-stack::before { content:''; position:absolute; inset:-14px 24px 18px -18px; z-index:-1; border-radius:28px; background:linear-gradient(145deg,#eef3ed,#f4eae0); opacity:.72; transform:rotate(-1.5deg); }
+.multi-venue-stack > p { margin:15px 0 20px;color:#746a63;font-size:13px;line-height:1.55; }
 .multi-venue-stack__cards { display:grid;gap:9px; }
 .multi-venue-mini,.multi-venue-stack__next { width:100%;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:13px;border:1px solid color-mix(in srgb,var(--mini-primary,#a58d7d) 20%,#ddd);border-radius:14px;background:var(--mini-surface,#faf8f5);text-align:left;cursor:pointer;transition:transform .16s ease,box-shadow .16s ease; }
 .multi-venue-mini:hover,.multi-venue-stack__next:hover { transform:translateY(-2px);box-shadow:0 10px 24px rgba(62,47,39,.1); }
 .multi-venue-mini > span,.multi-venue-stack__next > span { width:42px;height:42px;display:grid;place-items:center;border-radius:50%;background:var(--mini-primary,#eee);color:var(--mini-accent,#705c50);font-family:'Playfair Display',Georgia,serif;font-size:16px; }
 .multi-venue-mini div,.multi-venue-stack__next div { min-width:0;display:flex;flex-direction:column; }
-.multi-venue-mini small,.multi-venue-stack__next small { color:var(--mini-primary,#8d7668);font-size:7px;font-weight:900;letter-spacing:.09em; }
-.multi-venue-mini strong,.multi-venue-stack__next strong { margin:2px 0;color:var(--mini-primary,#514741);font-size:13px; }
-.multi-venue-mini em,.multi-venue-stack__next em { overflow:hidden;color:#968a82;font-size:8px;font-style:normal;text-overflow:ellipsis;white-space:nowrap; }
+.multi-venue-mini small,.multi-venue-stack__next small { color:var(--mini-primary,#8d7668);font-size:8px;font-weight:900;letter-spacing:.09em; }
+.multi-venue-mini strong,.multi-venue-stack__next strong { margin:3px 0;color:var(--mini-primary,#514741);font-size:15px; }
+.multi-venue-mini em,.multi-venue-stack__next em { overflow:hidden;color:#8f837b;font-size:10px;font-style:normal;text-overflow:ellipsis;white-space:nowrap; }
 .multi-venue-mini > b,.multi-venue-stack__next > b { color:var(--mini-primary,#8c7567);font-size:20px; }
 .multi-venue-stack__next { margin-top:10px;border-style:dashed;background:#faf9f7; }
 .multi-venue-stack__next > span { background:#f0ece7;color:#a58d7d; }

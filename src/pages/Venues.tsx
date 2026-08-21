@@ -10,9 +10,9 @@ export default function Venues({ venues, weddings, onOpenVenue, onOpenCouple }: 
   return (
     <main className="page-main shell venue-directory-page">
       <section className="page-intro venue-directory-intro">
-        <p className="eyebrow">VENUE VISIONS · VENUE EXPERIENCES</p>
-        <h1>See the same platform shaped around two very different venues.</h1>
-        <p>Each venue gets its own brand, inventory, packages, spaces, owner tools and private wedding workspaces. Couples always enter through the venue their wedding belongs to.</p>
+        <p className="eyebrow">VENUE VISIONS · VENUES</p>
+        <h1>See Venue Visions in action.</h1>
+        <p>Explore how the same platform adapts to different venue brands, inventory, spaces, packages and workflows. Couples always enter through the venue their wedding belongs to.</p>
       </section>
 
       <section className="venue-directory-grid">
@@ -27,7 +27,7 @@ export default function Venues({ venues, weddings, onOpenVenue, onOpenCouple }: 
             >
               <div className="venue-directory-card__brand">
                 <span className="venue-directory-card__mark">{config.profile.logoText}</span>
-                <div><span>{config.profile.isSample ? 'SAMPLE VENUE' : 'CONFIGURED PREVIEW'}</span><h2>{config.profile.shortName}</h2><p>{config.profile.locationLabel}</p></div>
+                <div><span>VENUE PORTAL</span><h2>{config.profile.shortName}</h2><p>{config.profile.locationLabel}</p></div>
               </div>
               <p className="venue-directory-card__tagline">{config.profile.tagline}</p>
               <div className="venue-directory-card__stats">
@@ -39,7 +39,7 @@ export default function Venues({ venues, weddings, onOpenVenue, onOpenCouple }: 
                 <button className="button button--primary" onClick={() => onOpenVenue(config.profile.slug)}>Explore {config.profile.shortName}</button>
                 {firstWedding && <button className="button button--ghost" onClick={() => onOpenCouple(config.profile.slug, firstWedding.accessSlug)}>Open a couple workspace</button>}
               </div>
-              <small className="venue-directory-card__note">{config.profile.isSample ? 'Fictional venue created to demonstrate a different brand and workflow.' : 'Uses public Chandelier Oaks venue information plus clearly identified sample planning data.'}</small>
+              <small className="venue-directory-card__note">{config.profile.isSample ? 'Juniper & Stone is a fictional showcase property used to demonstrate alternate branding and configuration.' : 'Chandelier Oaks is configured from publicly available venue information; wedding planning records are illustrative.'}</small>
             </article>
           )
         })}

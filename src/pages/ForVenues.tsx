@@ -67,7 +67,7 @@ export default function ForVenues({ leads, setLeads, onBackHome, onViewVenueDemo
             <article><span>Event spaces</span><strong>{submitted.eventSpaces}</strong><small>{submitted.weddingsPerMonth}/month</small></article>
             <article><span>Inventory</span><strong>{submitted.inventorySize}</strong><small>{submitted.packages}</small></article>
           </div>
-          <div className="hero__actions"><button className="button button--primary" onClick={onViewVenueDemo}>Explore Venue Examples</button><button className="button button--ghost" onClick={onBackHome}>Back to Venue Visions</button><button className="text-link" onClick={() => setSubmittedId(null)}>Start another request</button></div>
+          <div className="hero__actions"><button className="button button--primary" onClick={onViewVenueDemo}>Explore Venues</button><button className="button button--ghost" onClick={onBackHome}>Back to Venue Visions</button><button className="text-link" onClick={() => setSubmittedId(null)}>Start another request</button></div>
         </section>
       </main>
     )

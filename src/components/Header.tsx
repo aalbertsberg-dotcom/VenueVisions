@@ -50,7 +50,7 @@ export default function Header({
 
   const publicNav: NavItem[] = [
     { key: 'home', label: 'Home' },
-    { key: 'venues', label: 'Venue Examples' },
+    { key: 'venues', label: 'Venues' },
     { key: 'for-venues', label: 'For Venues' },
     { key: 'signin', label: 'Sign In' },
   ]

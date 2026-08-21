@@ -1,6 +1,6 @@
-# Venue Visions v1.5 — Multi-Venue SaaS Preview
+# Venue Visions v1.5.1 — Multi-Venue SaaS Preview
 
-Venue Visions is the company/product. v1.5 proves that one SaaS platform can host separate venue brands, operations, inventories and private couple workspaces without mixing venue data.
+Venue Visions is the company/product. v1.5.1 proves that one SaaS platform can host separate venue brands, operations, inventories and private couple workspaces without mixing venue data.
 
 ## Venue profiles
 
@@ -58,3 +58,10 @@ git add .
 git commit -m "Add second venue and multi-tenant venue structure"
 git push
 ```
+
+
+## v1.5.1 public-site polish
+- Public navigation now uses **Venues** instead of **Venue Examples**.
+- The homepage venue selector is presented as a real product preview rather than a concept graphic.
+- Removed the oversized decorative background shape that could cover the venue selector.
+- Reduced prototype/sample language on public pages while retaining small truthful disclosures where needed.
