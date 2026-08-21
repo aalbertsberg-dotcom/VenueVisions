@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
-import { chandelierOaks, inventory, venueAreas } from '../data'
+import { venueConfigById } from '../data'
 import { deleteMediaAsset, formatMediaBytes, listMediaAssets, mediaTypeForFile, saveMediaAsset, updateMediaMetadata } from '../mediaStore'
 import type { MediaAssetRecord, MediaPurpose, MediaScope } from '../types'
 import type { PageKey } from '../components/Header'
@@ -21,13 +21,16 @@ function AssetPreview({ asset }: { asset: MediaAssetRecord }) {
 }
 
 type MediaLibraryProps = {
+  venueId: string
   weddingId: string
   weddingName: string
   ownerMode: boolean
   onNavigate: (page: PageKey) => void
 }
 
-export default function MediaLibrary({ weddingId, weddingName, ownerMode, onNavigate }: MediaLibraryProps) {
+export default function MediaLibrary({ venueId, weddingId, weddingName, ownerMode, onNavigate }: MediaLibraryProps) {
+  const config = venueConfigById(venueId)
+  const { profile: venue, inventory, areas: venueAreas } = config
   const [assets, setAssets] = useState<MediaAssetRecord[]>([])
   const [scope, setScope] = useState<MediaScope>(ownerMode ? 'venue' : 'wedding')
   const [areaId, setAreaId] = useState('')
@@ -41,7 +44,7 @@ export default function MediaLibrary({ weddingId, weddingName, ownerMode, onNavi
   useEffect(() => { refresh() }, [])
   useEffect(() => { if (!ownerMode) setScope('wedding') }, [ownerMode])
 
-  const visibleAssets = useMemo(() => assets.filter((asset) => scope === 'venue' ? asset.scope === 'venue' : asset.scope === 'wedding' && asset.weddingId === weddingId), [assets, scope, weddingId])
+  const visibleAssets = useMemo(() => assets.filter((asset) => asset.venueId === venueId && (scope === 'venue' ? asset.scope === 'venue' : asset.scope === 'wedding' && asset.weddingId === weddingId)), [assets, scope, weddingId, venueId])
   const imageCount = visibleAssets.filter((asset) => asset.mediaType === 'image').length
   const videoCount = visibleAssets.filter((asset) => asset.mediaType === 'video').length
   const aiCount = visibleAssets.filter((asset) => asset.aiReference).length
@@ -55,10 +58,10 @@ export default function MediaLibrary({ weddingId, weddingName, ownerMode, onNavi
     for (const file of files) {
       const mediaType = mediaTypeForFile(file)
       if (!mediaType) { skipped.push(`${file.name} (unsupported)`); continue }
-      if (file.size > MAX_DEMO_FILE_SIZE) { skipped.push(`${file.name} (over 50 MB demo limit)`); continue }
+      if (file.size > MAX_DEMO_FILE_SIZE) { skipped.push(`${file.name} (over 50 MB preview limit)`); continue }
       const asset: MediaAssetRecord = {
         id: `media-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-        venueId: chandelierOaks.id,
+        venueId,
         scope,
         weddingId: scope === 'wedding' ? weddingId : undefined,
         name: file.name,
@@ -84,18 +87,18 @@ export default function MediaLibrary({ weddingId, weddingName, ownerMode, onNavi
   }
 
   const removeAsset = async (asset: MediaAssetRecord) => {
-    if (!window.confirm(`Remove ${asset.name} from this demo library?`)) return
+    if (!window.confirm(`Remove ${asset.name} from this preview library?`)) return
     await deleteMediaAsset(asset.id); await refresh()
   }
 
   return (
     <main className="page-main shell media-page">
       <section className="page-intro page-intro--split media-intro">
-        <div><p className="eyebrow">{ownerMode ? 'CHANDELIER OAKS · OWNER MEDIA' : `${weddingName.toUpperCase()} · WEDDING MEDIA`}</p><h1>Media Library</h1><p>Upload venue photos, short walkthrough videos, inspiration images and planning documents. The same files can feed the AI Preview Studio instead of being uploaded again.</p></div>
+        <div><p className="eyebrow">{ownerMode ? `${venue.shortName.toUpperCase()} · OWNER MEDIA` : `${venue.shortName.toUpperCase()} · ${weddingName.toUpperCase()} · WEDDING MEDIA`}</p><h1>Media Library</h1><p>Upload venue photos, short walkthrough videos, inspiration images and planning documents. The same files can feed the AI Preview Studio instead of being uploaded again.</p></div>
         <div className="media-intro__actions"><button className="button button--primary" onClick={() => inputRef.current?.click()} disabled={uploading}>{uploading ? 'Uploading…' : '+ Upload files'}</button><button className="button button--ghost" onClick={() => onNavigate('ai-preview')}>AI Preview Studio</button></div>
       </section>
 
-      <section className="panel media-demo-note"><strong>Working demo storage</strong><p>Files are stored only in this browser using IndexedDB. Production will send them to secure cloud storage so they are available across devices and to authorized users.</p></section>
+      <section className="panel media-demo-note"><strong>Working preview storage</strong><p>Files are stored only in this browser using IndexedDB. Production will send them to secure cloud storage so they are available across devices and only to authorized users at {venue.shortName}.</p></section>
 
       <section className="media-controls panel">
         {ownerMode && <div className="media-scope-toggle"><button className={scope === 'venue' ? 'active' : ''} onClick={() => setScope('venue')}>Venue library</button><button className={scope === 'wedding' ? 'active' : ''} onClick={() => setScope('wedding')}>{weddingName}</button></div>}

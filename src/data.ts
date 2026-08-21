@@ -1,4 +1,4 @@
-import type { InventoryItem, PackageTier, VenueArea, VenuePackage, VenueProfile } from './types'
+import type { InventoryItem, PackageTier, VenueArea, VenueConfig, VenuePackage, VenueProfile } from './types'
 
 export const chandelierOaks: VenueProfile = {
   id: 'venue-chandelier-oaks',
@@ -14,9 +14,20 @@ export const chandelierOaks: VenueProfile = {
   brandPrimary: '#34483b',
   brandAccent: '#b58a55',
   logoText: 'CO',
+  brandSurface: '#eef2ed',
+  brandText: '#23382d',
+  locationLabel: 'Kiln, Mississippi',
+  inventoryLabel: 'Pinrose Prop Shop',
+  previewLabel: 'Chandelier Oaks Preview',
+  links: [
+    { label: 'Official website', url: 'https://chandelieroaks.com/', kind: 'website' },
+    { label: 'Wedding packages', url: 'https://chandelieroaks.com/wedding-packages', kind: 'resource' },
+    { label: 'FAQ', url: 'https://chandelieroaks.com/faq', kind: 'resource' },
+    { label: 'Contact', url: 'https://chandelieroaks.com/contact', kind: 'resource' },
+  ],
 }
 
-export const packages: VenuePackage[] = [
+export const chandelierPackages: VenuePackage[] = [
   {
     id: 'micro',
     name: 'Intimate Elopements & Micro-Weddings',
@@ -69,7 +80,7 @@ export const packages: VenuePackage[] = [
   },
 ]
 
-export const venueAreas: VenueArea[] = [
+export const chandelierAreas: VenueArea[] = [
   {
     id: 'pecan-pavilion',
     name: 'Pecan Pavilion',
@@ -125,7 +136,7 @@ export const venueAreas: VenueArea[] = [
  * Names are based on categories Chandelier Oaks publicly describes for the Pinrose Prop Shop.
  * Quantities, dimensions, storage locations and package-tier mapping are placeholders until the venue catalogs its real inventory.
  */
-export const inventory: InventoryItem[] = [
+export const chandelierInventory: InventoryItem[] = [
   {
     id: 'champagne-wall',
     name: 'Champagne Wall',
@@ -287,20 +298,106 @@ export const inventory: InventoryItem[] = [
   },
 ]
 
+export const juniperStone: VenueProfile = {
+  id: 'venue-juniper-stone',
+  slug: 'juniper-stone-estate',
+  name: 'Juniper & Stone Estate',
+  shortName: 'Juniper & Stone',
+  tagline: 'Modern garden celebrations with a quiet architectural edge.',
+  website: '',
+  address: 'Sample venue · Asheville, North Carolina',
+  phone: '(555) 014-0274',
+  email: 'hello@juniperstone.example',
+  ownerName: 'Morgan Reed',
+  brandPrimary: '#18384a',
+  brandAccent: '#c8795b',
+  brandSurface: '#edf3f6',
+  brandText: '#142f3d',
+  logoText: 'JS',
+  locationLabel: 'Asheville, North Carolina',
+  inventoryLabel: 'Design Library',
+  previewLabel: 'Sample Venue',
+  isSample: true,
+  links: [],
+}
+
+export const juniperPackages: VenuePackage[] = [
+  { id: 'js-essential', name: 'Essential Celebration', price: 3900, duration: '8 hours', maxGuests: 80, tier: 1, description: 'A streamlined ceremony and reception package for intimate-to-mid-size celebrations.', highlights: ['Glass Hall reception', 'Courtyard ceremony option', 'Tables + chairs', 'Core design collection'] },
+  { id: 'js-signature', name: 'Signature Estate', price: 6500, duration: '12 hours', maxGuests: 150, tier: 2, description: 'A full-day estate experience with expanded design inventory and multiple property spaces.', highlights: ['Choice of ceremony areas', 'Glass Hall + Terrace', 'Premium design collection', 'Getting-ready suites'] },
+  { id: 'js-weekend', name: 'Estate Weekend', price: 8900, duration: 'Friday – Sunday', maxGuests: 200, tier: 3, description: 'A weekend-style celebration with extended access, rehearsal time and the complete design library.', highlights: ['Weekend property access', 'Rehearsal gathering', 'Full design library', 'Extended photo access'] },
+]
+
+export const juniperAreas: VenueArea[] = [
+  { id: 'glass-hall', name: 'Glass Hall', kind: 'Reception', description: 'Light-filled modern hall for dinner, dancing and reception layouts.', plannerEnabled: true, visual: 'greenhouse' },
+  { id: 'stone-courtyard', name: 'Stone Courtyard', kind: 'Ceremony', description: 'Architectural courtyard with warm stone, greenery and clean sight lines.', plannerEnabled: true, visual: 'gazebo' },
+  { id: 'orchard-lawn', name: 'Orchard Lawn', kind: 'Ceremony', description: 'Open lawn framed by trees for outdoor ceremonies and cocktail hour.', plannerEnabled: true, visual: 'oaks' },
+  { id: 'copper-terrace', name: 'Copper Terrace', kind: 'Hospitality', description: 'Covered terrace for cocktails, lounge seating and sunset moments.', plannerEnabled: true, visual: 'pavilion' },
+  { id: 'reflection-garden', name: 'Reflection Garden', kind: 'Photos', description: 'Landscape-focused portrait area with water, stone and seasonal plantings.', plannerEnabled: true, visual: 'lake' },
+]
+
+export const juniperInventory: InventoryItem[] = [
+  { id: 'js-oak-arch', name: 'White Oak Ceremony Frame', category: 'Arches', color: 'White oak', quantity: 1, dimensions: '8 ft × 7 ft', storage: 'Design Library · Bay A', description: 'Minimal wood ceremony frame for florals, fabric or standalone use.', imageStyle: 'wood-arbor', featured: true, accessTier: 1 },
+  { id: 'js-smoked-vases', name: 'Smoked Glass Bud Vase Set', category: 'Centerpieces', color: 'Smoke / clear', quantity: 40, dimensions: 'Assorted', storage: 'Design Library · Shelf C2', description: 'Mixed-height bud vases for modern table styling.', imageStyle: 'gold-lantern', featured: true, accessTier: 1 },
+  { id: 'js-copper-stands', name: 'Copper Floral Stands', category: 'Centerpieces', color: 'Copper', quantity: 16, dimensions: '28 in tall', storage: 'Design Library · Rack B', description: 'Elevated floral stands for guest tables or aisle accents.', imageStyle: 'welcome-easel', accessTier: 2 },
+  { id: 'js-lounge', name: 'Slate Lounge Collection', category: 'Furniture', color: 'Slate / oak', quantity: 3, dimensions: 'Modular sets', storage: 'Design Library · Furniture Bay', description: 'Modern lounge seating for cocktail hour and reception zones.', imageStyle: 'antique-sofa', featured: true, accessTier: 2 },
+  { id: 'js-ribbed-wall', name: 'Ribbed Ivory Backdrop', category: 'Backdrops', color: 'Ivory', quantity: 1, dimensions: '8 ft × 10 ft', storage: 'Design Library · Backdrop Bay', description: 'Architectural backdrop for sweetheart table, escort display or photo area.', imageStyle: 'green-wall', accessTier: 2 },
+  { id: 'js-hurricanes', name: 'Glass Hurricane Collection', category: 'Lighting', color: 'Clear / ivory', quantity: 36, dimensions: 'Assorted', storage: 'Design Library · Shelf D1', description: 'Battery-candle hurricane vessels for tables and aisle styling.', imageStyle: 'chandelier', accessTier: 1 },
+  { id: 'js-linen', name: 'Stone Linen Collection', category: 'Linens', color: 'Stone / sand', quantity: 30, dimensions: 'Assorted tables', storage: 'Textile Room · Rack 2', description: 'Soft neutral linen collection included with the full design tier.', imageStyle: 'ivory-linens', accessTier: 3 },
+  { id: 'js-floral', name: 'Seasonal Neutral Floral Set', category: 'Florals', color: 'Ivory / sage', quantity: 14, dimensions: 'Assorted', storage: 'Design Library · Floral Room', description: 'Sample floral collection for previewing premium styling.', imageStyle: 'white-florals', accessTier: 3 },
+]
+
+export const chandelierConfig: VenueConfig = {
+  profile: chandelierOaks,
+  packages: chandelierPackages,
+  areas: chandelierAreas,
+  inventory: chandelierInventory,
+  ownerAccessCode: '123456',
+  oneEventPerDate: true,
+  ownerDashboardNote: 'Chandelier Oaks publicly states that it hosts one wedding each day.',
+}
+
+export const juniperConfig: VenueConfig = {
+  profile: juniperStone,
+  packages: juniperPackages,
+  areas: juniperAreas,
+  inventory: juniperInventory,
+  ownerAccessCode: '246810',
+  oneEventPerDate: true,
+  ownerDashboardNote: 'Sample venue rule: one wedding per calendar date.',
+}
+
+export const venueConfigs: VenueConfig[] = [chandelierConfig, juniperConfig]
+export const venueProfiles = venueConfigs.map((item) => item.profile)
+
 export const tierLabel: Record<PackageTier, string> = {
   1: 'Core collection',
   2: 'Premium collection',
   3: 'Top-tier collection',
 }
 
-export function packageById(id: string) {
-  return packages.find((item) => item.id === id) ?? packages[0]
+export function venueConfigById(id: string) {
+  return venueConfigs.find((item) => item.profile.id === id) ?? venueConfigs[0]
 }
 
-export function areaById(id: string) {
-  return venueAreas.find((item) => item.id === id) ?? venueAreas[0]
+export function venueConfigBySlug(slug: string) {
+  return venueConfigs.find((item) => item.profile.slug === slug) ?? venueConfigs[0]
+}
+
+export function packageById(id: string, venueId = chandelierOaks.id) {
+  const config = venueConfigById(venueId)
+  return config.packages.find((item) => item.id === id) ?? config.packages[0]
+}
+
+export function areaById(id: string, venueId = chandelierOaks.id) {
+  const config = venueConfigById(venueId)
+  return config.areas.find((item) => item.id === id) ?? config.areas[0]
 }
 
 export function itemAllowedForTier(item: InventoryItem, tier: PackageTier) {
   return item.accessTier <= tier
 }
+
+// Legacy aliases kept for Chandelier Oaks-specific components while v1.5 moves the app to multi-venue data.
+export const packages = chandelierPackages
+export const venueAreas = chandelierAreas
+export const inventory = chandelierInventory

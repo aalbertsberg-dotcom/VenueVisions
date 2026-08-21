@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react'
-import { areaById, inventory, itemAllowedForTier, venueAreas } from '../data'
+import { areaById, itemAllowedForTier, venueConfigById } from '../data'
 import type { Dispatch, PointerEvent as ReactPointerEvent, SetStateAction } from 'react'
 import type { InventoryItem, PackageTier, PlacedItem, PlannerObjectType, Selection } from '../types'
 import type { PageKey } from '../components/Header'
@@ -80,6 +80,7 @@ function relayoutLinkedChairs(items: PlacedItem[], tableId: string) {
 }
 
 type PlannerProps = {
+  venueId: string
   selections: Selection[]
   placedItems: PlacedItem[]
   setPlacedItems: Dispatch<SetStateAction<PlacedItem[]>>
@@ -89,17 +90,20 @@ type PlannerProps = {
   onNavigate: (page: PageKey) => void
 }
 
-export default function Planner({ selections, placedItems, setPlacedItems, onSetQuantity, packageTier, preferredAreaId, onNavigate }: PlannerProps) {
+export default function Planner({ venueId, selections, placedItems, setPlacedItems, onSetQuantity, packageTier, preferredAreaId, onNavigate }: PlannerProps) {
+  const config = venueConfigById(venueId)
+  const { profile: venue, inventory, areas: venueAreas } = config
+  const defaultAreaId = preferredAreaId || venueAreas.find((item) => item.kind === 'Reception')?.id || venueAreas[0]?.id || ''
   const canvasRef = useRef<HTMLDivElement>(null)
   const [area, setArea] = useState(() => {
     const focused = localStorage.getItem('venueVisions.plannerArea')
     localStorage.removeItem('venueVisions.plannerArea')
-    return focused || preferredAreaId || 'pecan-pavilion'
+    return focused || defaultAreaId
   })
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [inventorySearch, setInventorySearch] = useState('')
-  const areaItems = placedItems.filter((item) => (item.areaId || 'pecan-pavilion') === area)
-  const currentArea = areaById(area)
+  const areaItems = placedItems.filter((item) => (item.areaId || defaultAreaId) === area)
+  const currentArea = areaById(area, venueId)
 
   const selectedDecor = useMemo(
     () => selections.map((s) => inventory.find((item) => item.id === s.itemId)).filter((item): item is InventoryItem => Boolean(item) && itemAllowedForTier(item as InventoryItem, packageTier)),
@@ -226,7 +230,7 @@ export default function Planner({ selections, placedItems, setPlacedItems, onSet
   }
 
   const clearRoom = () => {
-    setPlacedItems((current) => current.filter((item) => (item.areaId || 'pecan-pavilion') !== area))
+    setPlacedItems((current) => current.filter((item) => (item.areaId || defaultAreaId) !== area))
     setSelectedId(null)
   }
 
@@ -286,7 +290,7 @@ export default function Planner({ selections, placedItems, setPlacedItems, onSet
     <main className="planner-page">
       <div className="planner-topbar shell">
         <div>
-          <p className="eyebrow">STEP 1 · 2D VENUE DESIGNER</p>
+          <p className="eyebrow">{venue.shortName.toUpperCase()} · STEP 1 · 2D VENUE DESIGNER</p>
           <h1>Build the layout first.</h1>
           <p className="planner-topbar__lead">This overhead plan is the placement source of truth. Add tables, chairs and décor here before creating an AI visualization.</p>
         </div>
@@ -320,8 +324,8 @@ export default function Planner({ selections, placedItems, setPlacedItems, onSet
           ) : <p className="toolbox-empty">Nothing selected yet. You can still add directly from inventory below.</p>}
 
           <div className="toolbox__divider" />
-          <div className="toolbox__heading"><span className="mini-label">ALL INVENTORY</span><h2>Add décor directly</h2></div>
-          <input className="inventory-search" type="search" value={inventorySearch} onChange={(e) => setInventorySearch(e.target.value)} placeholder="Search inventory…" />
+          <div className="toolbox__heading"><span className="mini-label">{(venue.inventoryLabel ?? 'ALL INVENTORY').toUpperCase()}</span><h2>Add décor directly</h2></div>
+          <input className="inventory-search" type="search" value={inventorySearch} onChange={(e) => setInventorySearch(e.target.value)} placeholder={`Search ${venue.inventoryLabel ?? 'inventory'}…`} />
           <div className="inventory-tools">
             {filteredInventory.map((item) => {
               const inRoom = areaItems.filter((placed) => placed.inventoryItemId === item.id).length

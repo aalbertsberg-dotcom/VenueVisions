@@ -48,6 +48,12 @@ export type VenueArea = {
   visual: string
 }
 
+export type VenueLink = {
+  label: string
+  url: string
+  kind: 'website' | 'social' | 'resource'
+}
+
 export type VenueProfile = {
   id: string
   slug: string
@@ -62,6 +68,23 @@ export type VenueProfile = {
   brandPrimary: string
   brandAccent: string
   logoText: string
+  brandSurface?: string
+  brandText?: string
+  locationLabel?: string
+  inventoryLabel?: string
+  previewLabel?: string
+  isSample?: boolean
+  links?: VenueLink[]
+}
+
+export type VenueConfig = {
+  profile: VenueProfile
+  packages: VenuePackage[]
+  areas: VenueArea[]
+  inventory: InventoryItem[]
+  ownerAccessCode: string
+  oneEventPerDate: boolean
+  ownerDashboardNote: string
 }
 
 export type VenueLead = {

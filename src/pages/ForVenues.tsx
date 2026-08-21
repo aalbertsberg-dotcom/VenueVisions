@@ -28,7 +28,7 @@ export default function ForVenues({ leads, setLeads, onBackHome, onViewVenueDemo
   const handleLogo = (file: File | undefined) => {
     if (!file) return
     if (file.size > 800_000) {
-      window.alert('For this demo, keep the logo under 800 KB.')
+      window.alert('For this browser preview, keep the logo under 800 KB.')
       return
     }
     const reader = new FileReader()
@@ -59,15 +59,15 @@ export default function ForVenues({ leads, setLeads, onBackHome, onViewVenueDemo
       <main className="page-main shell venue-signup-success">
         <section className="panel success-card">
           <div className="success-check">✓</div>
-          <p className="eyebrow">VENUE DEMO REQUEST</p>
-          <h1>Your {submitted.venueName} demo request preview is saved.</h1>
+          <p className="eyebrow">VENUE PREVIEW REQUEST</p>
+          <h1>Your {submitted.venueName} venue preview request is saved.</h1>
           <p>This public demonstration does not send the form externally. The request is stored only in this browser so the intake experience can be reviewed safely.</p>
           <div className="signup-summary-grid">
             <article><span>Contact</span><strong>{submitted.contactName}</strong><small>{submitted.email}</small></article>
             <article><span>Event spaces</span><strong>{submitted.eventSpaces}</strong><small>{submitted.weddingsPerMonth}/month</small></article>
             <article><span>Inventory</span><strong>{submitted.inventorySize}</strong><small>{submitted.packages}</small></article>
           </div>
-          <div className="hero__actions"><button className="button button--primary" onClick={onViewVenueDemo}>View Venue Demo</button><button className="button button--ghost" onClick={onBackHome}>Back to Venue Visions</button><button className="text-link" onClick={() => setSubmittedId(null)}>Start another request</button></div>
+          <div className="hero__actions"><button className="button button--primary" onClick={onViewVenueDemo}>Explore Venue Examples</button><button className="button button--ghost" onClick={onBackHome}>Back to Venue Visions</button><button className="text-link" onClick={() => setSubmittedId(null)}>Start another request</button></div>
         </section>
       </main>
     )
@@ -76,7 +76,7 @@ export default function ForVenues({ leads, setLeads, onBackHome, onViewVenueDemo
   return (
     <main className="page-main shell for-venues-page">
       <section className="page-intro page-intro--split venue-onboarding-intro">
-        <div><p className="eyebrow">VENUE VISIONS · FOR VENUES</p><h1>See what Venue Visions could look like for your venue.</h1><p>Tell us about the property, brand, inventory and workflow. The form builds a live preview and shows the information Venue Visions would use to configure a venue-branded demo.</p></div>
+        <div><p className="eyebrow">VENUE VISIONS · FOR VENUES</p><h1>See what Venue Visions could look like for your venue.</h1><p>Tell us about the property, brand, inventory and workflow. The form builds a live preview and shows the information Venue Visions would use to configure a venue-branded experience.</p></div>
         <div className="onboarding-steps"><span><b>1</b>Venue details</span><span><b>2</b>Brand + inventory</span><span><b>3</b>Configure portal</span><span><b>4</b>Invite couples</span></div>
       </section>
 
@@ -116,8 +116,8 @@ export default function ForVenues({ leads, setLeads, onBackHome, onViewVenueDemo
             <label className="notes-field"><span>Anything unique about the workflow?</span><textarea value={form.notes} onChange={(e) => change('notes', e.target.value)} placeholder="Storage locations, appointment process, packages, unusual venue areas, setup team, etc." /></label>
           </section>
 
-          <div className="demo-submit-note"><strong>Demo environment:</strong> this form is not connected to a live intake system. Use sample information only; submissions stay in this browser.</div>
-          <button className="button button--primary full-width" type="submit">Request Venue Demo</button>
+          <div className="demo-submit-note"><strong>Preview environment:</strong> this form is not connected to a live intake system. Use sample information only; submissions stay in this browser.</div>
+          <button className="button button--primary full-width" type="submit">Request Venue Preview</button>
         </form>
 
         <aside className="portal-preview-sticky">
@@ -130,7 +130,7 @@ export default function ForVenues({ leads, setLeads, onBackHome, onViewVenueDemo
             <div className="portal-preview__hero"><span>YOUR WEDDING PORTAL</span><strong>Everything for your day, in one place.</strong><button type="button">Open my wedding</button></div>
             <div className="portal-preview__tiles"><i/><i/><i/></div>
           </div>
-          <div className="panel onboarding-includes"><p className="mini-label">A VENUE DEMO CAN INCLUDE</p><ul><li>Venue-branded customer portal</li><li>Owner/admin access</li><li>Separate couple workspaces</li><li>Inventory and package rules</li><li>Venue design areas</li><li>Messaging and setup summaries</li></ul></div>
+          <div className="panel onboarding-includes"><p className="mini-label">A VENUE VISIONS EXPERIENCE CAN INCLUDE</p><ul><li>Venue-branded customer portal</li><li>Owner/admin access</li><li>Separate couple workspaces</li><li>Inventory and package rules</li><li>Venue design areas</li><li>Messaging and setup summaries</li></ul></div>
         </aside>
       </div>
     </main>
