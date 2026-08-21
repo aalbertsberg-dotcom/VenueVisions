@@ -105,6 +105,8 @@ export default function Admin({ weddings, activeWeddingId, onSelectWedding, onOp
       <section className="owner-quick-grid">
         <button className="owner-quick-card" onClick={() => onNavigate('calendar')}><span>CALENDAR + PAYMENTS</span><strong>See booked dates and milestones</strong><small>One wedding per day · payment timeline demo</small><b>→</b></button>
         <button className="owner-quick-card" onClick={() => onNavigate('catalog')}><span>PINROSE PROP SHOP</span><strong>Review décor and package access</strong><small>Sample counts and storage locations</small><b>→</b></button>
+        <button className="owner-quick-card" onClick={() => onNavigate('media')}><span>MEDIA LIBRARY</span><strong>Upload photos, video and files</strong><small>Assign venue reference media to each property area</small><b>→</b></button>
+        <button className="owner-quick-card" onClick={() => onNavigate('ai-preview')}><span>AI PREVIEW STUDIO</span><strong>Turn layouts into visual concepts</strong><small>Use real venue photos + the active wedding plan</small><b>→</b></button>
       </section>
 
       <section className="panel admin-weddings admin-weddings--cards">

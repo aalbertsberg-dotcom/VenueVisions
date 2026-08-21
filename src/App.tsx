@@ -7,6 +7,8 @@ import VenuePortal from './pages/VenuePortal'
 import Catalog from './pages/Catalog'
 import Wedding from './pages/Wedding'
 import Planner from './pages/Planner'
+import MediaLibrary from './pages/MediaLibrary'
+import AiPreview from './pages/AiPreview'
 import Messages from './pages/Messages'
 import Calendar from './pages/Calendar'
 import SetupSheet from './pages/SetupSheet'
@@ -89,7 +91,7 @@ function parseRoute(): RouteState {
   const value = window.location.hash.replace(/^#\/?/, '')
   if (value.startsWith('couple/')) return { page: 'wedding', coupleSlug: decodeURIComponent(value.slice('couple/'.length)) }
   if (value.startsWith('venue/')) return { page: 'venue', coupleSlug: null }
-  const allowed: PageKey[] = ['home', 'for-venues', 'signin', 'venue', 'catalog', 'wedding', 'planner', 'messages', 'calendar', 'summary', 'admin', 'platform']
+  const allowed: PageKey[] = ['home', 'for-venues', 'signin', 'venue', 'catalog', 'wedding', 'planner', 'media', 'ai-preview', 'messages', 'calendar', 'summary', 'admin', 'platform']
   return { page: allowed.includes(value as PageKey) ? value as PageKey : 'home', coupleSlug: null }
 }
 
@@ -219,7 +221,7 @@ export default function App() {
   const selectionCount = useMemo(() => selections.reduce((sum, item) => sum + item.quantity, 0), [selections])
   const unreadMessages = useMemo(() => messages.filter((message) => { const role: MessageRole = ownerAuthenticated ? 'venue' : 'bride'; if (message.senderRole === role) return false; return role === 'bride' ? !message.readByBride : !message.readByVenue }).length, [messages, ownerAuthenticated])
 
-  const protectedPage = page === 'wedding' || page === 'planner' || page === 'messages' || page === 'summary'
+  const protectedPage = page === 'wedding' || page === 'planner' || page === 'media' || page === 'ai-preview' || page === 'messages' || page === 'summary'
   const showCoupleGate = protectedPage && !hasWorkspaceAccess
   const showCalendarGate = page === 'calendar' && !ownerAuthenticated
 
@@ -228,6 +230,7 @@ export default function App() {
     setWeddings(demoWeddings); setActiveWeddingId('wedding-sarah-john'); setNotificationsEnabled(false); setOwnerAuthenticated(false); setPlatformAuthenticated(false); setCoupleAuthenticatedWeddingId(null); setVenueLeads([])
     Object.keys(localStorage).filter((key) => key.startsWith('venueVisions.saas.') || key.startsWith('venueVisions.poc.')).forEach((key) => localStorage.removeItem(key))
     Object.keys(sessionStorage).filter((key) => key.startsWith('venueVisions.saas.')).forEach((key) => sessionStorage.removeItem(key))
+    try { indexedDB.deleteDatabase('venueVisionsMediaDemo') } catch { /* demo cleanup only */ }
     navigate('home')
   }
 
@@ -243,7 +246,9 @@ export default function App() {
       {!showCoupleGate && !showCalendarGate && page === 'venue' && <VenuePortal onNavigate={navigate} onOpenCoupleDemo={openCoupleDemo} />}
       {!showCoupleGate && !showCalendarGate && page === 'catalog' && <Catalog selections={selections} onSetQuantity={setQuantity} canEdit={hasWorkspaceAccess} onRequireAccess={openCoupleDemo} packageTier={packageInfo.tier} packageName={packageInfo.name} />}
       {!showCoupleGate && !showCalendarGate && page === 'wedding' && profile && <Wedding profile={profile} selections={selections} unreadMessages={unreadMessages} paymentStepsCompleted={activeWedding.paymentStepsCompleted} onProfileChange={updateProfile} onSetQuantity={setQuantity} onNavigate={navigate} ownerMode={ownerAuthenticated} />}
-      {!showCoupleGate && !showCalendarGate && page === 'planner' && profile && <Planner selections={selections} placedItems={placedItems} setPlacedItems={setPlacedItems} onSetQuantity={setQuantity} packageTier={packageInfo.tier} preferredAreaId={profile.receptionArea || 'pecan-pavilion'} />}
+      {!showCoupleGate && !showCalendarGate && page === 'planner' && profile && <Planner selections={selections} placedItems={placedItems} setPlacedItems={setPlacedItems} onSetQuantity={setQuantity} packageTier={packageInfo.tier} preferredAreaId={profile.receptionArea || 'pecan-pavilion'} onNavigate={navigate} />}
+      {!showCoupleGate && !showCalendarGate && page === 'media' && activeWedding && <MediaLibrary weddingId={activeWedding.id} weddingName={activeWedding.profile.couple} ownerMode={ownerAuthenticated} onNavigate={navigate} />}
+      {!showCoupleGate && !showCalendarGate && page === 'ai-preview' && activeWedding && <AiPreview weddingId={activeWedding.id} weddingName={activeWedding.profile.couple} preferredAreaId={activeWedding.profile.receptionArea || 'pecan-pavilion'} placedItems={placedItems} selections={selections} ownerMode={ownerAuthenticated} onNavigate={navigate} />}
       {!showCoupleGate && !showCalendarGate && page === 'messages' && profile && <Messages profile={profile} selections={selections} placedItems={placedItems} messages={messages} setMessages={setMessages} currentRole={ownerAuthenticated ? 'venue' : 'bride'} notificationsEnabled={notificationsEnabled} setNotificationsEnabled={setNotificationsEnabled} onOpenContext={openMessageContext} />}
       {!showCoupleGate && !showCalendarGate && page === 'summary' && activeWedding && <SetupSheet wedding={activeWedding} />}
       {!showCoupleGate && !showCalendarGate && page === 'calendar' && ownerAuthenticated && <Calendar weddings={weddings} activeWeddingId={activeWeddingId} onSelectWedding={selectActiveWedding} />}

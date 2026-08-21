@@ -1,4 +1,4 @@
-# Venue Visions v1.2 — Public SaaS Site + Venue Demo + Internal POC
+# Venue Visions v1.3 — Public SaaS Site + Venue Demo + Internal POC
 
 Venue Visions is presented as the company/product. Chandelier Oaks is the clearly labeled venue demo. The Venue Visions Admin area remains a separate internal **Proof of Concept** for founder review.
 
@@ -48,3 +48,13 @@ Or:
 ## Production direction
 
 A production release still needs a real backend for secure authentication, tenant separation, persistent customer data, file storage, invitations/notifications, and billing if Venue Visions uses subscriptions.
+
+
+## v1.3 media + AI preview
+- Working browser-local Media Library using IndexedDB for images, short videos and documents.
+- Owner can keep venue media separate from the active wedding and assign files to venue areas.
+- Venue photos can be marked as AI references.
+- Couple media stays attached to that wedding workspace.
+- AI Preview Studio consumes venue reference photos, the active 2D layout, selected decor, inspiration count and style controls.
+- Because GitHub Pages cannot safely hold an AI API key, the demo generates a local concept composite; production replaces that one generation step with a secure server-side image-model call.
+- Generated demo concepts can be saved back into the wedding Media Library.

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import Logo from './Logo'
 import type { WeddingWorkspace } from '../types'
 
-export type PageKey = 'home' | 'for-venues' | 'signin' | 'venue' | 'catalog' | 'wedding' | 'planner' | 'messages' | 'calendar' | 'summary' | 'admin' | 'platform'
+export type PageKey = 'home' | 'for-venues' | 'signin' | 'venue' | 'catalog' | 'wedding' | 'planner' | 'media' | 'ai-preview' | 'messages' | 'calendar' | 'summary' | 'admin' | 'platform'
 
 type HeaderProps = {
   page: PageKey
@@ -53,6 +53,8 @@ export default function Header({
         { key: 'catalog', label: 'Pinrose Prop Shop', description: 'Inventory and package access' },
         { key: 'wedding', label: 'Active Wedding', description: 'Couple details, package and checklist' },
         { key: 'planner', label: 'Venue Designer', description: 'Design each Chandelier Oaks area' },
+        { key: 'media', label: 'Media Library', description: 'Photos, video, files and AI references' },
+        { key: 'ai-preview', label: 'AI Preview Studio', description: 'Turn the 2D plan into a visual concept' },
         { key: 'messages', label: 'Messages', description: 'Venue and couple conversation' },
         { key: 'summary', label: 'Setup Sheet', description: 'Printable pull list and final handoff' },
       ]
@@ -62,6 +64,8 @@ export default function Header({
           { key: 'wedding', label: 'My Wedding', description: 'Package, timeline and details' },
           { key: 'catalog', label: 'Pinrose Prop Shop', description: 'Browse the décor available to you' },
           { key: 'planner', label: 'Venue Designer', description: 'Build your ceremony and reception plan' },
+          { key: 'media', label: 'Media & Inspiration', description: 'Upload inspiration, video and planning files' },
+          { key: 'ai-preview', label: 'AI Preview Studio', description: 'Visualize your layout in the venue' },
           { key: 'messages', label: 'Messages', description: 'Keep questions with your wedding' },
           { key: 'summary', label: 'Setup Sheet', description: 'Preview the final venue handoff' },
         ]

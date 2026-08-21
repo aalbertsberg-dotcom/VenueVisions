@@ -72,6 +72,12 @@ export default function VenuePortal({ onNavigate, onOpenCoupleDemo }: VenuePorta
         </div>
       </section>
 
+      <section className="section shell venue-ai-demo-section">
+        <div className="section-heading"><div><p className="eyebrow">MEDIA + AI PREVIEW</p><h2>Upload the real space once, then use it throughout planning.</h2><p className="section-lead">The demo supports venue photos, short walkthrough videos, wedding inspiration and planning files. Venue-area photos can feed the AI Preview Studio after the couple finishes the 2D plan.</p></div></div>
+        <div className="venue-ai-demo-grid"><article><span>01</span><strong>Upload venue media</strong><p>Photos, video and documents can be assigned to each Chandelier Oaks area.</p></article><article><span>02</span><strong>Build the 2D plan</strong><p>Tables, chairs and selected Pinrose décor stay structured and measurable.</p></article><article><span>03</span><strong>Generate a concept</strong><p>Production AI will combine the real venue image, layout data and wedding style into a visual preview.</p></article></div>
+        <div className="hero__actions"><button className="button button--venue" onClick={onOpenCoupleDemo}>Try the wedding tools</button><button className="button button--venue-ghost" onClick={() => onNavigate('admin')}>Open owner demo</button></div>
+      </section>
+
       <section className="venue-contact-strip">
         <div className="shell venue-contact-strip__inner">
           <div><span>CHANDELIER OAKS</span><strong>{chandelierOaks.address}</strong></div>

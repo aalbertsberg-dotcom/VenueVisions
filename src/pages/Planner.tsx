@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import { areaById, inventory, itemAllowedForTier, venueAreas } from '../data'
 import type { Dispatch, PointerEvent as ReactPointerEvent, SetStateAction } from 'react'
 import type { InventoryItem, PackageTier, PlacedItem, PlannerObjectType, Selection } from '../types'
+import type { PageKey } from '../components/Header'
 
 const furniture: Array<{ type: PlannerObjectType; label: string; icon: string }> = [
   { type: 'round-table', label: 'Round table', icon: '○' },
@@ -85,9 +86,10 @@ type PlannerProps = {
   onSetQuantity: (itemId: string, quantity: number) => void
   packageTier: PackageTier
   preferredAreaId?: string
+  onNavigate: (page: PageKey) => void
 }
 
-export default function Planner({ selections, placedItems, setPlacedItems, onSetQuantity, packageTier, preferredAreaId }: PlannerProps) {
+export default function Planner({ selections, placedItems, setPlacedItems, onSetQuantity, packageTier, preferredAreaId, onNavigate }: PlannerProps) {
   const canvasRef = useRef<HTMLDivElement>(null)
   const [area, setArea] = useState(() => {
     const focused = localStorage.getItem('venueVisions.plannerArea')
@@ -284,6 +286,8 @@ export default function Planner({ selections, placedItems, setPlacedItems, onSet
         </div>
         <div className="planner-topbar__actions">
           <label className="area-select"><span>Design area</span><select value={area} onChange={(e) => { setArea(e.target.value); setSelectedId(null) }}>{venueAreas.filter((item) => item.plannerEnabled).map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
+          <button className="button button--primary button--small" onClick={() => onNavigate('ai-preview')}>Generate AI Preview</button>
+          <button className="button button--ghost button--small" onClick={() => onNavigate('media')}>Area photos</button>
           <button className="button button--ghost button--small" onClick={clearRoom}>Clear room</button>
         </div>
       </div>

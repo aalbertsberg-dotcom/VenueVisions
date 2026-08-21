@@ -168,3 +168,27 @@ export type WeddingWorkspace = {
   messages: WeddingMessage[]
   paymentStepsCompleted: number
 }
+
+export type MediaScope = 'venue' | 'wedding'
+export type MediaType = 'image' | 'video' | 'document'
+export type MediaPurpose = 'venue-reference' | 'walkthrough' | 'inspiration' | 'document' | 'inventory' | 'ai-preview'
+
+export type MediaAsset = {
+  id: string
+  venueId: string
+  scope: MediaScope
+  weddingId?: string
+  name: string
+  mimeType: string
+  size: number
+  mediaType: MediaType
+  createdAt: string
+  areaId?: string
+  inventoryItemId?: string
+  purpose: MediaPurpose
+  aiReference: boolean
+}
+
+export type MediaAssetRecord = MediaAsset & {
+  blob: Blob
+}
