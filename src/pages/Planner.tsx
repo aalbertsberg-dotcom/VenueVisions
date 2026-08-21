@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from 'react'
-import { inventory } from '../data'
-import type { Dispatch, SetStateAction } from 'react'
-import type { InventoryItem, PlacedItem, PlannerObjectType, Selection } from '../types'
+import { areaById, inventory, itemAllowedForTier, venueAreas } from '../data'
+import type { Dispatch, PointerEvent as ReactPointerEvent, SetStateAction } from 'react'
+import type { InventoryItem, PackageTier, PlacedItem, PlannerObjectType, Selection } from '../types'
 
 const furniture: Array<{ type: PlannerObjectType; label: string; icon: string }> = [
   { type: 'round-table', label: 'Round table', icon: '○' },
@@ -83,31 +83,36 @@ type PlannerProps = {
   placedItems: PlacedItem[]
   setPlacedItems: Dispatch<SetStateAction<PlacedItem[]>>
   onSetQuantity: (itemId: string, quantity: number) => void
+  packageTier: PackageTier
+  preferredAreaId?: string
 }
 
-export default function Planner({ selections, placedItems, setPlacedItems, onSetQuantity }: PlannerProps) {
+export default function Planner({ selections, placedItems, setPlacedItems, onSetQuantity, packageTier, preferredAreaId }: PlannerProps) {
   const canvasRef = useRef<HTMLDivElement>(null)
   const [area, setArea] = useState(() => {
     const focused = localStorage.getItem('venueVisions.plannerArea')
     localStorage.removeItem('venueVisions.plannerArea')
-    return focused || 'Reception Hall'
+    return focused || preferredAreaId || 'pecan-pavilion'
   })
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [inventorySearch, setInventorySearch] = useState('')
+  const areaItems = placedItems.filter((item) => (item.areaId || 'pecan-pavilion') === area)
+  const currentArea = areaById(area)
 
   const selectedDecor = useMemo(
-    () => selections.map((s) => inventory.find((item) => item.id === s.itemId)).filter((item): item is InventoryItem => Boolean(item)),
-    [selections],
+    () => selections.map((s) => inventory.find((item) => item.id === s.itemId)).filter((item): item is InventoryItem => Boolean(item) && itemAllowedForTier(item as InventoryItem, packageTier)),
+    [selections, packageTier],
   )
 
   const filteredInventory = useMemo(() => {
     const query = inventorySearch.trim().toLowerCase()
-    if (!query) return inventory
-    return inventory.filter((item) => `${item.name} ${item.category} ${item.color}`.toLowerCase().includes(query))
-  }, [inventorySearch])
+    const allowed = inventory.filter((item) => itemAllowedForTier(item, packageTier))
+    if (!query) return allowed
+    return allowed.filter((item) => `${item.name} ${item.category} ${item.color}`.toLowerCase().includes(query))
+  }, [inventorySearch, packageTier])
 
   const makeItem = (type: PlannerObjectType, label: string, inventoryItemId?: string, x?: number, y?: number): PlacedItem => {
-    const offset = placedItems.length % 8
+    const offset = areaItems.length % 8
     return {
       id: `${type}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
       type,
@@ -117,6 +122,7 @@ export default function Planner({ selections, placedItems, setPlacedItems, onSet
       scale: 1,
       label,
       inventoryItemId,
+      areaId: area,
     }
   }
 
@@ -127,7 +133,8 @@ export default function Planner({ selections, placedItems, setPlacedItems, onSet
   }
 
   const addInventoryItem = (item: InventoryItem) => {
-    const alreadyPlaced = placedItems.filter((entry) => entry.inventoryItemId === item.id).length
+    if (!itemAllowedForTier(item, packageTier)) return
+    const alreadyPlaced = areaItems.filter((entry) => entry.inventoryItemId === item.id).length
     if (alreadyPlaced >= item.quantity) return
     addItem('decor', item.name, item.id)
     const selectedQty = selections.find((selection) => selection.itemId === item.id)?.quantity ?? 0
@@ -161,6 +168,7 @@ export default function Planner({ selections, placedItems, setPlacedItems, onSet
         scale: existing[index]?.scale ?? 1,
         label: 'Chair',
         parentTableId: tableId,
+        areaId: table.areaId || area,
       }))
       return [...withoutLinked, ...linked]
     })
@@ -177,12 +185,12 @@ export default function Planner({ selections, placedItems, setPlacedItems, onSet
   }
 
   const duplicateSelected = () => {
-    const selected = placedItems.find((item) => item.id === selectedId)
+    const selected = areaItems.find((item) => item.id === selectedId)
     if (!selected) return
 
     if (selected.inventoryItemId) {
       const source = inventory.find((item) => item.id === selected.inventoryItemId)
-      const alreadyPlaced = placedItems.filter((item) => item.inventoryItemId === selected.inventoryItemId).length
+      const alreadyPlaced = areaItems.filter((item) => item.inventoryItemId === selected.inventoryItemId).length
       if (source && alreadyPlaced >= source.quantity) return
     }
 
@@ -201,13 +209,14 @@ export default function Planner({ selections, placedItems, setPlacedItems, onSet
           scale: 1,
           label: 'Chair',
           parentTableId: duplicate.id,
+          areaId: area,
         }))]
       }
       return next
     })
 
     if (selected.inventoryItemId) {
-      const alreadyPlaced = placedItems.filter((item) => item.inventoryItemId === selected.inventoryItemId).length
+      const alreadyPlaced = areaItems.filter((item) => item.inventoryItemId === selected.inventoryItemId).length
       const selectedQty = selections.find((selection) => selection.itemId === selected.inventoryItemId)?.quantity ?? 0
       if (selectedQty < alreadyPlaced + 1) onSetQuantity(selected.inventoryItemId, alreadyPlaced + 1)
     }
@@ -215,18 +224,18 @@ export default function Planner({ selections, placedItems, setPlacedItems, onSet
   }
 
   const clearRoom = () => {
-    setPlacedItems([])
+    setPlacedItems((current) => current.filter((item) => (item.areaId || 'pecan-pavilion') !== area))
     setSelectedId(null)
   }
 
-  const handlePointerDown = (event: React.PointerEvent<HTMLButtonElement>, id: string) => {
+  const handlePointerDown = (event: ReactPointerEvent<HTMLButtonElement>, id: string) => {
     const target = event.currentTarget
     const canvas = canvasRef.current
     if (!canvas) return
     target.setPointerCapture(event.pointerId)
     setSelectedId(id)
 
-    const object = placedItems.find((item) => item.id === id)
+    const object = areaItems.find((item) => item.id === id)
     if (!object) return
     const rect = canvas.getBoundingClientRect()
     const startOffsetX = event.clientX - rect.left - object.x
@@ -262,24 +271,24 @@ export default function Planner({ selections, placedItems, setPlacedItems, onSet
     window.addEventListener('pointerup', onUp)
   }
 
-  const selectedObject = placedItems.find((item) => item.id === selectedId)
-  const selectedTableChairCount = isTable(selectedObject) ? placedItems.filter((item) => item.parentTableId === selectedObject.id).length : 0
-  const linkedChairCount = placedItems.filter((item) => item.type === 'chair' && item.parentTableId).length
+  const selectedObject = areaItems.find((item) => item.id === selectedId)
+  const selectedTableChairCount = isTable(selectedObject) ? areaItems.filter((item) => item.parentTableId === selectedObject.id).length : 0
+  const linkedChairCount = areaItems.filter((item) => item.type === 'chair' && item.parentTableId).length
 
   return (
     <main className="planner-page">
       <div className="planner-topbar shell">
         <div>
-          <p className="eyebrow">VENUE DESIGNER · PROTOTYPE</p>
-          <h1>Build your reception layout.</h1>
+          <p className="eyebrow">CHANDELIER OAKS · VENUE DESIGNER</p>
+          <h1>Design each part of the property.</h1>
         </div>
         <div className="planner-topbar__actions">
-          <label className="area-select"><span>Design area</span><select value={area} onChange={(e) => setArea(e.target.value)}><option>Reception Hall</option><option disabled>Ceremony Area — coming later</option><option disabled>Patio — coming later</option><option disabled>Entrance — coming later</option></select></label>
+          <label className="area-select"><span>Design area</span><select value={area} onChange={(e) => { setArea(e.target.value); setSelectedId(null) }}>{venueAreas.filter((item) => item.plannerEnabled).map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
           <button className="button button--ghost button--small" onClick={clearRoom}>Clear room</button>
         </div>
       </div>
 
-      <div className="planner-tip shell" role="note"><strong>Designer tip:</strong> Select a table to add chairs, resize it, or rotate it. Select any other object to resize, rotate, duplicate, or remove it.</div>
+      <div className="planner-tip shell" role="note"><strong>{currentArea.name}:</strong> {currentArea.description} Select a table to add chairs, resize or rotate it. Each venue area saves separately in this demo.</div>
 
       <div className="planner-shell shell">
         <aside className="toolbox panel">
@@ -295,7 +304,7 @@ export default function Planner({ selections, placedItems, setPlacedItems, onSet
           {selectedDecor.length ? (
             <div className="decor-tools">
               {selectedDecor.map((item) => {
-                const inRoom = placedItems.filter((placed) => placed.inventoryItemId === item.id).length
+                const inRoom = areaItems.filter((placed) => placed.inventoryItemId === item.id).length
                 return <button key={item.id} onClick={() => addInventoryItem(item)} disabled={inRoom >= item.quantity} title="Add this decoration to the floor plan"><span className={`decor-dot decor-dot--${item.imageStyle}`} /><span>{item.name}<small>{inRoom} in room</small></span><b>+</b></button>
               })}
             </div>
@@ -306,7 +315,7 @@ export default function Planner({ selections, placedItems, setPlacedItems, onSet
           <input className="inventory-search" type="search" value={inventorySearch} onChange={(e) => setInventorySearch(e.target.value)} placeholder="Search inventory…" />
           <div className="inventory-tools">
             {filteredInventory.map((item) => {
-              const inRoom = placedItems.filter((placed) => placed.inventoryItemId === item.id).length
+              const inRoom = areaItems.filter((placed) => placed.inventoryItemId === item.id).length
               const isSelected = selections.some((selection) => selection.itemId === item.id)
               return (
                 <button key={item.id} onClick={() => addInventoryItem(item)} disabled={inRoom >= item.quantity} title="Adds to the layout and to My Wedding when needed">
@@ -321,15 +330,15 @@ export default function Planner({ selections, placedItems, setPlacedItems, onSet
 
         <section className="canvas-panel panel">
           <div className="canvas-panel__heading">
-            <div><span className="mini-label">{area.toUpperCase()}</span><strong>Sample venue floor plan</strong></div>
+            <div><span className="mini-label">{currentArea.kind.toUpperCase()}</span><strong>{currentArea.name} · conceptual plan</strong></div>
             <span className="prototype-badge">Not to scale</span>
           </div>
           <div className="floor-canvas" ref={canvasRef} onMouseDown={() => setSelectedId(null)}>
-            <div className="floor-label floor-label--entrance">ENTRANCE</div>
-            <div className="floor-feature floor-feature--stage">STAGE / HEAD TABLE</div>
-            <div className="floor-feature floor-feature--doors">PATIO DOORS</div>
-            <div className="floor-feature floor-feature--service">SERVICE</div>
-            {placedItems.map((item) => {
+            <div className="floor-label floor-label--entrance">ENTRY / APPROACH</div>
+            <div className="floor-feature floor-feature--stage">{currentArea.kind === 'Ceremony' ? 'CEREMONY FOCAL AREA' : 'FEATURE / HEAD TABLE'}</div>
+            <div className="floor-feature floor-feature--doors">{currentArea.name.toUpperCase()}</div>
+            <div className="floor-feature floor-feature--service">NOT TO SCALE</div>
+            {areaItems.map((item) => {
               const inventoryItem = item.inventoryItemId ? inventory.find((entry) => entry.id === item.inventoryItemId) : undefined
               return (
                 <button
@@ -388,9 +397,9 @@ export default function Planner({ selections, placedItems, setPlacedItems, onSet
             <div className="properties-empty"><span>↖</span><p>Select an object on the floor plan to edit it.</p></div>
           )}
           <div className="toolbox__divider" />
-          <div className="room-stats"><span>Objects placed</span><strong>{placedItems.length}</strong></div>
+          <div className="room-stats"><span>Objects in this area</span><strong>{areaItems.length}</strong></div>
           <div className="room-stats"><span>Table-linked chairs</span><strong>{linkedChairCount}</strong></div>
-          <div className="room-stats"><span>Décor pieces shown</span><strong>{placedItems.filter((item) => item.type === 'decor').length}</strong></div>
+          <div className="room-stats"><span>Décor pieces shown</span><strong>{areaItems.filter((item) => item.type === 'decor').length}</strong></div>
         </aside>
       </div>
     </main>

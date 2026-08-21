@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react'
 import type { Dispatch, KeyboardEvent, SetStateAction } from 'react'
-import { inventory } from '../data'
+import { inventory, venueAreas } from '../data'
 import type { InventoryItem, MessageAttachment, MessageContext, MessageRole, PlacedItem, Selection, WeddingMessage, WeddingProfile } from '../types'
 
 type MessagesProps = {
@@ -57,11 +57,7 @@ export default function Messages({
     [selections],
   )
 
-  const linkedAreas = useMemo(() => {
-    const areas = ['Reception Hall']
-    if (placedItems.length > 0) return areas.map((label) => ({ kind: 'area' as const, id: label, label }))
-    return areas.map((label) => ({ kind: 'area' as const, id: label, label }))
-  }, [placedItems.length])
+  const linkedAreas = useMemo(() => venueAreas.filter((area) => area.plannerEnabled).map((area) => ({ kind: 'area' as const, id: area.id, label: area.name })), [placedItems.length])
 
   const senderName = currentRole === 'bride' ? (profile.couple || 'Bride') : 'Venue Team'
   const otherRole: MessageRole = currentRole === 'bride' ? 'venue' : 'bride'
@@ -141,7 +137,7 @@ export default function Messages({
 
   const notify = (body: string) => {
     if (!notificationsEnabled || typeof Notification === 'undefined' || Notification.permission !== 'granted') return
-    new Notification('Venue Visions · New message', { body })
+    new Notification('Chandelier Oaks · Venue Visions message', { body })
   }
 
   const simulateReply = () => {
@@ -158,7 +154,7 @@ export default function Messages({
         body: replyBody,
         timestamp: new Date().toISOString(),
         attachments: [],
-        context: { kind: 'area', id: 'Reception Hall', label: 'Reception Hall floor plan' },
+        context: { kind: 'area', id: profile.receptionArea || 'pecan-pavilion', label: venueAreas.find((area) => area.id === (profile.receptionArea || 'pecan-pavilion'))?.name || 'Pecan Pavilion' },
         readByBride: otherRole === 'bride',
         readByVenue: otherRole === 'venue',
       }
@@ -187,22 +183,22 @@ export default function Messages({
     <main className="page-main shell messages-page">
       <section className="page-intro page-intro--split messages-intro">
         <div>
-          <p className="eyebrow">WEDDING MESSAGES</p>
+          <p className="eyebrow">CHANDELIER OAKS · WEDDING MESSAGES</p>
           <h1>Keep the conversation with the plan.</h1>
           <p>Questions, confirmations, photos and linked décor stay attached to this wedding instead of getting scattered across texts and email.</p>
         </div>
         <div className="message-demo-role message-demo-role--locked">
           <span className="mini-label">SIGNED IN AS</span>
           <strong>{currentRole === 'venue' ? 'Venue Team' : profile.couple}</strong>
-          <small>Role follows the demo access used to enter this workspace.</small>
+          <small>Role follows the Chandelier Oaks owner or couple demo access used to enter this workspace.</small>
         </div>
       </section>
 
       <div className="messages-layout">
         <section className="panel conversation-panel">
           <div className="conversation-heading">
-            <div className="conversation-avatar">VV</div>
-            <div><strong>{profile.couple || 'Wedding conversation'}</strong><span>Venue Team · Wedding planning thread</span></div>
+            <div className="conversation-avatar">CO</div>
+            <div><strong>{profile.couple || 'Wedding conversation'}</strong><span>Chandelier Oaks · Wedding planning thread</span></div>
             <div className="conversation-status"><span className="status-dot" /> Active</div>
           </div>
 

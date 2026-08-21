@@ -1,13 +1,17 @@
 export type Category =
-  | 'Centerpieces'
-  | 'Vases'
-  | 'Candles'
-  | 'Signs'
+  | 'Furniture'
   | 'Arches'
-  | 'Linens'
+  | 'Backdrops'
+  | 'Lighting'
   | 'Florals'
+  | 'Linens'
+  | 'Centerpieces'
+  | 'Signs'
+  | 'Specialty'
   | 'Ceremony'
   | 'Miscellaneous'
+
+export type PackageTier = 1 | 2 | 3
 
 export type InventoryItem = {
   id: string
@@ -20,6 +24,64 @@ export type InventoryItem = {
   description: string
   imageStyle: string
   featured?: boolean
+  accessTier: PackageTier
+  packageNote?: string
+}
+
+export type VenuePackage = {
+  id: string
+  name: string
+  price: number
+  duration: string
+  maxGuests: number | null
+  tier: PackageTier
+  description: string
+  highlights: string[]
+}
+
+export type VenueArea = {
+  id: string
+  name: string
+  kind: 'Ceremony' | 'Reception' | 'Photos' | 'Hospitality'
+  description: string
+  plannerEnabled: boolean
+  visual: string
+}
+
+export type VenueProfile = {
+  id: string
+  slug: string
+  name: string
+  shortName: string
+  tagline: string
+  website: string
+  address: string
+  phone: string
+  email: string
+  ownerName: string
+  brandPrimary: string
+  brandAccent: string
+  logoText: string
+}
+
+export type VenueLead = {
+  id: string
+  submittedAt: string
+  venueName: string
+  website: string
+  contactName: string
+  email: string
+  phone: string
+  address: string
+  eventSpaces: number
+  weddingsPerMonth: number
+  inventorySize: string
+  packages: string
+  needs: string[]
+  notes: string
+  brandPrimary: string
+  brandAccent: string
+  logoDataUrl?: string
 }
 
 export type Selection = {
@@ -48,6 +110,8 @@ export type PlacedItem = {
   inventoryItemId?: string
   /** Chairs created by a table's chair slider remain separate objects, but move with this table. */
   parentTableId?: string
+  /** Demo planner keeps the area on each item so one wedding can have several separate layouts. */
+  areaId?: string
 }
 
 export type WeddingProfile = {
@@ -55,6 +119,13 @@ export type WeddingProfile = {
   date: string
   guests: number
   notes: string
+  packageId: string
+  ceremonyArea: string
+  receptionArea: string
+  primaryEmail: string
+  partnerEmail: string
+  contractSigned: boolean
+  reservationPaid: boolean
 }
 
 export type WeddingStatus = 'Ready' | 'Designing' | 'Not started'
@@ -95,4 +166,5 @@ export type WeddingWorkspace = {
   selections: Selection[]
   placedItems: PlacedItem[]
   messages: WeddingMessage[]
+  paymentStepsCompleted: number
 }

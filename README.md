@@ -1,35 +1,79 @@
-# Venue Visions v0.7.1
+# Venue Visions v1.0 — SaaS Demo
 
-Demo prototype for a wedding venue décor catalog, couple workspace, visual venue planner, messaging, and owner dashboard.
+Venue Visions is now structured as a multi-tenant wedding-venue planning platform rather than a one-off venue website. **Chandelier Oaks** is configured as the first demo customer tenant.
+
+## Demo structure
+
+```text
+Venue Visions (founder/platform level)
+└── Chandelier Oaks (venue tenant)
+    ├── Owner dashboard
+    ├── Calendar & payment milestones
+    ├── Pinrose Prop Shop catalog
+    ├── Packages & venue areas
+    └── Separate couple workspaces
+        ├── My Wedding
+        ├── Venue Designer
+        ├── Messages
+        └── Setup / pull sheet
+```
+
+The platform-level founder console is intentionally separate from the Chandelier Oaks owner console. Additional venues would become sibling tenants under Venue Visions, each with separate branding, inventory, packages, weddings and users.
 
 ## Demo access
 
-### Owner
-- Password: `123456`
-- Owner sign-in lasts for the current browser tab/session.
-- Once signed in, use the **Active Wedding** selector in Owner View or the hamburger menu to switch couples without signing in again.
+### Venue Visions founder console
+- Route: `#/platform`
+- Demo code: `654321`
+- Code is prefilled because this is a public prototype.
 
-### Couple demo links
-Each sample couple has a unique demo URL and access code:
-- Sarah & John: `#/couple/sarah-john` — code `111111`
-- Ashley & Mark: `#/couple/ashley-mark` — code `222222`
-- Jennifer & Matt: `#/couple/jennifer-matt` — code `333333`
+### Chandelier Oaks owner
+- Route: `#/admin`
+- Demo code: `123456`
+- Owner can switch the active wedding without signing in again during the browser session.
 
-The owner dashboard includes **Access details** for each couple with Copy Link, Copy Code, and Resend Access demo controls.
+### Couple workspaces
+- Sarah & John: `#/couple/sarah-john` — `111111`
+- Ashley & Mark: `#/couple/ashley-mark` — `222222`
+- Jennifer & Matt: `#/couple/jennifer-matt` — `333333`
 
-> These codes are intentionally visible/prefilled because this is a static GitHub Pages prototype. They are not real security. Production should use a backend authentication provider, email magic links or one-time codes, role-based authorization, and server-side data isolation.
+These access codes are **presentation gates only**, not real security. Production requires a backend identity provider, server-side tenant authorization, secure passwordless/email access or one-time codes, and private persistent storage.
 
-## v0.7 additions
-- Persistent owner session within the browser tab.
-- Owner can switch the active wedding from Owner View or the hamburger menu.
-- Separate couple access gate for every wedding.
-- Unique couple URLs.
-- Different demo access code per couple.
-- Owner access/recovery controls for each couple.
-- Couple/venue message role now follows the authenticated demo role instead of a manual role toggle.
-- Public décor browsing remains available, but changing a wedding requires wedding or owner access.
-- Duplicate wedding dates remain blocked for the current venue.
-- The prototype is intentionally scoped to a **single venue**.
+## What v1.0 demonstrates
+
+- Venue Visions public SaaS landing page.
+- **For Venues** onboarding/signup form with venue details, logo upload, colors and a live branded portal preview.
+- Founder-only onboarding pipeline and tenant dashboard.
+- Chandelier Oaks branded customer portal, powered by Venue Visions.
+- Five publicly advertised Chandelier Oaks package options.
+- Package-aware demo décor access tiers.
+- Pinrose Prop Shop inventory catalog with sample quantities/storage locations.
+- Multiple separate couples and unique access links/codes.
+- Owner active-wedding switcher.
+- One-wedding-per-day conflict protection.
+- Owner calendar and contract/payment milestone dates.
+- Multiple design areas for the property.
+- Visual floor planner with tables, separate chairs, chair-count slider, resize, rotation, duplicate/remove and direct inventory placement.
+- Bride/couple ↔ venue messaging with unread counts, attachments and links to inventory/venue areas.
+- Printable setup/pull sheet grouped by storage location and venue area.
+- Browser-local demo persistence and Reset Demo.
+- Responsive hamburger navigation.
+
+## Chandelier Oaks source vs sample data
+
+Public venue facts used in the demo come from Chandelier Oaks' own website, including package names/pricing, published guest limits where stated, ceremony options, Pinrose Prop Shop categories, the one-wedding-per-day policy, and installment timing.
+
+**Sample/demo only until the venue confirms it:**
+- Exact prop quantities
+- Storage locations
+- Dimensions
+- Package-to-prop tier mapping
+- Couple names/contact information
+- Payment completion statuses
+- Exact room/floor-plan measurements
+- The micro-wedding guest cap (the public package page does not state one, so the demo labels it as "to confirm")
+
+No real customer or payment data should be entered into this GitHub Pages prototype.
 
 ## Run locally
 
@@ -44,8 +88,8 @@ npm run dev
 ```powershell
 npm run build
 git add .
-git commit -m "Add owner wedding switcher and couple access"
+git commit -m "Restructure Venue Visions as SaaS with Chandelier Oaks"
 git push
 ```
 
-GitHub Actions will redeploy the GitHub Pages site after the push.
+The included GitHub Actions workflow deploys the Vite `dist` output to GitHub Pages after a push to `main`.

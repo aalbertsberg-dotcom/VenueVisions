@@ -27,12 +27,12 @@ export default function CoupleAccess({ wedding, onSubmitCode, onBackHome }: Coup
   return (
     <main className="page-main shell couple-access-page">
       <section className="panel couple-access-card" aria-labelledby="couple-access-title">
-        <div className="couple-access-mark" aria-hidden="true">VV</div>
-        <p className="eyebrow">PRIVATE WEDDING WORKSPACE · DEMO</p>
+        <div className="couple-access-mark" aria-hidden="true">CO</div>
+        <p className="eyebrow">CHANDELIER OAKS · PRIVATE WEDDING WORKSPACE · DEMO</p>
         <h1 id="couple-access-title">{wedding.profile.couple}</h1>
         <p className="couple-access-date">{formatDate(wedding.profile.date)}</p>
         <p className="couple-access-lead">
-          This wedding has its own link and access code. In production, each couple would only be able to open their own workspace.
+          This Chandelier Oaks wedding has its own Venue Visions link and demo access code. In production, the couple would only be able to open this wedding.
         </p>
 
         <form className="owner-access-form" onSubmit={submit}>
@@ -52,7 +52,7 @@ export default function CoupleAccess({ wedding, onSubmitCode, onBackHome }: Coup
         <div className="owner-access-note">
           <strong>Prototype only.</strong> The code is visible in the demo on purpose. Production access would use secure email sign-in or one-time codes and would not expose recoverable passwords.
         </div>
-        <button className="text-link owner-access-back" type="button" onClick={onBackHome}>← Back to public demo</button>
+        <button className="text-link owner-access-back" type="button" onClick={onBackHome}>← Back to Chandelier Oaks portal</button>
       </section>
     </main>
   )
