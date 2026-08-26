@@ -25,7 +25,7 @@ export default function VenuePortal({ venueId, weddings, onNavigate, onOpenCoupl
 
   return (
     <main className="venue-portal" style={{ '--venue-primary': venue.brandPrimary, '--venue-accent': venue.brandAccent, '--venue-surface': venue.brandSurface ?? '#eef2ed', '--venue-text': venue.brandText ?? venue.brandPrimary } as CSSProperties}>
-      <section className="venue-brand-hero venue-brand-hero--dynamic">
+      <section className="venue-brand-hero venue-brand-hero--dynamic venue-brand-hero--compact">
         <div className="venue-brand-hero__wash" />
         <div className="shell venue-brand-hero__inner">
           <div className="venue-brand-lockup">
@@ -33,14 +33,14 @@ export default function VenuePortal({ venueId, weddings, onNavigate, onOpenCoupl
             <div><span>{venue.shortName.toUpperCase()}</span><small>{venue.venueTypeLabel ?? 'Event venue'} · {venue.locationLabel}</small></div>
           </div>
           <div className="venue-brand-hero__copy">
-            <span className="venue-powered">{venue.previewLabel} · Powered by Venue Visions</span>
+            <span className="venue-powered">Powered by Venue Visions</span>
             <h1>{heroTitle}</h1>
             <p>{heroBody}</p>
             <div className="hero__actions">
               {firstEvent && <button className="button button--venue" onClick={() => onOpenCouple(firstEvent.id)}>{isChandelier ? 'Open Couple Portal' : `Enter a ${clientLabel} workspace`}</button>}
               <button className="button button--venue-ghost" onClick={() => onNavigate('admin')}>{isChandelier ? 'Owner Portal' : 'Venue owner preview'}</button>
             </div>
-            <div className="venue-preview-credentials"><span>{isChandelier ? 'Venue operations and couple planning are connected in one Chandelier Oaks workspace.' : 'Owner access is prefilled on the next screen.'}</span><span>{weddings.length} private {clientPlural} workspaces configured.</span></div>
+            <div className="venue-preview-credentials"><span>{isChandelier ? 'Chandelier Oaks planning, selections and venue operations stay connected from booking through setup.' : 'Owner access is prefilled on the next screen.'}</span><span>{isChandelier ? `${weddings.length} active planning workspaces ready in this configured venue portal.` : `${weddings.length} private ${clientPlural} workspaces configured.`}</span></div>
           </div>
         </div>
       </section>
@@ -82,7 +82,7 @@ export default function VenuePortal({ venueId, weddings, onNavigate, onOpenCoupl
       </section>
 
       <section className="section shell package-preview-section">
-        <div className="section-heading"><div><p className="eyebrow">{isChandelier ? 'CURRENT WEDDING PACKAGES' : 'PACKAGE-AWARE PLANNING'}</p><h2>{isChandelier ? 'Package details drive the planning experience.' : `The portal knows what kind of ${eventLabel} is being planned.`}</h2><p className="section-lead">{isChandelier ? 'The current Chandelier Oaks packages are configured with pricing, duration, guest limits and tier-aware planning so each couple sees the experience attached to their booking.' : `Package details can control guest limits, planning milestones and which inventory or resource tiers are available to the ${clientLabel}.`}</p></div></div>
+        <div className="section-heading"><div><p className="eyebrow">{isChandelier ? 'CURRENT WEDDING PACKAGES' : 'PACKAGE-AWARE PLANNING'}</p><h2>{isChandelier ? 'Package details drive the planning experience.' : `The portal knows what kind of ${eventLabel} is being planned.`}</h2><p className="section-lead">{isChandelier ? 'Current public Chandelier Oaks wedding package pricing, duration and published guest limits are reflected here so each couple can plan against the package they actually booked.' : `Package details can control guest limits, planning milestones and which inventory or resource tiers are available to the ${clientLabel}.`}</p></div></div>
         <div className="package-preview-grid">
           {packages.map((pkg) => (
             <article className={pkg.tier === 2 ? 'package-card package-card--featured' : 'package-card'} key={pkg.id}>

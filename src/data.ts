@@ -42,8 +42,8 @@ export const chandelierPackages: VenuePackage[] = [
     duration: '4 hours',
     maxGuests: null,
     tier: 1,
-    description: 'A smaller outdoor-style celebration with time for vows, a simple cake moment, photos and an unhurried experience. Public pricing does not state a guest cap for this package.',
-    highlights: ['Outdoor ceremony options', 'Patio cake moment', 'Property photo access', 'Décor access — tier dependent'],
+    description: 'A four-hour elopement or micro-wedding experience for a smaller, relaxed celebration beneath the oaks or by the water.',
+    highlights: ['Outdoor ceremony options', 'Patio cake cutting', 'Full outdoor property photo access', 'Pinrose décor access — tier dependent'],
   },
   {
     id: 'classic',
@@ -52,8 +52,8 @@ export const chandelierPackages: VenuePackage[] = [
     duration: '8 hours',
     maxGuests: 60,
     tier: 1,
-    description: 'A traditional ceremony and reception experience without a full-weekend commitment.',
-    highlights: ['Ceremony + reception access', 'Tables and chairs', 'Optional add-ons', 'Décor access — tier dependent'],
+    description: 'A full eight-hour ceremony and reception experience for couples who want a traditional celebration without the full-weekend commitment.',
+    highlights: ['Up to 60 guests', 'Ceremony + reception access', 'Tables and chairs', 'Optional add-ons'],
   },
   {
     id: 'overnight',
@@ -62,8 +62,8 @@ export const chandelierPackages: VenuePackage[] = [
     duration: '11 AM – 8 AM',
     maxGuests: 100,
     tier: 2,
-    description: 'Celebrate all day, stay overnight and add rehearsal, game-room and bridal-photo time.',
-    highlights: ['Up to 8 overnight guests + couple', 'Loft game room', 'Pecan Pavilion', 'Weekday bridal photo session'],
+    description: 'An 11 AM-to-8 AM celebration with overnight accommodations, rehearsal space and additional venue access.',
+    highlights: ['Up to 100 event guests', 'Up to 8 overnight guests + couple', 'Loft game room + Pecan Pavilion', 'Weekday bridal photo session'],
   },
   {
     id: 'weekend',
@@ -72,8 +72,8 @@ export const chandelierPackages: VenuePackage[] = [
     duration: 'Friday – Sunday',
     maxGuests: 175,
     tier: 2,
-    description: 'A full weekend built around time to rehearse, celebrate, stay onsite and enjoy the property without rushing.',
-    highlights: ['12 overnight guests + couple Friday', 'Rehearsal dinner for up to 35', 'Pecan Pavilion + Loft', 'Premium rental tiers'],
+    description: 'A Friday-through-Sunday wedding weekend with time for rehearsal, celebration, overnight stays and an unhurried departure.',
+    highlights: ['Up to 175 guests', '12 overnight guests + couple Friday', 'Rehearsal dinner for up to 35', 'Premium rental tiers'],
   },
   {
     id: 'luxury',
@@ -82,8 +82,8 @@ export const chandelierPackages: VenuePackage[] = [
     duration: 'Friday – Sunday',
     maxGuests: 250,
     tier: 3,
-    description: 'The most inclusive Chandelier Oaks experience with full-property access and elevated service.',
-    highlights: ['Up to 18 overnight guests + couple', 'Top-tier rentals + floral access', 'Linens, bartending and security', 'Concierge + day-of coordination'],
+    description: 'The premium full-weekend Chandelier Oaks experience with the broadest property, rental and service access.',
+    highlights: ['Up to 250 guests', 'Up to 18 overnight guests + couple both nights', 'Top-tier rentals, floral access + linens', 'Bartending, security, concierge + coordination'],
   },
 ]
 

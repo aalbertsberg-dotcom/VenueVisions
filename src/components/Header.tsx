@@ -47,13 +47,18 @@ export default function Header({
 
   const sortedWeddings = useMemo(() => [...weddings].sort((a, b) => a.profile.date.localeCompare(b.profile.date)), [weddings])
   const mode = ownerAuthenticated ? 'owner' : coupleAuthenticated ? 'couple' : platformAuthenticated ? 'platform' : 'public'
+  const isVenuePublicPage = mode === 'public' && page === 'venue'
 
   const eventLabel = activeVenue.eventLabel ?? 'event'
   const eventPlural = activeVenue.eventPluralLabel ?? 'events'
   const clientLabel = activeVenue.clientLabel ?? 'client'
   const resourceLabel = eventLabel === 'wedding' ? 'Décor' : 'Resources'
 
-  const publicNav: NavItem[] = [
+  const publicNav: NavItem[] = isVenuePublicPage ? [
+    { key: 'venue', label: 'Venue Home' },
+    { key: 'home', label: 'Venue Visions' },
+    { key: 'signin', label: 'Sign In' },
+  ] : [
     { key: 'home', label: 'Home' },
     { key: 'venues', label: 'Venues' },
     { key: 'for-venues', label: 'For Venues' },
@@ -95,9 +100,10 @@ export default function Header({
 
   return (
     <>
-      <header className={`site-header app-header app-header--${mode}`} style={{ '--venue-primary': activeVenue.brandPrimary, '--venue-accent': activeVenue.brandAccent } as CSSProperties}>
+      <header className={`site-header app-header app-header--${mode}${isVenuePublicPage ? ' app-header--venue-public' : ''}`} style={{ '--venue-primary': activeVenue.brandPrimary, '--venue-accent': activeVenue.brandAccent } as CSSProperties}>
         <div className="app-header__brand">
-          {mode === 'public' && <button className="brand-button" onClick={() => go('home')} aria-label="Venue Visions home"><Logo /></button>}
+          {mode === 'public' && !isVenuePublicPage && <button className="brand-button" onClick={() => go('home')} aria-label="Venue Visions home"><Logo /></button>}
+          {isVenuePublicPage && <VenueBrand venue={activeVenue} onClick={() => go('venue')} subtitle="Powered by Venue Visions" />}
           {mode === 'platform' && <button className="platform-brand" type="button" onClick={() => go('platform')}><Logo compact /><span><strong>Venue Visions Admin</strong><small>Proof of Concept</small></span></button>}
           {mode === 'owner' && <VenueBrand venue={activeVenue} onClick={() => go('admin')} subtitle="Owner Portal · Powered by Venue Visions" />}
           {mode === 'couple' && <VenueBrand venue={activeVenue} onClick={() => go('wedding')} subtitle={`${eventLabel[0].toUpperCase() + eventLabel.slice(1)} Portal · Powered by Venue Visions`} />}
@@ -112,7 +118,7 @@ export default function Header({
 
           {mode === 'couple' && <div className="profile-menu-wrap"><button className="couple-profile-button" type="button" aria-expanded={profileOpen} onClick={() => setProfileOpen((current) => !current)}><span>{activeWeddingName}</span><b aria-hidden="true">⌄</b></button>{profileOpen && <div className="couple-profile-popover"><span className="mini-label">{activeVenue.shortName.toUpperCase()}</span><strong>{activeWeddingName}</strong><button onClick={() => go('wedding')}>{eventLabel[0].toUpperCase() + eventLabel.slice(1)} home</button><button onClick={() => go('media')}>Media & inspiration</button><button onClick={() => go('summary')}>Setup summary</button><button onClick={() => go('venue')}>{activeVenue.shortName} home</button><button onClick={() => { setProfileOpen(false); onCoupleLogout() }}>Sign out</button></div>}</div>}
 
-          {mode === 'public' && <button className="button button--primary header-demo-cta" onClick={() => go('venues')}>Explore Venues</button>}
+          {mode === 'public' && <button className="button button--primary header-demo-cta" onClick={() => go(isVenuePublicPage ? 'signin' : 'venues')}>{isVenuePublicPage ? 'Portal Sign In' : 'Explore Venues'}</button>}
           {mode === 'platform' && <button className="button button--ghost button--small" onClick={onPlatformLogout}>Sign out</button>}
 
           {(mode === 'owner' || mode === 'platform' || mode === 'public') && <button className="compact-menu-button" type="button" aria-expanded={menuOpen} onClick={() => setMenuOpen((current) => !current)}><span className="compact-menu-button__bars" aria-hidden="true"><i /><i /><i /></span><span>Menu</span>{mode === 'owner' && unreadMessages > 0 && <b>{unreadMessages}</b>}</button>}

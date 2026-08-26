@@ -2149,3 +2149,57 @@ body { font-size: 16px; line-height: 1.5; }
   .venue-directory-cta { align-items:stretch;flex-direction:column;padding:26px 24px; }
   .venue-directory-cta .button { width:100%; }
 }
+
+
+/* ---------- v1.6.3 venue-first configured implementation polish ---------- */
+.app-header--venue-public {
+  border-top:5px solid var(--venue-primary);
+  background:rgba(252,251,249,.98);
+}
+.app-header--venue-public .tenant-brand__mark {
+  border-color:color-mix(in srgb,var(--venue-accent) 45%,#fff);
+}
+.app-header--venue-public .app-nav-link.active {
+  color:var(--venue-primary);
+}
+.app-header--venue-public .app-nav-link.active::after {
+  background:var(--venue-accent);
+}
+.app-header--venue-public .header-demo-cta {
+  background:var(--venue-primary);
+}
+.venue-brand-hero--compact {
+  min-height:420px;
+}
+.venue-brand-hero--compact .venue-brand-hero__inner {
+  padding-top:28px;
+  padding-bottom:42px;
+}
+.venue-brand-hero--compact .venue-brand-hero__copy {
+  max-width:900px;
+  margin-top:42px;
+}
+.venue-brand-hero--compact .venue-powered {
+  margin-bottom:12px;
+  padding:5px 9px;
+  font-size:9px;
+  letter-spacing:.1em;
+  opacity:.9;
+}
+.venue-brand-hero--compact h1 {
+  max-width:920px;
+  margin-bottom:12px;
+  font-size:clamp(38px,5vw,64px);
+}
+.venue-brand-hero--compact .venue-brand-hero__copy > p {
+  max-width:760px;
+  font-size:16px;
+}
+.venue-brand-hero--compact .venue-preview-credentials {
+  margin-top:18px;
+}
+@media (max-width:700px) {
+  .venue-brand-hero--compact { min-height:auto; }
+  .venue-brand-hero--compact .venue-brand-hero__copy { margin-top:32px; }
+  .venue-brand-hero--compact h1 { font-size:38px; }
+}
