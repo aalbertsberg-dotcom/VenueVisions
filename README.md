@@ -1,4 +1,4 @@
-# Venue Visions v1.6.3
+# Venue Visions v1.6.4
 
 Chandelier Oaks is now presented as the first configured venue implementation rather than a generic demo. Public venue facts, package structure, booking rules, couple portals and an initial Pinrose Prop Shop catalog are integrated into the venue-branded experience. Temporary access codes and local browser data remain only as current-build plumbing until production authentication/storage are added.
 
@@ -68,3 +68,10 @@ git push
 ## v1.6.3
 - Chandelier Oaks public venue experience is now venue-first with smaller tenant branding and subtle Venue Visions attribution.
 - Chandelier Oaks wedding package pricing matches the current public package page: $2,500 / $4,800 / $7,200 / $10,000 / $12,000.
+
+
+## v1.6.4
+- Removed duplicate Chandelier Oaks branding from the venue hero.
+- Removed the duplicate Powered by Venue Visions hero pill and configured-portal status copy.
+- Chandelier Oaks hero now starts with “Plan your event at Chandelier Oaks.”
+- “Powered by Venue Visions” in venue headers links back to the Venue Visions home page.

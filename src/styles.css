@@ -2203,3 +2203,20 @@ body { font-size: 16px; line-height: 1.5; }
   .venue-brand-hero--compact .venue-brand-hero__copy { margin-top:32px; }
   .venue-brand-hero--compact h1 { font-size:38px; }
 }
+
+
+/* ---------- v1.6.4 venue landing cleanup ---------- */
+.tenant-brand__powered-link {
+  cursor:pointer;
+  text-decoration:none;
+  text-underline-offset:2px;
+}
+.tenant-brand__powered-link:hover,
+.tenant-brand__powered-link:focus-visible {
+  color:var(--venue-primary,#2f4638);
+  text-decoration:underline;
+  outline:none;
+}
+.venue-brand-hero--compact .venue-brand-hero__copy:first-child {
+  margin-top:18px;
+}

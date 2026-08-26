@@ -20,7 +20,7 @@ export default function VenuePortal({ venueId, weddings, onNavigate, onOpenCoupl
   const eventPlural = venue.eventPluralLabel ?? 'events'
   const clientLabel = venue.clientLabel ?? 'client'
   const clientPlural = venue.clientPluralLabel ?? 'clients'
-  const heroTitle = venue.portalHeroTitle ?? (isChandelier ? 'Your Chandelier Oaks wedding, organized from first selection to final setup.' : 'A modern venue portal, configured around a completely different brand.')
+  const heroTitle = isChandelier ? 'Plan your event at Chandelier Oaks.' : (venue.portalHeroTitle ?? 'A modern venue portal, configured around a completely different brand.')
   const heroBody = venue.portalHeroBody ?? (isChandelier ? 'Browse the Pinrose Prop Shop, review your package, design venue spaces and keep every question attached to your wedding plan.' : 'Explore the Design Library, plan modern venue spaces, build the 2D layout and keep every wedding workspace separate.')
 
   return (
@@ -28,19 +28,18 @@ export default function VenuePortal({ venueId, weddings, onNavigate, onOpenCoupl
       <section className="venue-brand-hero venue-brand-hero--dynamic venue-brand-hero--compact">
         <div className="venue-brand-hero__wash" />
         <div className="shell venue-brand-hero__inner">
-          <div className="venue-brand-lockup">
+          {!isChandelier && <div className="venue-brand-lockup">
             <div className="venue-brand-mark">{venue.logoText}</div>
             <div><span>{venue.shortName.toUpperCase()}</span><small>{venue.venueTypeLabel ?? 'Event venue'} · {venue.locationLabel}</small></div>
-          </div>
+          </div>}
           <div className="venue-brand-hero__copy">
-            <span className="venue-powered">Powered by Venue Visions</span>
             <h1>{heroTitle}</h1>
             <p>{heroBody}</p>
             <div className="hero__actions">
               {firstEvent && <button className="button button--venue" onClick={() => onOpenCouple(firstEvent.id)}>{isChandelier ? 'Open Couple Portal' : `Enter a ${clientLabel} workspace`}</button>}
               <button className="button button--venue-ghost" onClick={() => onNavigate('admin')}>{isChandelier ? 'Owner Portal' : 'Venue owner preview'}</button>
             </div>
-            <div className="venue-preview-credentials"><span>{isChandelier ? 'Chandelier Oaks planning, selections and venue operations stay connected from booking through setup.' : 'Owner access is prefilled on the next screen.'}</span><span>{isChandelier ? `${weddings.length} active planning workspaces ready in this configured venue portal.` : `${weddings.length} private ${clientPlural} workspaces configured.`}</span></div>
+            {!isChandelier && <div className="venue-preview-credentials"><span>Owner access is prefilled on the next screen.</span><span>{`${weddings.length} private ${clientPlural} workspaces configured.`}</span></div>}
           </div>
         </div>
       </section>

@@ -26,11 +26,21 @@ type HeaderProps = {
 
 type NavItem = { key: PageKey; label: string; description?: string }
 
-function VenueBrand({ venue, onClick, subtitle }: { venue: VenueProfile; onClick: () => void; subtitle: string }) {
+function VenueBrand({ venue, onClick, onPoweredClick, subtitle }: { venue: VenueProfile; onClick: () => void; onPoweredClick: () => void; subtitle: string }) {
+  const poweredText = 'Powered by Venue Visions'
+  const hasPoweredLink = subtitle.includes(poweredText)
+  const subtitlePrefix = hasPoweredLink ? subtitle.replace(poweredText, '').replace(/\s*·\s*$/, '').trim() : subtitle
+
   return (
     <button className="tenant-brand" type="button" onClick={onClick} aria-label={`${venue.shortName} home`}>
       <span className="tenant-brand__mark" style={{ background: venue.brandPrimary, color: venue.brandAccent }}>{venue.logoText}</span>
-      <span className="tenant-brand__words"><strong style={{ color: venue.brandText ?? venue.brandPrimary }}>{venue.shortName}</strong><small>{subtitle}</small></span>
+      <span className="tenant-brand__words">
+        <strong style={{ color: venue.brandText ?? venue.brandPrimary }}>{venue.shortName}</strong>
+        <small>
+          {subtitlePrefix}{subtitlePrefix && hasPoweredLink ? ' · ' : ''}
+          {hasPoweredLink && <span className="tenant-brand__powered-link" role="link" tabIndex={0} onClick={(event) => { event.stopPropagation(); onPoweredClick() }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); onPoweredClick() } }}>{poweredText}</span>}
+        </small>
+      </span>
     </button>
   )
 }
@@ -103,10 +113,10 @@ export default function Header({
       <header className={`site-header app-header app-header--${mode}${isVenuePublicPage ? ' app-header--venue-public' : ''}`} style={{ '--venue-primary': activeVenue.brandPrimary, '--venue-accent': activeVenue.brandAccent } as CSSProperties}>
         <div className="app-header__brand">
           {mode === 'public' && !isVenuePublicPage && <button className="brand-button" onClick={() => go('home')} aria-label="Venue Visions home"><Logo /></button>}
-          {isVenuePublicPage && <VenueBrand venue={activeVenue} onClick={() => go('venue')} subtitle="Powered by Venue Visions" />}
+          {isVenuePublicPage && <VenueBrand venue={activeVenue} onClick={() => go('venue')} onPoweredClick={() => go('home')} subtitle="Powered by Venue Visions" />}
           {mode === 'platform' && <button className="platform-brand" type="button" onClick={() => go('platform')}><Logo compact /><span><strong>Venue Visions Admin</strong><small>Proof of Concept</small></span></button>}
-          {mode === 'owner' && <VenueBrand venue={activeVenue} onClick={() => go('admin')} subtitle="Owner Portal · Powered by Venue Visions" />}
-          {mode === 'couple' && <VenueBrand venue={activeVenue} onClick={() => go('wedding')} subtitle={`${eventLabel[0].toUpperCase() + eventLabel.slice(1)} Portal · Powered by Venue Visions`} />}
+          {mode === 'owner' && <VenueBrand venue={activeVenue} onClick={() => go('admin')} onPoweredClick={() => go('home')} subtitle="Owner Portal · Powered by Venue Visions" />}
+          {mode === 'couple' && <VenueBrand venue={activeVenue} onClick={() => go('wedding')} onPoweredClick={() => go('home')} subtitle={`${eventLabel[0].toUpperCase() + eventLabel.slice(1)} Portal · Powered by Venue Visions`} />}
         </div>
 
         <nav className="app-header__desktop-nav" aria-label="Primary navigation">
