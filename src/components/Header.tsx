@@ -131,7 +131,7 @@ export default function Header({
           {mode === 'owner' && <button onClick={() => { setMenuOpen(false); onOwnerLogout() }}>Sign out of {activeVenue.shortName}</button>}
           {mode === 'platform' && <button onClick={() => { setMenuOpen(false); onPlatformLogout() }}>Sign out of VV Admin POC</button>}
           {mode === 'public' && <button onClick={() => go('signin')}>Sign in</button>}
-          {(mode === 'owner' || mode === 'platform') && <button className="clean-drawer__reset" onClick={() => { setMenuOpen(false); onResetPreview() }}>Reset preview data</button>}
+          {(mode === 'owner' || mode === 'platform') && <button className="clean-drawer__reset" onClick={() => { setMenuOpen(false); onResetPreview() }}>{mode === 'owner' && activeVenue.id === 'venue-chandelier-oaks' ? 'Reset local workspace data' : 'Reset preview data'}</button>}
         </div>
       </aside>
 

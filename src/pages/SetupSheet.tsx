@@ -27,7 +27,7 @@ export default function SetupSheet({ venueId, wedding }: SetupSheetProps) {
         <section className="paper-block"><h3>Pull by storage location</h3>{Object.entries(storage).length ? Object.entries(storage).map(([location, entries]) => <div className="storage-pull-group" key={location}><strong>{location}</strong><span>{entries.map((entry) => `${entry.quantity} × ${entry.item!.name}`).join(' · ')}</span></div>) : <p>Nothing to pull yet.</p>}</section>
         <section className="paper-block"><h3>Venue layouts</h3>{areaCounts.length ? <div className="paper-area-grid">{areaCounts.map(({ area, count }) => <article key={area.id}><strong>{area.name}</strong><span>{count} placed objects</span></article>)}</div> : <p>No floor-plan objects placed yet.</p>}</section>
         <section className="paper-block"><h3>{clientLabel[0].toUpperCase() + clientLabel.slice(1)} notes</h3><p>{wedding.profile.notes || 'No notes added.'}</p></section>
-        <footer className="paper-sheet__footer"><span>Generated with Venue Visions.</span><span>{venue.isSample ? `Showcase ${eventLabel} data.` : 'Configured preview; operational details should be confirmed by the venue.'}</span></footer>
+        <footer className="paper-sheet__footer"><span>Generated with Venue Visions.</span><span>{venue.isSample ? `Showcase ${eventLabel} data.` : 'Chandelier Oaks setup sheet · final quantities and placement confirmed by venue team.'}</span></footer>
       </section>
     </main>
   )

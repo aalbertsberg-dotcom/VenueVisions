@@ -1,3 +1,7 @@
+# Venue Visions v1.6.2
+
+Chandelier Oaks is now presented as the first configured venue implementation rather than a generic demo. Public venue facts, package structure, booking rules, couple portals and an initial Pinrose Prop Shop catalog are integrated into the venue-branded experience. Temporary access codes and local browser data remain only as current-build plumbing until production authentication/storage are added.
+
 # Venue Visions v1.6.1
 
 Venue Visions is now presented as a broader **event venue management & planning SaaS**, not wedding-only software.

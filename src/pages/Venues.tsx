@@ -75,7 +75,7 @@ export default function Venues({ venues, weddings, onOpenVenue, onOpenCouple, on
         })}
       </section>
 
-      <p className="venue-directory-disclosure">Chandelier Oaks uses publicly available venue information with illustrative planning data. Juniper &amp; Stone and The Foundry are fictional showcase properties.</p>
+      <p className="venue-directory-disclosure">Chandelier Oaks is the first configured venue implementation, built from its current public venue information with inventory verification still to be completed. Juniper &amp; Stone and The Foundry are fictional showcase properties.</p>
 
       <section className="venue-directory-cta">
         <div>

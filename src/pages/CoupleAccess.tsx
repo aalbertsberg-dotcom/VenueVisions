@@ -18,12 +18,13 @@ export default function CoupleAccess({ venueId, wedding, onSubmitCode, onBackHom
   const venue = venueConfigById(venueId).profile
   const eventLabel = venue.eventLabel ?? 'event'
   const clientLabel = venue.clientLabel ?? 'client'
+  const isChandelier = venue.id === 'venue-chandelier-oaks'
   const [code, setCode] = useState(wedding.accessCode)
   const [error, setError] = useState('')
 
   const submit = (event: FormEvent) => {
     event.preventDefault()
-    if (!onSubmitCode(code)) { setError(`That preview access code is not correct for this ${eventLabel}.`); return }
+    if (!onSubmitCode(code)) { setError(`That access code is not correct for this ${eventLabel}.`); return }
     setError('')
   }
 
@@ -39,12 +40,12 @@ export default function CoupleAccess({ venueId, wedding, onSubmitCode, onBackHom
         <form className="owner-access-form" onSubmit={submit}>
           <label htmlFor="couple-preview-code">{eventLabel[0].toUpperCase() + eventLabel.slice(1)} access code</label>
           <input id="couple-preview-code" inputMode="numeric" autoComplete="one-time-code" value={code} onChange={(event) => { setCode(event.target.value); setError('') }} />
-          <small>Prefilled for this preview: <strong>{wedding.accessCode}</strong></small>
+          <small>{isChandelier ? 'Current build access code' : 'Prefilled for this preview'}: <strong>{wedding.accessCode}</strong></small>
           {error && <div className="owner-access-error" role="alert">{error}</div>}
           <button className="button button--primary full-width" type="submit">Enter {venue.shortName} {eventLabel}</button>
         </form>
 
-        <div className="owner-access-note"><strong>Preview access.</strong> Production would use secure email sign-in or one-time codes and would not expose recoverable passwords.</div>
+        <div className="owner-access-note"><strong>{isChandelier ? 'Current build sign-in.' : 'Preview access.'}</strong> Production launch will use secure email sign-in or one-time codes and will not expose recoverable passwords.</div>
         <button className="text-link owner-access-back" type="button" onClick={onBackHome}>← Back to {venue.shortName}</button>
       </section>
     </main>

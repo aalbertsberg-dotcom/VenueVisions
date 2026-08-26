@@ -32,6 +32,7 @@ export default function MediaLibrary({ venueId, weddingId, weddingName, ownerMod
   const config = venueConfigById(venueId)
   const { profile: venue, inventory, areas: venueAreas } = config
   const eventLabel = venue.eventLabel ?? 'event'
+  const isChandelier = venue.id === 'venue-chandelier-oaks'
   const [assets, setAssets] = useState<MediaAssetRecord[]>([])
   const [scope, setScope] = useState<MediaScope>(ownerMode ? 'venue' : 'wedding')
   const [areaId, setAreaId] = useState('')
@@ -59,7 +60,7 @@ export default function MediaLibrary({ venueId, weddingId, weddingName, ownerMod
     for (const file of files) {
       const mediaType = mediaTypeForFile(file)
       if (!mediaType) { skipped.push(`${file.name} (unsupported)`); continue }
-      if (file.size > MAX_DEMO_FILE_SIZE) { skipped.push(`${file.name} (over 50 MB preview limit)`); continue }
+      if (file.size > MAX_DEMO_FILE_SIZE) { skipped.push(`${file.name} (over 50 MB ${isChandelier ? 'current-build' : 'preview'} limit)`); continue }
       const asset: MediaAssetRecord = {
         id: `media-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
         venueId,
@@ -88,7 +89,7 @@ export default function MediaLibrary({ venueId, weddingId, weddingName, ownerMod
   }
 
   const removeAsset = async (asset: MediaAssetRecord) => {
-    if (!window.confirm(`Remove ${asset.name} from this preview library?`)) return
+    if (!window.confirm(`Remove ${asset.name} from this ${isChandelier ? 'media library' : 'preview library'}?`)) return
     await deleteMediaAsset(asset.id); await refresh()
   }
 
@@ -99,7 +100,7 @@ export default function MediaLibrary({ venueId, weddingId, weddingName, ownerMod
         <div className="media-intro__actions"><button className="button button--primary" onClick={() => inputRef.current?.click()} disabled={uploading}>{uploading ? 'Uploading…' : '+ Upload files'}</button><button className="button button--ghost" onClick={() => onNavigate('ai-preview')}>AI Preview Studio</button></div>
       </section>
 
-      <section className="panel media-demo-note"><strong>Working preview storage</strong><p>Files are stored only in this browser using IndexedDB. Production will send them to secure cloud storage so they are available across devices and only to authorized users at {venue.shortName}.</p></section>
+      <section className="panel media-demo-note"><strong>{isChandelier ? 'Current build storage' : 'Working preview storage'}</strong><p>Files are stored only in this browser using IndexedDB. Production will send them to secure cloud storage so they are available across devices and only to authorized users at {venue.shortName}.</p></section>
 
       <section className="media-controls panel">
         {ownerMode && <div className="media-scope-toggle"><button className={scope === 'venue' ? 'active' : ''} onClick={() => setScope('venue')}>Venue library</button><button className={scope === 'wedding' ? 'active' : ''} onClick={() => setScope('wedding')}>{weddingName}</button></div>}

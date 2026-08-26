@@ -1501,6 +1501,12 @@ h3 { color: var(--brown); }
 .venue-facts article { padding:20px; border:1px solid var(--line); border-radius:16px; background:#fff; }
 .venue-facts strong { display:block; font-family:'Playfair Display',Georgia,serif; color:var(--co-green); font-size:35px; }
 .venue-facts span { color:var(--muted); font-size:10px; }
+.chandelier-operations-section { padding-top:26px; }
+.chandelier-operations-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:12px; }
+.chandelier-operations-grid article { min-height:190px;padding:21px;border:1px solid #dfe3dc;border-radius:17px;background:linear-gradient(145deg,#f8fbf7,#fff); }
+.chandelier-operations-grid article > span { display:block;color:var(--co-green);font-size:8px;font-weight:900;letter-spacing:.11em; }
+.chandelier-operations-grid strong { display:block;margin:8px 0 9px;color:var(--brown);font-family:'Playfair Display',Georgia,serif;font-size:22px;line-height:1.12; }
+.chandelier-operations-grid p { margin:0;color:var(--muted);font-size:10px;line-height:1.6; }
 .venue-spaces-section { background:#f2f0ea; border-block:1px solid #e6e0d7; }
 .section-lead { max-width:700px; color:var(--muted); line-height:1.6; }
 .venue-area-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
@@ -1633,7 +1639,7 @@ h3 { color: var(--brown); }
   .saas-hero__visual { min-height:450px; }.platform-stack { padding:20px; }.tenant-couples { grid-template-columns:1fr;margin-left:0; }
   .case-study-section { gap:25px; }.case-study-map { min-height:330px; }
   .venue-brand-hero { min-height:620px; }.venue-brand-hero__inner { padding-top:25px; }.venue-brand-hero__copy { margin-top:58px; }
-  .venue-area-grid,.package-preview-grid,.venue-facts { grid-template-columns:1fr; }
+  .venue-area-grid,.package-preview-grid,.venue-facts,.chandelier-operations-grid { grid-template-columns:1fr; }
   .venue-area-card__body p,.package-card h3,.package-card p { min-height:0; }
   .venue-contact-strip__inner { gap:16px; }
   .form-grid.two-col,.brand-form-row,.signup-summary-grid,.owner-quick-grid,.owner-package-grid,.add-wedding-form--expanded,.wedding-action-grid { grid-template-columns:1fr; }
@@ -1995,6 +2001,7 @@ body { font-size: 16px; line-height: 1.5; }
 @media (max-width:900px) {
   .venue-directory-grid,.venue-comparison-grid,.platform-venue-grid { grid-template-columns:1fr; }
   .venue-couple-preview-grid { grid-template-columns:repeat(2,1fr); }
+  .chandelier-operations-grid { grid-template-columns:repeat(2,1fr); }
   .signin-venue-picker { align-items:stretch;flex-direction:column; }
   .signin-selected-venue { min-width:0; }
 }

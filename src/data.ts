@@ -10,7 +10,7 @@ export const chandelierOaks: VenueProfile = {
   address: '25021 Loren Ladner Road, Kiln, Mississippi 39556',
   phone: '(228) 233-0645',
   email: 'chandelier.oaks@gmail.com',
-  ownerName: 'Felia Georges',
+  ownerName: 'Felia & Robert Georges',
   brandPrimary: '#34483b',
   brandAccent: '#b58a55',
   logoText: 'CO',
@@ -19,11 +19,13 @@ export const chandelierOaks: VenueProfile = {
   locationLabel: 'Kiln, Mississippi',
   inventoryLabel: 'Pinrose Prop Shop',
   previewLabel: 'Chandelier Oaks',
-  venueTypeLabel: 'Wedding venue',
+  venueTypeLabel: 'Wedding & event venue',
   eventLabel: 'wedding',
   eventPluralLabel: 'weddings',
   clientLabel: 'couple',
   clientPluralLabel: 'couples',
+  portalHeroTitle: 'Welcome to your Chandelier Oaks planning portal.',
+  portalHeroBody: 'Keep package details, venue spaces, Pinrose Prop Shop selections, layouts, messages and final setup information together from booking through wedding day.',
   links: [
     { label: 'Official website', url: 'https://chandelieroaks.com/', kind: 'website' },
     { label: 'Wedding packages', url: 'https://chandelieroaks.com/wedding-packages', kind: 'resource' },
@@ -90,7 +92,7 @@ export const chandelierAreas: VenueArea[] = [
     id: 'pecan-pavilion',
     name: 'Pecan Pavilion',
     kind: 'Reception',
-    description: 'Open-air pavilion for receptions, ceremonies, sweetheart tables and dancing.',
+    description: '3,500 sq. ft. open-air pavilion beneath mature live oaks, with three grand chandeliers and room for ceremonies, receptions and dancing.',
     plannerEnabled: true,
     visual: 'pavilion',
   },
@@ -114,7 +116,7 @@ export const chandelierAreas: VenueArea[] = [
     id: 'greenhouse',
     name: 'Greenhouse',
     kind: 'Ceremony',
-    description: 'Chapel-like greenhouse setting for intimate ceremonies, portraits and styled moments.',
+    description: 'Chapel-like greenhouse setting for intimate ceremonies, portraits and styled wedding moments.',
     plannerEnabled: true,
     visual: 'greenhouse',
   },
@@ -137,9 +139,9 @@ export const chandelierAreas: VenueArea[] = [
 ]
 
 /**
- * DEMO INVENTORY ONLY.
- * Names are based on categories Chandelier Oaks publicly describes for the Pinrose Prop Shop.
- * Quantities, dimensions, storage locations and package-tier mapping are placeholders until the venue catalogs its real inventory.
+ * INITIAL CHANDELIER OAKS CATALOG.
+ * Item types are based on categories Chandelier Oaks publicly describes for the Pinrose Prop Shop.
+ * Working quantities, dimensions, storage locations and package-tier mapping remain onboarding fields until the venue completes its inventory pass.
  */
 export const chandelierInventory: InventoryItem[] = [
   {
@@ -148,13 +150,13 @@ export const chandelierInventory: InventoryItem[] = [
     category: 'Backdrops',
     color: 'Warm white / gold',
     quantity: 1,
-    dimensions: 'Demo dimensions · 7 ft × 4 ft',
+    dimensions: 'Working dimensions · verify onsite',
     storage: 'Pinrose Prop Shop · Backdrop bay',
     description: 'Statement champagne display wall for cocktail hour or reception welcome moments.',
     imageStyle: 'champagne-wall',
     featured: true,
     accessTier: 2,
-    packageNote: 'Demo tier mapping — venue to confirm.',
+    packageNote: 'Initial package mapping · confirm during venue onboarding.',
   },
   {
     id: 'french-doors',
@@ -162,13 +164,13 @@ export const chandelierInventory: InventoryItem[] = [
     category: 'Backdrops',
     color: 'Antique ivory',
     quantity: 2,
-    dimensions: 'Demo dimensions · pair',
+    dimensions: 'Working dimensions · verify onsite',
     storage: 'Pinrose Prop Shop · Wall rack A',
     description: 'Vintage-style French doors for ceremony entrances, portraits or styled backdrops.',
     imageStyle: 'french-doors',
     featured: true,
     accessTier: 1,
-    packageNote: 'Demo tier mapping — venue to confirm.',
+    packageNote: 'Initial package mapping · confirm during venue onboarding.',
   },
   {
     id: 'antique-sofa',
@@ -176,13 +178,13 @@ export const chandelierInventory: InventoryItem[] = [
     category: 'Furniture',
     color: 'Olive / walnut',
     quantity: 2,
-    dimensions: 'Demo dimensions · 72 in wide',
+    dimensions: 'Working dimensions · verify onsite',
     storage: 'Pinrose Prop Shop · Furniture row',
     description: 'Vintage seating piece for lounge areas, portraits and sweetheart-table styling.',
     imageStyle: 'antique-sofa',
     featured: true,
     accessTier: 2,
-    packageNote: 'Demo tier mapping — venue to confirm.',
+    packageNote: 'Initial package mapping · confirm during venue onboarding.',
   },
   {
     id: 'circle-arch',
@@ -190,12 +192,12 @@ export const chandelierInventory: InventoryItem[] = [
     category: 'Arches',
     color: 'Matte black',
     quantity: 1,
-    dimensions: 'Demo dimensions · 7 ft round',
+    dimensions: 'Working dimensions · verify onsite',
     storage: 'Pinrose Prop Shop · Arch rack',
     description: 'Round ceremony arch ready for greenery, fabric or floral installation.',
     imageStyle: 'circle-arch',
     accessTier: 1,
-    packageNote: 'Demo tier mapping — venue to confirm.',
+    packageNote: 'Initial package mapping · confirm during venue onboarding.',
   },
   {
     id: 'wood-arbor',
@@ -203,12 +205,12 @@ export const chandelierInventory: InventoryItem[] = [
     category: 'Arches',
     color: 'Natural wood',
     quantity: 1,
-    dimensions: 'Demo dimensions · 8 ft × 7 ft',
+    dimensions: 'Working dimensions · verify onsite',
     storage: 'Pinrose Prop Shop · Arch rack',
     description: 'Warm wood ceremony arbor for outdoor ceremony settings.',
     imageStyle: 'wood-arbor',
     accessTier: 1,
-    packageNote: 'Demo tier mapping — venue to confirm.',
+    packageNote: 'Initial package mapping · confirm during venue onboarding.',
   },
   {
     id: 'swing-bed',
@@ -221,7 +223,7 @@ export const chandelierInventory: InventoryItem[] = [
     description: 'Photo-ready swing-bed setup for portraits and relaxed wedding-weekend moments.',
     imageStyle: 'swing-bed',
     accessTier: 2,
-    packageNote: 'Demo tier mapping — venue to confirm.',
+    packageNote: 'Initial package mapping · confirm during venue onboarding.',
   },
   {
     id: 'crystal-chandelier',
@@ -234,7 +236,7 @@ export const chandelierInventory: InventoryItem[] = [
     description: 'Decorative chandelier option for styled spaces and elevated reception moments.',
     imageStyle: 'chandelier',
     accessTier: 2,
-    packageNote: 'Demo tier mapping — venue to confirm.',
+    packageNote: 'Initial package mapping · confirm during venue onboarding.',
   },
   {
     id: 'green-wall',
@@ -242,12 +244,12 @@ export const chandelierInventory: InventoryItem[] = [
     category: 'Backdrops',
     color: 'Green',
     quantity: 1,
-    dimensions: 'Demo dimensions · 8 ft × 8 ft',
+    dimensions: 'Working dimensions · verify onsite',
     storage: 'Pinrose Prop Shop · Backdrop bay',
     description: 'Styled greenery wall for portraits, photo moments or seating-chart placement.',
     imageStyle: 'green-wall',
     accessTier: 1,
-    packageNote: 'Demo tier mapping — venue to confirm.',
+    packageNote: 'Initial package mapping · confirm during venue onboarding.',
   },
   {
     id: 'gold-lantern',
@@ -255,12 +257,12 @@ export const chandelierInventory: InventoryItem[] = [
     category: 'Centerpieces',
     color: 'Antique gold',
     quantity: 24,
-    dimensions: 'Assorted demo sizes',
+    dimensions: 'Assorted sizes · verify onsite',
     storage: 'Pinrose Prop Shop · Shelf B3',
     description: 'Warm metallic lanterns for tables, aisle styling and reception groupings. Use flameless candles only.',
     imageStyle: 'gold-lantern',
     accessTier: 1,
-    packageNote: 'Demo inventory — venue to confirm quantity.',
+    packageNote: 'Working quantity · confirm during venue inventory onboarding.',
   },
   {
     id: 'white-florals',
@@ -269,11 +271,11 @@ export const chandelierInventory: InventoryItem[] = [
     color: 'White / green',
     quantity: 12,
     dimensions: 'Assorted arrangements',
-    storage: 'Floral storage · Demo',
-    description: 'Sample premium floral inventory for centerpieces and styled focal areas.',
+    storage: 'Pinrose Prop Shop · Floral storage',
+    description: 'Working floral collection record for centerpieces and styled focal areas; final pieces will be confirmed during inventory onboarding.',
     imageStyle: 'white-florals',
     accessTier: 3,
-    packageNote: 'Luxury-tier demo example — venue to confirm exact floral access.',
+    packageNote: 'Initial luxury-package mapping · confirm exact floral access during onboarding.',
   },
   {
     id: 'ivory-linens',
@@ -282,11 +284,11 @@ export const chandelierInventory: InventoryItem[] = [
     color: 'Ivory',
     quantity: 30,
     dimensions: 'Assorted table sizes',
-    storage: 'Linen storage · Demo',
-    description: 'Sample linen collection shown as included for the top demo tier.',
+    storage: 'Pinrose Prop Shop · Linen storage',
+    description: 'Working linen collection record for the top package tier; final counts and sizes will be confirmed during inventory onboarding.',
     imageStyle: 'ivory-linens',
     accessTier: 3,
-    packageNote: 'Luxury-tier demo example — venue to confirm exact linen inventory.',
+    packageNote: 'Initial luxury-package mapping · confirm exact linen access during onboarding.',
   },
   {
     id: 'welcome-easel',
@@ -299,7 +301,7 @@ export const chandelierInventory: InventoryItem[] = [
     description: 'Decorative easel for welcome signage, seating charts or portraits.',
     imageStyle: 'welcome-easel',
     accessTier: 1,
-    packageNote: 'Demo inventory — venue to confirm quantity.',
+    packageNote: 'Working quantity · confirm during venue inventory onboarding.',
   },
 ]
 
@@ -322,7 +324,7 @@ export const juniperStone: VenueProfile = {
   locationLabel: 'Asheville, North Carolina',
   inventoryLabel: 'Design Library',
   previewLabel: 'Juniper & Stone',
-  venueTypeLabel: 'Wedding venue',
+  venueTypeLabel: 'Wedding & event venue',
   eventLabel: 'wedding',
   eventPluralLabel: 'weddings',
   clientLabel: 'couple',
@@ -419,7 +421,7 @@ export const chandelierConfig: VenueConfig = {
   inventory: chandelierInventory,
   ownerAccessCode: '123456',
   oneEventPerDate: true,
-  ownerDashboardNote: 'Chandelier Oaks publicly states that it hosts one wedding each day.',
+  ownerDashboardNote: 'One wedding per day. Chandelier Oaks also publishes a 25% signing payment followed by installments 270, 180 and 60 days before the event.',
 }
 
 export const juniperConfig: VenueConfig = {

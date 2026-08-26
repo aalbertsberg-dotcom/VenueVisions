@@ -15,6 +15,7 @@ export default function SignIn({ venues, activeVenueId, onSelectVenue, onVenueOw
   const eventLabel = active.profile.eventLabel ?? 'event'
   const eventPlural = active.profile.eventPluralLabel ?? 'events'
   const clientLabel = active.profile.clientLabel ?? 'client'
+  const isChandelier = active.profile.id === 'venue-chandelier-oaks'
   return (
     <main className="page-main shell signin-page">
       <section className="signin-intro">
@@ -29,11 +30,11 @@ export default function SignIn({ venues, activeVenueId, onSelectVenue, onVenueOw
       </section>
 
       <div className="signin-grid">
-        <article className="panel signin-card"><div className="signin-card__icon">V</div><span className="mini-label">VENUE TEAM</span><h2>{active.profile.shortName} owner</h2><p>Manage {eventPlural}, inventory, packages, messages, calendar milestones and final setup sheets for this venue only.</p><button className="button button--primary full-width" onClick={onVenueOwner}>Open Venue Owner Preview</button><small>Preview access is prefilled on the next screen.</small></article>
-        <article className="panel signin-card"><div className="signin-card__icon signin-card__icon--couple">◎</div><span className="mini-label">{clientLabel.toUpperCase()}</span><h2>My {active.profile.shortName} {eventLabel}</h2><p>Enter the private {eventLabel} workspace that belongs to this venue.</p><button className="button button--ghost full-width" onClick={onCouple}>Open {clientLabel[0].toUpperCase() + clientLabel.slice(1)} Workspace</button><small>The preview opens the first configured {clientLabel} for the selected venue.</small></article>
+        <article className="panel signin-card"><div className="signin-card__icon">V</div><span className="mini-label">VENUE TEAM</span><h2>{active.profile.shortName} owner</h2><p>Manage {eventPlural}, inventory, packages, messages, calendar milestones and final setup sheets for this venue only.</p><button className="button button--primary full-width" onClick={onVenueOwner}>{isChandelier ? 'Open Owner Portal' : 'Open Venue Owner Preview'}</button><small>{isChandelier ? 'Current build access is prefilled on the next screen.' : 'Preview access is prefilled on the next screen.'}</small></article>
+        <article className="panel signin-card"><div className="signin-card__icon signin-card__icon--couple">◎</div><span className="mini-label">{clientLabel.toUpperCase()}</span><h2>My {active.profile.shortName} {eventLabel}</h2><p>Enter the private {eventLabel} workspace that belongs to this venue.</p><button className="button button--ghost full-width" onClick={onCouple}>Open {clientLabel[0].toUpperCase() + clientLabel.slice(1)} Workspace</button><small>{isChandelier ? `Choose a configured ${eventLabel} workspace and enter its access code.` : `The preview opens the first configured ${clientLabel} for the selected venue.`}</small></article>
       </div>
 
-      <section className="signin-production-note"><strong>Production access</strong><span>Real accounts would use secure venue-team authentication and email-based client invitations or one-time codes, while preserving the venue-first path.</span></section>
+      <section className="signin-production-note"><strong>Access model</strong><span>The current build uses temporary access codes. Production launch will use secure venue-team accounts and email-based client invitations or one-time codes while preserving the venue-first path.</span></section>
       <button className="text-link signin-back" onClick={onBackHome}>← Back to Venue Visions</button>
     </main>
   )

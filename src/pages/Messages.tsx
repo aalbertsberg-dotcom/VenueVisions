@@ -29,6 +29,7 @@ export default function Messages({ venueId, profile, selections, placedItems, me
   const venue = config.profile
   const eventLabel = venue.eventLabel ?? 'event'
   const clientLabel = venue.clientLabel ?? 'client'
+  const isChandelier = venue.id === 'venue-chandelier-oaks'
   const clientDisplay = clientLabel[0].toUpperCase() + clientLabel.slice(1)
   const roleLabel = (role: MessageRole) => role === 'bride' ? clientDisplay : 'Venue Team'
   const venueInventory = config.inventory
@@ -79,7 +80,7 @@ export default function Messages({ venueId, profile, selections, placedItems, me
     setAttachmentError('')
     const availableSlots = MAX_ATTACHMENTS - attachments.length
     Array.from(files).slice(0, availableSlots).forEach((file) => {
-      if (file.size > MAX_ATTACHMENT_BYTES) { setAttachmentError('For this browser preview, each message attachment must be under 750 KB.'); return }
+      if (file.size > MAX_ATTACHMENT_BYTES) { setAttachmentError(isChandelier ? 'For the current build, each message attachment must be under 750 KB.' : 'For this browser preview, each message attachment must be under 750 KB.'); return }
       const reader = new FileReader()
       reader.onload = () => {
         if (typeof reader.result !== 'string') return
@@ -189,7 +190,7 @@ export default function Messages({ venueId, profile, selections, placedItems, me
             {attachments.length > 0 && <div className="composer-attachments">{attachments.map((attachment) => <button key={attachment.id} onClick={() => setAttachments((current) => current.filter((item) => item.id !== attachment.id))}><span>📎 {attachment.name}</span><b>×</b></button>)}</div>}
             {attachmentError && <div className="composer-error">{attachmentError}</div>}
             <textarea value={draft} onChange={(e) => setDraft(e.target.value)} onKeyDown={handleKeyDown} placeholder={`Message ${otherName}…`} />
-            <div className="composer-footer"><span>Ctrl + Enter to send · Stored only in this browser preview</span><button className="button button--primary" onClick={sendMessage} disabled={!draft.trim() && !attachments.length && !context}>Send message</button></div>
+            <div className="composer-footer"><span>Ctrl + Enter to send · {isChandelier ? 'Stored in this browser for the current build' : 'Stored only in this browser preview'}</span><button className="button button--primary" onClick={sendMessage} disabled={!draft.trim() && !attachments.length && !context}>Send message</button></div>
           </div>
         </section>
 
@@ -197,8 +198,8 @@ export default function Messages({ venueId, profile, selections, placedItems, me
           <section className="panel notification-card">
             <p className="eyebrow">NOTIFICATIONS</p><h2>Don't miss a reply.</h2><p>Unread messages are always shown in the navigation. Browser notifications can also pop up when a reply arrives.</p>
             <button className={notificationsEnabled ? 'notification-toggle active' : 'notification-toggle'} onClick={toggleNotifications}><span><b>{notificationsEnabled ? 'On' : 'Off'}</b><small>Browser notifications</small></span><i /></button>
-            <button className="button button--ghost full-width" onClick={simulateReply} disabled={simulating}>{simulating ? 'Waiting for preview reply…' : `Simulate reply from ${otherName}`}</button>
-            <small className="prototype-help">This simulation exists so the preview can show notifications without a live messaging backend.</small>
+            <button className="button button--ghost full-width" onClick={simulateReply} disabled={simulating}>{simulating ? (isChandelier ? 'Sending test reply…' : 'Waiting for preview reply…') : (isChandelier ? `Test reply from ${otherName}` : `Simulate reply from ${otherName}`)}</button>
+            <small className="prototype-help">{isChandelier ? 'Temporary notification test until the live messaging backend is connected.' : 'This simulation exists so the preview can show notifications without a live messaging backend.'}</small>
           </section>
           <section className="panel message-info-card"><p className="eyebrow">THREAD DETAILS</p><h2>{profile.couple || eventLabel[0].toUpperCase() + eventLabel.slice(1)}</h2><dl><div><dt>Venue</dt><dd>{venue.shortName}</dd></div><div><dt>{eventLabel[0].toUpperCase() + eventLabel.slice(1)} date</dt><dd>{profile.date ? new Date(`${profile.date}T12:00:00`).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' }) : 'Not set'}</dd></div><div><dt>Messages</dt><dd>{messages.length}</dd></div><div><dt>Selected resources</dt><dd>{selections.reduce((sum, item) => sum + item.quantity, 0)} pieces</dd></div><div><dt>Floor plan</dt><dd>{placedItems.length ? `${placedItems.length} objects placed` : 'Not started'}</dd></div></dl></section>
         </aside>
